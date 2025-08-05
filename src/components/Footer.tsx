@@ -1,9 +1,52 @@
 import { Link } from "react-router-dom";
-import { Instagram, Facebook, Phone, Mail, MapPin } from "lucide-react";
+import { Instagram, Facebook, Phone, Mail, MapPin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes('@')) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('newsletter-subscribe', {
+        body: { email }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Successfully subscribed!",
+        description: data.message || "Thank you for subscribing to our newsletter.",
+      });
+      setEmail("");
+    } catch (error: any) {
+      console.error('Newsletter subscription error:', error);
+      toast({
+        title: "Subscription failed",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <footer className="bg-gradient-to-br from-primary/5 to-secondary/5 border-t">
       <div className="container mx-auto px-4 py-16">
@@ -21,11 +64,35 @@ const Footer = () => {
               </p>
             </div>
             <div className="flex space-x-4">
-              <Button variant="outline" size="icon" className="hover:bg-primary hover:text-primary-foreground">
-                <Instagram className="w-4 h-4" />
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
+                asChild
+              >
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                  <Instagram className="w-4 h-4" />
+                </a>
               </Button>
-              <Button variant="outline" size="icon" className="hover:bg-primary hover:text-primary-foreground">
-                <Facebook className="w-4 h-4" />
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
+                asChild
+              >
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                  <Facebook className="w-4 h-4" />
+                </a>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
+                asChild
+              >
+                <a href="https://t.me/cretanguru" target="_blank" rel="noopener noreferrer">
+                  <Send className="w-4 h-4" />
+                </a>
               </Button>
             </div>
           </div>
@@ -89,15 +156,28 @@ const Footer = () => {
 
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">Subscribe to our newsletter</p>
-              <div className="flex space-x-2">
+              <form onSubmit={handleNewsletterSubmit} className="flex space-x-2">
                 <Input 
+                  type="email"
                   placeholder="Enter your email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="flex-1 text-sm"
+                  disabled={isLoading}
                 />
-                <Button size="sm" className="px-4">
-                  Subscribe
+                <Button 
+                  type="submit" 
+                  size="sm" 
+                  className="px-4 group"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  )}
                 </Button>
-              </div>
+              </form>
             </div>
           </div>
         </div>

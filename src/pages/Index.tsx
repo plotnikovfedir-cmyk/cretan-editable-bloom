@@ -79,17 +79,86 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Services Overview */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Our Services</h2>
+            <p className="text-lg text-muted-foreground">Complete Cretan experience at your fingertips</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <CardContent className="p-6 text-center">
+                <div className="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto mb-4 text-2xl group-hover:bg-terracotta transition-colors">
+                  🎯
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Activities</h3>
+                <p className="text-muted-foreground mb-4">Discover authentic Cretan experiences from olive oil tastings to herb foraging</p>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/activities">Explore</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <CardContent className="p-6 text-center">
+                <div className="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto mb-4 text-2xl group-hover:bg-sunset transition-colors">
+                  🎪
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Events</h3>
+                <p className="text-muted-foreground mb-4">Join our sunset BBQs, boat trips and traditional music nights</p>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/events">View Events</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <CardContent className="p-6 text-center">
+                <div className="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto mb-4 text-2xl group-hover:bg-gold transition-colors">
+                  🚗
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Taxi</h3>
+                <p className="text-muted-foreground mb-4">Reliable transfers to airports, beaches and attractions across Crete</p>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/taxi">Book Ride</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <CardContent className="p-6 text-center">
+                <div className="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto mb-4 text-2xl group-hover:bg-secondary transition-colors">
+                  🏖️
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Beach Delivery</h3>
+                <p className="text-muted-foreground mb-4">Premium picnic boxes delivered to remote beaches and sunset spots</p>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/delivery">Order Now</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Experience Authentic Crete</h2>
           <p className="text-lg mb-8 max-w-2xl mx-auto opacity-90">
-            Join us for unique activities that connect you with Cretan culture, from olive oil tastings 
-            to herb foraging tours in the beautiful Mediterranean landscape.
+            From premium products to unforgettable experiences - discover everything 
+            that makes Crete special with Cretan Guru.
           </p>
-          <Button asChild size="lg" variant="secondary" className="bg-gold hover:bg-gold/90 text-gold-foreground">
-            <Link to="/activities">Explore Activities</Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" variant="secondary" className="bg-gold hover:bg-gold/90 text-gold-foreground">
+              <Link to="/products">Shop Products</Link>
+            </Button>
+            <Button asChild size="lg" className="bg-white/10 hover:bg-white/20 text-white border border-white/20">
+              <Link to="/activities">Book Experience</Link>
+            </Button>
+          </div>
         </div>
       </section>
     </div>

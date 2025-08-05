@@ -1,33 +1,66 @@
 import Navigation from "@/components/Navigation";
 import ProductCard from "@/components/ProductCard";
+import { Link } from "react-router-dom";
 import oliveOilImage from "@/assets/olive-oil-product.jpg";
 import herbsImage from "@/assets/herbs-product.jpg";
 
 const Products = () => {
   const products = [
     {
+      id: "extra-virgin-olive-oil",
       title: "Extra Virgin Olive Oil",
       image: oliveOilImage,
-      description: "Cold-pressed, organic olive oil from the finest Cretan groves. Rich in antioxidants and bursting with authentic Mediterranean flavor.",
+      description: "Cold-pressed from the finest Cretan olives, our olive oil is rich in antioxidants and flavor.",
       price: "12.90"
     },
     {
-      title: "Herbal Infused Oil", 
+      id: "wild-mountain-herbs",
+      title: "Wild Mountain Herbs",
       image: herbsImage,
-      description: "Our premium olive oil infused with wild Cretan herbs including oregano, thyme, and rosemary. A perfect blend of tradition and flavor.",
-      price: "14.90"
+      description: "Hand-picked herbs from the Cretan mountains, dried naturally to preserve their intense aroma.",
+      price: "8.90"
     },
     {
-      title: "Premium Gift Set",
+      id: "oil-st-johns-wort",
+      title: "Oil With St John's Wort",
       image: oliveOilImage,
-      description: "A beautiful gift set containing our finest olive oils, herbs, and traditional Cretan honey. Perfect for food lovers.",
+      description: "Premium olive oil infused with wild St John's Wort, known for its healing properties.",
+      price: "18.90"
+    },
+    {
+      id: "wild-oregano-oil",
+      title: "Wild Oregano Olive Oil",
+      image: herbsImage,
+      description: "Extra virgin olive oil infused with wild Cretan oregano, perfect for Mediterranean cuisine.",
+      price: "16.90"
+    },
+    {
+      id: "agios-konstantinos-oil",
+      title: "Olive Oil – Agios Konstantinos",
+      image: oliveOilImage,
+      description: "Single-origin olive oil from the blessed groves of Agios Konstantinos monastery.",
       price: "24.90"
     },
     {
-      title: "Wild Mountain Herbs",
-      image: herbsImage, 
-      description: "Hand-picked wild herbs from the Cretan mountains. Dried naturally and packaged to preserve their intense flavor and aroma.",
-      price: "8.90"
+      id: "koxare-oil",
+      title: "Olive Oil – Koxaré",
+      image: oliveOilImage,
+      description: "Exceptional olive oil from the ancient village of Koxaré, with notes of pepper and herbs.",
+      price: "26.90"
+    },
+    {
+      id: "myxorouma-oil",
+      title: "Olive Oil – Myxorouma",
+      image: herbsImage,
+      description: "Premium estate oil from Myxorouma, with a rich golden color and fruity aroma.",
+      price: "28.90"
+    },
+    {
+      id: "preveli-oil",
+      title: "Olive Oil – Preveli",
+      image: oliveOilImage,
+      description: "Artisanal olive oil from the famous Preveli monastery, a true taste of Cretan heritage.",
+      price: "32.90"
     }
   ];
 
@@ -46,7 +79,14 @@ const Products = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {products.map((product, index) => (
-            <ProductCard key={index} {...product} />
+            <Link key={index} to={`/products/${product.id}`}>
+              <ProductCard
+                title={product.title}
+                image={product.image}
+                description={product.description}
+                price={product.price}
+              />
+            </Link>
           ))}
         </div>
       </div>

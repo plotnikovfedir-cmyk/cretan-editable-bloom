@@ -9,7 +9,7 @@ import CreteMap from "@/components/CreteMap";
 import BlogCard from "@/components/BlogCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Target, Calendar, Car, MapPin } from "lucide-react";
+import Footer from "@/components/Footer";
 import oliveOilImage from "@/assets/olive-oil-product.jpg";
 import herbsImage from "@/assets/herbs-product.jpg";
 
@@ -125,43 +125,39 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <ServiceCard
-              icon={Target}
+              image="/src/assets/activities-service.jpg"
               title="Activities"
               description="Discover authentic Cretan experiences from olive oil tastings to herb foraging adventures"
               link="/activities"
               buttonText="Explore Activities"
-              bgGradient="bg-gradient-to-br from-green-500 to-emerald-600"
-              iconColor="bg-white/20"
+              bgGradient="bg-gradient-to-br from-green-500/80 to-emerald-600/80"
             />
             
             <ServiceCard
-              icon={Calendar}
+              image="/src/assets/events-service.jpg"
               title="Events"
               description="Join our sunset BBQs, boat trips and traditional music nights under the stars"
               link="/events"
               buttonText="View Events"
-              bgGradient="bg-gradient-to-br from-orange-500 to-red-500"
-              iconColor="bg-white/20"
+              bgGradient="bg-gradient-to-br from-orange-500/80 to-red-500/80"
             />
             
             <ServiceCard
-              icon={Car}
+              image="/src/assets/taxi-service.jpg"
               title="Taxi Service"
               description="Reliable transfers to airports, beaches and attractions across beautiful Crete"
               link="/taxi"
               buttonText="Book Ride"
-              bgGradient="bg-gradient-to-br from-yellow-500 to-orange-500"
-              iconColor="bg-white/20"
+              bgGradient="bg-gradient-to-br from-yellow-500/80 to-orange-500/80"
             />
             
             <ServiceCard
-              icon={MapPin}
+              image="/src/assets/delivery-service.jpg"
               title="Beach Delivery"
               description="Premium picnic boxes delivered to remote beaches and stunning sunset spots"
               link="/delivery"
               buttonText="Order Now"
-              bgGradient="bg-gradient-to-br from-blue-500 to-cyan-500"
-              iconColor="bg-white/20"
+              bgGradient="bg-gradient-to-br from-blue-500/80 to-cyan-500/80"
             />
           </div>
         </div>
@@ -240,6 +236,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 };

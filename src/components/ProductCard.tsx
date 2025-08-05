@@ -71,7 +71,7 @@ const ProductCard = ({ title, image, description, price, rating = 4.7, organic =
         </div>
         
         <div className="pt-2">
-          <p className="text-2xl font-bold text-primary font-serif">€{price}</p>
+          <p className="text-2xl font-bold text-primary">€{price}</p>
         </div>
       </CardContent>
       <CardFooter className="p-6 pt-0">

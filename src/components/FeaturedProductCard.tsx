@@ -91,7 +91,7 @@ const FeaturedProductCard = ({
         </div>
         
         <div className="flex justify-between items-center pt-2">
-          <span className="text-2xl font-bold text-primary font-serif">€{price}</span>
+          <span className="text-2xl font-bold text-primary">€{price}</span>
           <Button 
             asChild 
             className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300"

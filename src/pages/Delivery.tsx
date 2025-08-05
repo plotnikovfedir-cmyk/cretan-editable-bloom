@@ -146,7 +146,7 @@ const Delivery = () => {
                   <CardTitle className="text-xl mb-2 text-stone-800">{item.title}</CardTitle>
                   <p className="text-stone-600 mb-4">{item.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-emerald-600">{item.price}</span>
+                    <span className="text-2xl font-bold text-primary">{item.price}</span>
                     <Button variant="outline" className="border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white">
                       Add to Order
                     </Button>

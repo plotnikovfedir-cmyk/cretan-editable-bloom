@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Star, MapPin, Heart, ShoppingCart } from "lucide-react";
+import ProductLocationMap from "@/components/ProductLocationMap";
 
 interface ProductDetailProps {
   id: string;
@@ -34,6 +35,7 @@ const ProductDetail = ({
   rating, 
   reviewCount,
   origin,
+  coordinates,
   volumes,
   reviews 
 }: ProductDetailProps) => {
@@ -172,16 +174,14 @@ const ProductDetail = ({
             <h2 className="text-2xl font-bold mb-4">About This Product</h2>
             <p className="text-muted-foreground leading-relaxed">{longDescription}</p>
             
-            {/* Map placeholder */}
+            {/* Interactive Location Map */}
             <div className="mt-6">
               <h3 className="text-lg font-semibold mb-3">Origin Location</h3>
-              <div className="w-full h-64 bg-muted rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="w-8 h-8 text-primary mx-auto mb-2" />
-                  <p className="text-muted-foreground">Map showing {origin}</p>
-                  <p className="text-sm text-muted-foreground">Interactive map coming soon</p>
-                </div>
-              </div>
+              <ProductLocationMap 
+                origin={origin}
+                coordinates={coordinates}
+                productName={title}
+              />
             </div>
           </div>
 

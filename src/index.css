@@ -42,6 +42,11 @@ All colors MUST be HSL.
     --gold: 45 95% 65%;
     --gold-foreground: 27 10% 20%;
 
+    /* Additional event colors */
+    --sunset: 14 100% 57%;
+    --moonlight: 220 70% 80%;
+    --emerald: 160 84% 39%;
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 

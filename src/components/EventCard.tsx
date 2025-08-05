@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 interface EventCardProps {
   title: string;
@@ -7,9 +8,10 @@ interface EventCardProps {
   image: string;
   frequency: string;
   frequencyColor?: string;
+  slug: string;
 }
 
-const EventCard = ({ title, description, image, frequency, frequencyColor = "bg-primary" }: EventCardProps) => {
+const EventCard = ({ title, description, image, frequency, frequencyColor = "bg-primary", slug }: EventCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
       <CardHeader className="p-0 relative">
@@ -25,12 +27,14 @@ const EventCard = ({ title, description, image, frequency, frequencyColor = "bg-
       <CardContent className="p-6">
         <h3 className="text-xl font-semibold mb-3 text-foreground">{title}</h3>
         <p className="text-muted-foreground mb-4 leading-relaxed">{description}</p>
-        <Button 
-          variant="outline" 
-          className="w-full hover:bg-primary hover:text-primary-foreground transition-colors"
-        >
-          Learn More
-        </Button>
+        <Link to={`/events/${slug}`}>
+          <Button 
+            variant="outline" 
+            className="w-full hover:bg-primary hover:text-primary-foreground transition-colors"
+          >
+            Learn More
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   );

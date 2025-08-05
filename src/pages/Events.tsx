@@ -11,21 +11,24 @@ const Events = () => {
       description: "Join us every Friday for a spectacular sunset BBQ experience. Enjoy grilled specialties while watching the sun dip into the Mediterranean horizon.",
       image: sunsetBbqImage,
       frequency: "Every Friday",
-      frequencyColor: "bg-sunset"
+      frequencyColor: "bg-sunset",
+      slug: "sunset-bbq"
     },
     {
       title: "Full Moon Boat Trip",
       description: "Experience the magic of Crete under the full moon. Our monthly boat excursions offer a unique perspective of the coastline bathed in moonlight.",
       image: boatTripImage,
       frequency: "Once a Month",
-      frequencyColor: "bg-moonlight"
+      frequencyColor: "bg-moonlight",
+      slug: "boat-trip"
     },
     {
       title: "Local Music Night",
       description: "Immerse yourself in traditional Cretan culture every Saturday. Local musicians perform authentic folk music in an intimate taverna setting.",
       image: musicNightImage,
       frequency: "Every Saturday",
-      frequencyColor: "bg-terracotta"
+      frequencyColor: "bg-terracotta",
+      slug: "music-night"
     }
   ];
 
@@ -58,6 +61,7 @@ const Events = () => {
                 image={event.image}
                 frequency={event.frequency}
                 frequencyColor={event.frequencyColor}
+                slug={event.slug}
               />
             ))}
           </div>

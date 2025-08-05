@@ -8,22 +8,26 @@ const Activities = () => {
     {
       title: "Olive Oil Tasting Experience",
       description: "Join our experts for a guided tasting experience where you'll learn about the nuances of premium Cretan olive oil and its health benefits.",
-      image: tastingImage
+      image: tastingImage,
+      slug: "olive-oil-tasting"
     },
     {
       title: "Wild Herb Foraging Tour",
       description: "Explore Crete's mountainous terrain with local guides who will teach you to identify and harvest wild herbs used in traditional cuisine.",
-      image: foragingImage
+      image: foragingImage,
+      slug: "herb-foraging"
     },
     {
       title: "Traditional Cooking Class",
       description: "Learn to prepare authentic Cretan dishes using our olive oils and herbs in a hands-on cooking experience with local chefs.",
-      image: tastingImage
+      image: tastingImage,
+      slug: "cooking-class"
     },
     {
       title: "Olive Grove Tour",
       description: "Visit our family-owned olive groves and witness the traditional methods of olive cultivation and oil production that have been passed down for generations.",
-      image: foragingImage
+      image: foragingImage,
+      slug: "olive-grove-tour"
     }
   ];
 

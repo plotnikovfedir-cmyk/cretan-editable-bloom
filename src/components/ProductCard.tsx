@@ -1,6 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Leaf } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
 
@@ -96,12 +97,21 @@ const ProductCard = ({ id, title, image, description, price, rating = 4.7, organ
         </div>
       </CardContent>
       <CardFooter className="p-6 pt-0 mt-auto">
-        <Button 
-          onClick={handleAddToCart}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300"
-        >
-          Add to Cart
-        </Button>
+        <div className="flex gap-2 w-full">
+          <Button 
+            asChild
+            variant="outline"
+            className="flex-1 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+          >
+            <Link to={`/products/${id}`}>View Details</Link>
+          </Button>
+          <Button 
+            onClick={handleAddToCart}
+            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300"
+          >
+            Add to Cart
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

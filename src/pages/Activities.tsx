@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import ActivityCard from "@/components/ActivityCard";
+import Footer from "@/components/Footer";
 import tastingImage from "@/assets/tasting-activity.jpg";
 import foragingImage from "@/assets/foraging-activity.jpg";
 
@@ -50,6 +51,8 @@ const Activities = () => {
           ))}
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };

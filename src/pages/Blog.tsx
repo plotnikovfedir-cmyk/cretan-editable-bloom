@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import BlogCard from "@/components/BlogCard";
+import Footer from "@/components/Footer";
 import oliveOilImage from "@/assets/olive-oil-product.jpg";
 import herbsImage from "@/assets/herbs-product.jpg";
 
@@ -50,6 +51,8 @@ const Blog = () => {
           ))}
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };

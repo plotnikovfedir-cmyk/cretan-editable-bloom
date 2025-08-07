@@ -1,8 +1,15 @@
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import deliveryHeroImage from "@/assets/delivery-hero.jpg";
 import picnicBoxImage from "@/assets/picnic-box.jpg";
+import ammoudiBeachImage from "@/assets/ammoudi-beach.jpg";
+import schinariaBeachImage from "@/assets/schinaria-beach.jpg";
+import preveliBeachImage from "@/assets/preveli-beach.jpg";
+import triopetraBeachImage from "@/assets/triopetra-beach.jpg";
+import agiosPavlosBeachImage from "@/assets/agios-pavlos-beach.jpg";
+import monasteryBeachImage from "@/assets/monastery-beach.jpg";
 
 const Delivery = () => {
   const menuItems = [
@@ -27,8 +34,12 @@ const Delivery = () => {
   ];
 
   const beaches = [
-    "Ammoudi Beach", "Schinaria Beach", "Preveli Beach", 
-    "Triopetra Beach", "Agios Pavlos", "Monastery Beach"
+    { name: "Ammoudi Beach", image: ammoudiBeachImage },
+    { name: "Schinaria Beach", image: schinariaBeachImage },
+    { name: "Preveli Beach", image: preveliBeachImage },
+    { name: "Triopetra Beach", image: triopetraBeachImage },
+    { name: "Agios Pavlos", image: agiosPavlosBeachImage },
+    { name: "Monastery Beach", image: monasteryBeachImage }
   ];
 
   const testimonials = [
@@ -166,12 +177,21 @@ const Delivery = () => {
             <p className="text-lg text-stone-600">We deliver to these stunning locations near Plakias</p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {beaches.map((beach, index) => (
-              <div key={index} className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-center hover:bg-emerald-100 transition-colors">
-                <span className="text-2xl mb-2 block">🏖️</span>
-                <span className="font-medium text-stone-800">{beach}</span>
-              </div>
+              <Card key={index} className="overflow-hidden group hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
+                <CardHeader className="p-0 relative">
+                  <img 
+                    src={beach.image} 
+                    alt={beach.name}
+                    className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h3 className="text-lg font-semibold drop-shadow-lg">{beach.name}</h3>
+                  </div>
+                </CardHeader>
+              </Card>
             ))}
           </div>
         </div>
@@ -238,6 +258,8 @@ const Delivery = () => {
           </p>
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 };

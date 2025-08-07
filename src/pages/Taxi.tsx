@@ -128,17 +128,22 @@ const Taxi = () => {
             <Button 
               size="lg" 
               variant="secondary" 
-              className="bg-gold hover:bg-gold/90 text-gold-foreground"
+              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground border-0 shadow-lg hover:shadow-xl transition-all duration-300"
               asChild
             >
-              <a href="tel:+1234567890">📞 Call Directly</a>
+              <a href="tel:+1234567890" className="flex items-center gap-2">
+                📞 Call Directly
+              </a>
             </Button>
             <Button 
               size="lg" 
-              className="bg-white/10 hover:bg-white/20 text-white border border-white/20"
+              variant="outline"
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300"
               asChild
             >
-              <a href="mailto:info@cretanguru.com">✉️ Send Email</a>
+              <a href="mailto:info@cretanguru.com" className="flex items-center gap-2">
+                ✉️ Send Email
+              </a>
             </Button>
           </div>
         </div>

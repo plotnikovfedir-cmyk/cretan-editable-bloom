@@ -1,4 +1,5 @@
 import { MapPin, Leaf, Mountain, Waves } from "lucide-react";
+import creteIslandImage from "@/assets/crete-island.jpg";
 
 const CreteMap = () => {
   const locations = [
@@ -66,21 +67,15 @@ const CreteMap = () => {
         </div>
 
         <div className="max-w-5xl mx-auto relative">
-          {/* Crete Island Shape (more realistic) */}
-          <div className="relative w-full h-96 bg-gradient-to-br from-emerald-400 via-green-500 to-green-700 shadow-2xl overflow-hidden" 
+          {/* Real Crete Island Image */}
+          <div className="relative w-full h-96 shadow-2xl overflow-hidden rounded-2xl"
                style={{
-                 clipPath: "polygon(0% 60%, 15% 45%, 25% 35%, 40% 30%, 55% 25%, 70% 35%, 85% 40%, 95% 50%, 100% 65%, 90% 80%, 75% 85%, 60% 82%, 45% 88%, 30% 85%, 15% 75%, 5% 70%)"
+                 backgroundImage: `url(${creteIslandImage})`,
+                 backgroundSize: 'cover',
+                 backgroundPosition: 'center',
                }}>
-            {/* Island texture overlay */}
-            <div className="absolute inset-0 opacity-20" style={islandTextureStyle}></div>
-            
-            {/* Mountain ranges effect */}
-            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-green-600/30 to-green-800/50"></div>
-            
-            {/* Coastline effect */}
-            <div className="absolute inset-0 shadow-inner" style={{
-              boxShadow: "inset 0 0 30px rgba(59, 130, 246, 0.3)"
-            }}></div>
+            {/* Overlay for better marker visibility */}
+            <div className="absolute inset-0 bg-black/20"></div>
             
             {/* Production zones overlay */}
             <div className="absolute top-0 left-0 w-1/3 h-2/3 bg-yellow-400/20 rounded-full blur-xl opacity-60"></div>

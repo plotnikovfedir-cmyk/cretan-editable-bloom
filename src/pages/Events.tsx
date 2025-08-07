@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import EventCard from "@/components/EventCard";
+import Footer from "@/components/Footer";
 import sunsetBbqImage from "@/assets/sunset-bbq.jpg";
 import boatTripImage from "@/assets/boat-trip.jpg";
 import musicNightImage from "@/assets/music-night.jpg";
@@ -96,6 +97,8 @@ const Events = () => {
           </div>
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 };

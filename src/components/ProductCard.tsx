@@ -39,7 +39,7 @@ const ProductCard = ({ title, image, description, price, rating = 4.7, organic =
     return stars;
   };
   return (
-    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-500 hover:scale-[1.02] bg-card border border-border/50">
+    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-500 hover:scale-[1.02] bg-card border border-border/50 h-full flex flex-col">
       <CardHeader className="p-0 relative">
         <div className="relative overflow-hidden">
           <img 
@@ -56,9 +56,9 @@ const ProductCard = ({ title, image, description, price, rating = 4.7, organic =
           )}
         </div>
       </CardHeader>
-      <CardContent className="p-6 space-y-4">
-        <div>
-          <h3 className="text-xl font-semibold mb-2 text-foreground group-hover:text-primary transition-colors duration-300">
+      <CardContent className="p-6 space-y-4 flex-grow flex flex-col">
+        <div className="flex-grow">
+          <h3 className="text-xl font-semibold mb-2 text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
             {title}
           </h3>
           <div className="flex items-center gap-2 mb-3">
@@ -67,14 +67,14 @@ const ProductCard = ({ title, image, description, price, rating = 4.7, organic =
             </div>
             <span className="text-sm text-muted-foreground">({rating})</span>
           </div>
-          <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
+          <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">{description}</p>
         </div>
         
         <div className="pt-2">
           <p className="text-2xl font-bold text-primary">€{price}</p>
         </div>
       </CardContent>
-      <CardFooter className="p-6 pt-0">
+      <CardFooter className="p-6 pt-0 mt-auto">
         <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300">
           Add to Cart
         </Button>

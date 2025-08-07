@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import ProductCard from "@/components/ProductCard";
+import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 import oliveOilImage from "@/assets/olive-oil-product.jpg";
 import herbsImage from "@/assets/herbs-product.jpg";
@@ -90,6 +91,8 @@ const Products = () => {
           ))}
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };

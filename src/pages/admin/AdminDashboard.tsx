@@ -14,7 +14,9 @@ import {
   LogOut,
   Settings,
   Camera,
-  MessageSquare
+  MessageSquare,
+  Star,
+  MapPin
 } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -25,7 +27,8 @@ const AdminDashboard = () => {
     events: 0,
     blogPosts: 0,
     orders: 0,
-    bookings: 0
+    bookings: 0,
+    reviews: 0
   });
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -65,13 +68,14 @@ const AdminDashboard = () => {
 
   const loadStats = async () => {
     try {
-      const [products, activities, events, blogPosts, orders, bookings] = await Promise.all([
+      const [products, activities, events, blogPosts, orders, bookings, reviews] = await Promise.all([
         supabase.from("products").select("id", { count: "exact", head: true }),
         supabase.from("activities").select("id", { count: "exact", head: true }),
         supabase.from("events").select("id", { count: "exact", head: true }),
         supabase.from("blog_posts").select("id", { count: "exact", head: true }),
         supabase.from("orders").select("id", { count: "exact", head: true }),
-        supabase.from("bookings").select("id", { count: "exact", head: true })
+        supabase.from("bookings").select("id", { count: "exact", head: true }),
+        supabase.from("customer_reviews").select("id", { count: "exact", head: true })
       ]);
 
       setStats({
@@ -80,7 +84,8 @@ const AdminDashboard = () => {
         events: events.count || 0,
         blogPosts: blogPosts.count || 0,
         orders: orders.count || 0,
-        bookings: bookings.count || 0
+        bookings: bookings.count || 0,
+        reviews: reviews.count || 0
       });
     } catch (error) {
       console.error("Error loading stats:", error);
@@ -133,7 +138,7 @@ const AdminDashboard = () => {
       count: 0
     },
     {
-      title: "Отзывы",
+      title: "Testimonials",
       description: "Управление отзывами клиентов",
       icon: MessageSquare,
       link: "/admin/testimonials",
@@ -152,6 +157,20 @@ const AdminDashboard = () => {
       icon: Users,
       link: "/admin/bookings",
       count: stats.bookings
+    },
+    {
+      title: "Отзывы клиентов",
+      description: "Модерация отзывов клиентов",
+      icon: Star,
+      link: "/admin/reviews",
+      count: stats.reviews
+    },
+    {
+      title: "Локации",
+      description: "Управление точками на карте",
+      icon: MapPin,
+      link: "/admin/locations",
+      count: 0
     }
   ];
 

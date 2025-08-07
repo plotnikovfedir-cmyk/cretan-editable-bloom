@@ -27,6 +27,9 @@ import AdminActivities from "./pages/admin/AdminActivities";
 import AdminInstagramGallery from "./pages/admin/AdminInstagramGallery";
 import AdminTestimonials from "./pages/admin/AdminTestimonials";
 import AdminLocations from "./pages/admin/AdminLocations";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminBookings from "./pages/admin/AdminBookings";
+import AdminReviews from "./pages/admin/AdminReviews";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +64,9 @@ const App = () => (
             <Route path="/admin/instagram-gallery" element={<AdminInstagramGallery />} />
             <Route path="/admin/testimonials" element={<AdminTestimonials />} />
             <Route path="/admin/locations" element={<AdminLocations />} />
+            <Route path="/admin/orders" element={<AdminOrders />} />
+            <Route path="/admin/bookings" element={<AdminBookings />} />
+            <Route path="/admin/reviews" element={<AdminReviews />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

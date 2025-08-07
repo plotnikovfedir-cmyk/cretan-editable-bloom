@@ -26,6 +26,7 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import AdminActivities from "./pages/admin/AdminActivities";
 import AdminInstagramGallery from "./pages/admin/AdminInstagramGallery";
 import AdminTestimonials from "./pages/admin/AdminTestimonials";
+import AdminLocations from "./pages/admin/AdminLocations";
 
 const queryClient = new QueryClient();
 

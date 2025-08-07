@@ -59,6 +59,7 @@ const App = () => (
             <Route path="/admin/activities" element={<AdminActivities />} />
             <Route path="/admin/instagram-gallery" element={<AdminInstagramGallery />} />
             <Route path="/admin/testimonials" element={<AdminTestimonials />} />
+            <Route path="/admin/locations" element={<AdminLocations />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

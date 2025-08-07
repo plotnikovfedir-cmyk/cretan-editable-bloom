@@ -495,6 +495,42 @@ export type Database = {
         }
         Relationships: []
       }
+      locations: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          latitude: number
+          location_type: string
+          longitude: number
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          latitude: number
+          location_type?: string
+          longitude: number
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          latitude?: number
+          location_type?: string
+          longitude?: number
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           created_at: string
@@ -626,6 +662,8 @@ export type Database = {
           id: string
           image_url: string | null
           in_stock: boolean | null
+          latitude: number | null
+          longitude: number | null
           name: string
           price: number | null
           slug: string
@@ -638,6 +676,8 @@ export type Database = {
           id?: string
           image_url?: string | null
           in_stock?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
           name: string
           price?: number | null
           slug: string
@@ -650,6 +690,8 @@ export type Database = {
           id?: string
           image_url?: string | null
           in_stock?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
           name?: string
           price?: number | null
           slug?: string

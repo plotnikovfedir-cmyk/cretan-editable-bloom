@@ -23,6 +23,9 @@ import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
+import AdminActivities from "./pages/admin/AdminActivities";
+import AdminInstagramGallery from "./pages/admin/AdminInstagramGallery";
+import AdminTestimonials from "./pages/admin/AdminTestimonials";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +56,9 @@ const App = () => (
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/activities" element={<AdminActivities />} />
+            <Route path="/admin/instagram-gallery" element={<AdminInstagramGallery />} />
+            <Route path="/admin/testimonials" element={<AdminTestimonials />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

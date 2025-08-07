@@ -12,7 +12,9 @@ import {
   Users, 
   ShoppingCart,
   LogOut,
-  Settings
+  Settings,
+  Camera,
+  MessageSquare
 } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -122,6 +124,20 @@ const AdminDashboard = () => {
       icon: BookOpen,
       link: "/admin/blog",
       count: stats.blogPosts
+    },
+    {
+      title: "Instagram Галерея",
+      description: "Управление 'Follow Our Journey'",
+      icon: Camera,
+      link: "/admin/instagram-gallery",
+      count: 0
+    },
+    {
+      title: "Отзывы",
+      description: "Управление отзывами клиентов",
+      icon: MessageSquare,
+      link: "/admin/testimonials",
+      count: 0
     },
     {
       title: "Заказы",

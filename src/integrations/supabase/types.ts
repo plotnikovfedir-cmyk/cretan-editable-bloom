@@ -459,6 +459,42 @@ export type Database = {
         }
         Relationships: []
       }
+      instagram_gallery: {
+        Row: {
+          alt_text: string | null
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+          is_active: boolean
+          link_url: string | null
+          order_position: number | null
+          updated_at: string
+        }
+        Insert: {
+          alt_text?: string | null
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          is_active?: boolean
+          link_url?: string | null
+          order_position?: number | null
+          updated_at?: string
+        }
+        Update: {
+          alt_text?: string | null
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          link_url?: string | null
+          order_position?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           created_at: string
@@ -618,6 +654,84 @@ export type Database = {
           price?: number | null
           slug?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      settings: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean
+          setting_key: string
+          setting_type: string
+          setting_value: string | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          setting_key: string
+          setting_type?: string
+          setting_value?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          setting_key?: string
+          setting_type?: string
+          setting_value?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          created_at: string
+          customer_image_url: string | null
+          customer_location: string | null
+          customer_name: string
+          id: string
+          is_active: boolean
+          is_featured: boolean
+          order_position: number | null
+          rating: number | null
+          testimonial_text: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_image_url?: string | null
+          customer_location?: string | null
+          customer_name: string
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          order_position?: number | null
+          rating?: number | null
+          testimonial_text: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_image_url?: string | null
+          customer_location?: string | null
+          customer_name?: string
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          order_position?: number | null
+          rating?: number | null
+          testimonial_text?: string
+          updated_at?: string
         }
         Relationships: []
       }

@@ -20,8 +20,19 @@ const ProductCard = ({ id, title, image, description, price, rating = 4.7, organ
   const { toast } = useToast();
 
   const handleAddToCart = () => {
+    // Map slug to UUID - need to get the correct UUID for the product
+    const productUuidMap: { [key: string]: string } = {
+      'wild-mountain-herbs': '08f10350-3e4d-4896-a68c-96f1151eeb78',
+      'extra-virgin-olive-oil': '55b40246-9fe5-4654-87cf-c4387a462701',
+      'cretan-honey': '87140e39-5756-49c3-bba2-3dcc609884fb',
+      'dittany-crete': '9f1e8bd0-7e3a-4c22-9ec1-87229fa1a659',
+      'olive-oil-soap': '4553460b-62a6-4aea-a82f-7e40379436ab'
+    };
+    
+    const productUuid = productUuidMap[id] || id;
+    
     const product = {
-      id,
+      id: productUuid,
       name: title,
       price: parseFloat(price),
       image_url: image,

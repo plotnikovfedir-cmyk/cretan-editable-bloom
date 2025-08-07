@@ -30,15 +30,25 @@ serve(async (req) => {
       )
     }
 
-    // Set the auth token for the request
-    supabaseClient.auth.setSession({ access_token: authHeader.replace('Bearer ', ''), refresh_token: '' })
+    // Get the user from the JWT token
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser(authHeader.replace('Bearer ', ''))
+    
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid token' }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 401
+        }
+      )
+    }
 
     // Check if user is admin
-    const { data: isAdmin, error: adminError } = await supabaseClient.rpc('is_admin')
+    const { data: isAdmin, error: adminError } = await supabaseClient.rpc('is_admin', { user_id: user.id })
     
     if (adminError || !isAdmin) {
       return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
+        JSON.stringify({ error: 'Unauthorized - admin access required' }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 403

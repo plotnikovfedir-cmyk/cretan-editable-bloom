@@ -1,11 +1,15 @@
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import PriceTable from "@/components/PriceTable";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Car, Shield, MapPin, MessageCircle } from "lucide-react";
+import BookingModal from "@/components/BookingModal";
 import taxiHeroImage from "@/assets/taxi-service.jpg";
 
 const Taxi = () => {
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  
   const destinations = [
     { destination: "Rethymno", price: "45-55 €" },
     { destination: "Chania Airport", price: "110-140 €" },
@@ -35,6 +39,7 @@ const Taxi = () => {
           <Button 
             size="lg" 
             className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            onClick={() => setIsBookingModalOpen(true)}
           >
             <MessageCircle className="w-5 h-5 mr-2" />
             Book Your Ride Now
@@ -127,8 +132,7 @@ const Taxi = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              variant="secondary" 
-              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground border-0 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg hover:shadow-xl transition-all duration-300"
               asChild
             >
               <a href="tel:+1234567890" className="flex items-center gap-2">
@@ -138,7 +142,7 @@ const Taxi = () => {
             <Button 
               size="lg" 
               variant="outline"
-              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-primary/10 hover:bg-primary/20 text-primary-foreground border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300"
               asChild
             >
               <a href="mailto:info@cretanguru.com" className="flex items-center gap-2">
@@ -149,6 +153,13 @@ const Taxi = () => {
         </div>
       </section>
       <Footer />
+      
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+        type="taxi"
+        title="Taxi Transfer"
+      />
     </div>
   );
 };

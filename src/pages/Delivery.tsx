@@ -2,6 +2,8 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useCart } from '@/contexts/CartContext';
+import { useToast } from '@/hooks/use-toast';
 import deliveryHeroImage from "@/assets/delivery-hero.jpg";
 import picnicBoxImage from "@/assets/picnic-box.jpg";
 import ammoudiBeachImage from "@/assets/ammoudi-beach.jpg";
@@ -12,6 +14,25 @@ import agiosPavlosBeachImage from "@/assets/agios-pavlos-beach.jpg";
 import monasteryBeachImage from "@/assets/monastery-beach.jpg";
 
 const Delivery = () => {
+  const { addToCart } = useCart();
+  const { toast } = useToast();
+
+  const handleAddToOrder = (item: any) => {
+    const product = {
+      id: `delivery-${item.title.toLowerCase().replace(/\s+/g, '-')}`,
+      name: item.title,
+      price: parseFloat(item.price.replace('€', '')),
+      image_url: item.image,
+      description: item.description
+    };
+
+    addToCart(product);
+    toast({
+      title: "Added to order",
+      description: `${item.title} has been added to your order.`
+    });
+  };
+
   const menuItems = [
     {
       title: "Mediterranean Picnic Box",
@@ -158,7 +179,11 @@ const Delivery = () => {
                   <p className="text-stone-600 mb-4">{item.description}</p>
                   <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold text-primary">{item.price}</span>
-                    <Button variant="outline" className="border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white">
+                    <Button 
+                      variant="outline" 
+                      className="border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white"
+                      onClick={() => handleAddToOrder(item)}
+                    >
                       Add to Order
                     </Button>
                   </div>

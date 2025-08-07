@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import BookingModal from "@/components/BookingModal";
 import sunsetBbqImage from "@/assets/sunset-bbq.jpg";
 import boatTripImage from "@/assets/boat-trip.jpg";
 import musicNightImage from "@/assets/music-night.jpg";
@@ -26,6 +28,7 @@ interface EventData {
 
 const EventDetail = () => {
   const { slug } = useParams();
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   const events: Record<string, EventData> = {
     "sunset-bbq": {
@@ -299,7 +302,10 @@ const EventDetail = () => {
                   </div>
                 </div>
 
-                <Button className="w-full mb-4">
+                <Button 
+                  className="w-full mb-4"
+                  onClick={() => setIsBookingModalOpen(true)}
+                >
                   Reserve Your Spot
                 </Button>
 
@@ -327,7 +333,11 @@ const EventDetail = () => {
                   {event.nextDates.map((date, index) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                       <span className="text-foreground font-medium">{date}</span>
-                      <Button size="sm" variant="outline">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => setIsBookingModalOpen(true)}
+                      >
                         Book
                       </Button>
                     </div>
@@ -354,6 +364,15 @@ const EventDetail = () => {
       </div>
 
       <Footer />
+      
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+        type="event"
+        title={event.title}
+        price={event.price}
+        referenceId={slug}
+      />
     </div>
   );
 };

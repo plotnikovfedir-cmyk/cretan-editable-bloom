@@ -1,8 +1,11 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Leaf } from "lucide-react";
+import { useCart } from '@/contexts/CartContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProductCardProps {
+  id: string;
   title: string;
   image: string;
   description: string;
@@ -11,7 +14,25 @@ interface ProductCardProps {
   organic?: boolean;
 }
 
-const ProductCard = ({ title, image, description, price, rating = 4.7, organic = true }: ProductCardProps) => {
+const ProductCard = ({ id, title, image, description, price, rating = 4.7, organic = true }: ProductCardProps) => {
+  const { addToCart } = useCart();
+  const { toast } = useToast();
+
+  const handleAddToCart = () => {
+    const product = {
+      id,
+      name: title,
+      price: parseFloat(price),
+      image_url: image,
+      description
+    };
+
+    addToCart(product);
+    toast({
+      title: "Added to cart",
+      description: `${title} has been added to your cart.`
+    });
+  };
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -75,7 +96,10 @@ const ProductCard = ({ title, image, description, price, rating = 4.7, organic =
         </div>
       </CardContent>
       <CardFooter className="p-6 pt-0 mt-auto">
-        <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300">
+        <Button 
+          onClick={handleAddToCart}
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300"
+        >
           Add to Cart
         </Button>
       </CardFooter>

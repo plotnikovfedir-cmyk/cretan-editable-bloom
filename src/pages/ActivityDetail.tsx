@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import BookingModal from "@/components/BookingModal";
 import tastingImage from "@/assets/tasting-activity.jpg";
 import foragingImage from "@/assets/foraging-activity.jpg";
 
@@ -24,6 +26,7 @@ interface ActivityData {
 
 const ActivityDetail = () => {
   const { slug } = useParams();
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   const activities: Record<string, ActivityData> = {
     "olive-oil-tasting": {
@@ -300,7 +303,10 @@ const ActivityDetail = () => {
                   </div>
                 </div>
 
-                <Button className="w-full mb-4">
+                <Button 
+                  className="w-full mb-4"
+                  onClick={() => setIsBookingModalOpen(true)}
+                >
                   Book Now
                 </Button>
 
@@ -338,6 +344,15 @@ const ActivityDetail = () => {
       </div>
 
       <Footer />
+      
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+        type="activity"
+        title={activity.title}
+        price={activity.price}
+        referenceId={slug}
+      />
     </div>
   );
 };

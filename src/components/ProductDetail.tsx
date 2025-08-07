@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Star, MapPin, Heart, ShoppingCart } from "lucide-react";
 import ProductLocationMap from "@/components/ProductLocationMap";
+import { useCart } from '@/contexts/CartContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProductDetailProps {
   id: string;
@@ -27,6 +29,7 @@ interface ProductDetailProps {
 }
 
 const ProductDetail = ({ 
+  id,
   title, 
   image, 
   description, 
@@ -41,6 +44,26 @@ const ProductDetail = ({
 }: ProductDetailProps) => {
   const [selectedVolume, setSelectedVolume] = useState(volumes[0]);
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
+  const { toast } = useToast();
+
+  const handleAddToCart = () => {
+    const product = {
+      id: id,
+      name: title,
+      price: parseFloat(selectedVolume.price),
+      image_url: image,
+      description: description
+    };
+    
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product);
+    }
+    toast({
+      title: "Added to cart",
+      description: `${quantity}x ${title} (${selectedVolume.size}) added to your cart.`,
+    });
+  };
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -151,6 +174,7 @@ const ProductDetail = ({
                 <Button 
                   size="lg" 
                   className="flex-1 bg-primary hover:bg-primary/90"
+                  onClick={handleAddToCart}
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />
                   Add to Cart

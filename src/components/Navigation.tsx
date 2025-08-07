@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import CartIcon from "@/components/CartIcon";
 
 const Navigation = () => {
   const location = useLocation();
@@ -36,6 +37,10 @@ const Navigation = () => {
                 {item.label}
               </Link>
             ))}
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <CartIcon />
           </div>
           
           {/* Mobile menu - simplified for this example */}

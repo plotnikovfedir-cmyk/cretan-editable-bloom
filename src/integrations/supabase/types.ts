@@ -777,6 +777,48 @@ export type Database = {
         }
         Relationships: []
       }
+      website_images: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          file_size: number | null
+          filename: string
+          id: string
+          is_active: boolean
+          mime_type: string | null
+          original_path: string
+          public_url: string
+          updated_at: string
+          usage_type: string
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          file_size?: number | null
+          filename: string
+          id?: string
+          is_active?: boolean
+          mime_type?: string | null
+          original_path: string
+          public_url: string
+          updated_at?: string
+          usage_type?: string
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          file_size?: number | null
+          filename?: string
+          id?: string
+          is_active?: boolean
+          mime_type?: string | null
+          original_path?: string
+          public_url?: string
+          updated_at?: string
+          usage_type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

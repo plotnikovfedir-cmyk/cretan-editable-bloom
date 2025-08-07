@@ -15,9 +15,9 @@ import {
   Settings,
   Camera,
   MessageSquare,
-  Star,
   MapPin
 } from "lucide-react";
+import { Star } from "lucide-react";
 
 const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);

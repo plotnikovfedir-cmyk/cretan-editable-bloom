@@ -12,6 +12,10 @@ import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import oliveOilImage from "@/assets/olive-oil-product.jpg";
 import herbsImage from "@/assets/herbs-product.jpg";
+import activitiesServiceImage from "@/assets/activities-service.jpg";
+import eventsServiceImage from "@/assets/events-service.jpg";
+import taxiServiceImage from "@/assets/taxi-service.jpg";
+import deliveryServiceImage from "@/assets/delivery-service.jpg";
 
 const Index = () => {
   return (
@@ -125,7 +129,7 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <ServiceCard
-              image="/src/assets/activities-service.jpg"
+              image={activitiesServiceImage}
               title="Activities"
               description="Discover authentic Cretan experiences from olive oil tastings to herb foraging adventures"
               link="/activities"
@@ -134,7 +138,7 @@ const Index = () => {
             />
             
             <ServiceCard
-              image="/src/assets/events-service.jpg"
+              image={eventsServiceImage}
               title="Events"
               description="Join our sunset BBQs, boat trips and traditional music nights under the stars"
               link="/events"
@@ -143,7 +147,7 @@ const Index = () => {
             />
             
             <ServiceCard
-              image="/src/assets/taxi-service.jpg"
+              image={taxiServiceImage}
               title="Taxi Service"
               description="Reliable transfers to airports, beaches and attractions across beautiful Crete"
               link="/taxi"
@@ -152,7 +156,7 @@ const Index = () => {
             />
             
             <ServiceCard
-              image="/src/assets/delivery-service.jpg"
+              image={deliveryServiceImage}
               title="Beach Delivery"
               description="Premium picnic boxes delivered to remote beaches and stunning sunset spots"
               link="/delivery"

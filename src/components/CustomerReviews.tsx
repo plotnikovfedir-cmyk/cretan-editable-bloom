@@ -126,7 +126,7 @@ const CustomerReviews = ({ productId, showAddReview = false, limit }: CustomerRe
             key={star}
             className={`w-4 h-4 ${
               star <= rating
-                ? 'fill-yellow-400 text-yellow-400'
+                ? 'fill-primary text-primary'
                 : 'text-muted-foreground'
             }`}
           />
@@ -148,8 +148,8 @@ const CustomerReviews = ({ productId, showAddReview = false, limit }: CustomerRe
             <Star
               className={`w-5 h-5 ${
                 star <= formData.rating
-                  ? 'fill-yellow-400 text-yellow-400'
-                  : 'text-muted-foreground hover:text-yellow-400'
+                  ? 'fill-primary text-primary'
+                  : 'text-muted-foreground hover:text-primary'
               }`}
             />
           </button>

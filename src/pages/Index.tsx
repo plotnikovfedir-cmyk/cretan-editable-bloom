@@ -4,7 +4,7 @@ import FeaturedProductCard from "@/components/FeaturedProductCard";
 import ServiceCard from "@/components/ServiceCard";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import TestimonialsSection from "@/components/TestimonialsSection";
-import InstagramGallery from "@/components/InstagramGallery";
+import InstagramGalleryDynamic from "@/components/InstagramGalleryDynamic";
 import CreteMap from "@/components/CreteMap";
 import BlogCard from "@/components/BlogCard";
 import { Button } from "@/components/ui/button";
@@ -216,7 +216,7 @@ const Index = () => {
       <CreteMap />
 
       {/* Instagram Gallery */}
-      <InstagramGallery />
+      <InstagramGalleryDynamic />
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-primary to-primary/90 text-primary-foreground relative overflow-hidden">

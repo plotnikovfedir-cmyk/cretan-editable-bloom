@@ -68,12 +68,27 @@ const AdminReviews = () => {
 
   const updateReviewStatus = async (reviewId: string, isApproved: boolean) => {
     try {
+      const reviewToUpdate = reviews.find(r => r.id === reviewId);
+      
       const { error } = await supabase
         .from('customer_reviews')
         .update({ is_approved: isApproved })
         .eq('id', reviewId);
 
       if (error) throw error;
+
+      // Log admin action for audit trail
+      try {
+        await supabase.rpc('log_admin_action', {
+          p_action: `Review ${isApproved ? 'approved' : 'rejected'}`,
+          p_table_name: 'customer_reviews',
+          p_record_id: reviewId,
+          p_old_values: { is_approved: reviewToUpdate?.is_approved },
+          p_new_values: { is_approved: isApproved }
+        });
+      } catch (auditError) {
+        console.error('Error logging admin action:', auditError);
+      }
       
       toast({
         title: "Success",
@@ -95,12 +110,30 @@ const AdminReviews = () => {
     if (!confirm('Are you sure you want to delete this review?')) return;
 
     try {
+      const reviewToDelete = reviews.find(r => r.id === reviewId);
+      
       const { error } = await supabase
         .from('customer_reviews')
         .delete()
         .eq('id', reviewId);
 
       if (error) throw error;
+
+      // Log admin action for audit trail
+      try {
+        await supabase.rpc('log_admin_action', {
+          p_action: 'Review deleted',
+          p_table_name: 'customer_reviews',
+          p_record_id: reviewId,
+          p_old_values: reviewToDelete ? {
+            user_name: reviewToDelete.user_name,
+            rating: reviewToDelete.rating,
+            review_text: reviewToDelete.review_text
+          } : null
+        });
+      } catch (auditError) {
+        console.error('Error logging admin action:', auditError);
+      }
       
       toast({
         title: "Success",

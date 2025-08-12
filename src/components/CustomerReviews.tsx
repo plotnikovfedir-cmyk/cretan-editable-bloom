@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { sanitizeText } from '@/utils/sanitize';
 
 interface Review {
   id: string;
@@ -79,16 +80,42 @@ const CustomerReviews = ({ productId, showAddReview = false, limit }: CustomerRe
       return;
     }
 
+    // Sanitize and validate input data
+    const sanitizedName = sanitizeText(formData.user_name.trim()).slice(0, 100);
+    const sanitizedEmail = formData.user_email.trim().toLowerCase();
+    const sanitizedReviewText = sanitizeText(formData.review_text.trim()).slice(0, 1000);
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(sanitizedEmail)) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate rating
+    if (formData.rating < 1 || formData.rating > 5) {
+      toast({
+        title: "Error",
+        description: "Rating must be between 1 and 5.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       const { error } = await supabase
         .from('customer_reviews')
         .insert({
-          user_name: formData.user_name,
-          user_email: formData.user_email,
+          user_name: sanitizedName,
+          user_email: sanitizedEmail,
           rating: formData.rating,
-          review_text: formData.review_text,
+          review_text: sanitizedReviewText,
           product_id: productId || null
         });
 

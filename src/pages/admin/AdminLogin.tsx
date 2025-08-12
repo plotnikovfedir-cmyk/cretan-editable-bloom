@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useRateLimit } from "@/hooks/useRateLimit";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -13,9 +14,28 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  // Rate limiting: 5 attempts per 15 minutes, 5 minute block
+  const { checkRateLimit, isBlocked, getTimeUntilReset, remainingAttempts } = useRateLimit({
+    maxAttempts: 5,
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    blockDurationMs: 5 * 60 * 1000 // 5 minutes
+  });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check rate limiting
+    if (!checkRateLimit()) {
+      const timeLeft = Math.ceil(getTimeUntilReset() / 1000 / 60);
+      toast({
+        variant: "destructive",
+        title: "Too many login attempts",
+        description: `Please wait ${timeLeft} minutes before trying again.`,
+      });
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -102,9 +122,19 @@ const AdminLogin = () => {
                 placeholder="••••••••"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Вход..." : "Войти"}
+            <Button type="submit" className="w-full" disabled={loading || isBlocked}>
+              {loading ? "Вход..." : isBlocked ? "Заблокировано" : "Войти"}
             </Button>
+            {isBlocked && (
+              <p className="text-sm text-destructive text-center mt-2">
+                Слишком много попыток входа. Попробуйте через {Math.ceil(getTimeUntilReset() / 1000 / 60)} мин.
+              </p>
+            )}
+            {!isBlocked && remainingAttempts < 5 && (
+              <p className="text-sm text-muted-foreground text-center mt-2">
+                Осталось попыток: {remainingAttempts}
+              </p>
+            )}
           </form>
         </CardContent>
       </Card>

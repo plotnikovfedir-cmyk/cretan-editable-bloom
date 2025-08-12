@@ -66,15 +66,51 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
         total_price: price ? parseFloat(price.replace('€', '').replace(' per person', '')) * parseInt(formData.number_of_people) : null
       };
 
-      const { error } = await supabase
+      // Insert booking into database
+      const { data: booking, error } = await supabase
         .from('bookings')
-        .insert([bookingData]);
+        .insert([bookingData])
+        .select()
+        .single();
 
       if (error) throw error;
 
+      // Send confirmation email
+      try {
+        const emailData = {
+          template_name: 'booking_confirmation',
+          to_email: formData.customer_email,
+          template_data: {
+            customer_name: formData.customer_name,
+            title: title,
+            type: type,
+            booking_date: date.toLocaleDateString('en-US', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }),
+            number_of_people: formData.number_of_people,
+            total_price: bookingData.total_price?.toFixed(2) || 'TBD',
+            special_requests: formData.special_requests || ''
+          }
+        };
+
+        await supabase.functions.invoke('send-notification-email', {
+          body: emailData
+        });
+
+        console.log('Confirmation email sent successfully');
+      } catch (emailError) {
+        console.error('Failed to send confirmation email:', emailError);
+        // Don't fail the booking if email fails
+      }
+
+      // Show confirmation dialog
       toast({
-        title: "Booking confirmed!",
-        description: "We'll contact you shortly to confirm the details."
+        title: "Заявка принята!",
+        description: "Ваша заявка успешно отправлена. Мы свяжемся с вами в ближайшее время для подтверждения деталей.",
+        duration: 5000
       });
 
       onClose();

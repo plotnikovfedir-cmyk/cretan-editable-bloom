@@ -95,6 +95,39 @@ const Checkout = () => {
       // Clear cart
       await clearCart();
 
+      // Send order confirmation email
+      try {
+        const orderItemsHtml = state.items.map(item => 
+          `<div style="border-bottom: 1px solid #eee; padding: 10px 0;">
+            <strong>${item.product_name}</strong><br>
+            Quantity: ${item.quantity} × €${item.product_price.toFixed(2)} = €${(item.product_price * item.quantity).toFixed(2)}
+          </div>`
+        ).join('');
+
+        const emailData = {
+          template_name: 'order_confirmation',
+          to_email: formData.customer_email,
+          template_data: {
+            customer_name: formData.customer_name,
+            order_number: order.order_number,
+            total_amount: state.total.toFixed(2),
+            payment_method: formData.payment_method.replace('_', ' '),
+            shipping_address: formData.shipping_address,
+            order_items: orderItemsHtml,
+            notes: formData.notes || ''
+          }
+        };
+
+        await supabase.functions.invoke('send-notification-email', {
+          body: emailData
+        });
+
+        console.log('Order confirmation email sent successfully');
+      } catch (emailError) {
+        console.error('Failed to send order confirmation email:', emailError);
+        // Don't fail the order if email fails
+      }
+
       toast({
         title: "Order placed successfully!",
         description: `Your order #${order.order_number} has been placed. You will receive a confirmation email shortly.`

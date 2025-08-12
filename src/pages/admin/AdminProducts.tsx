@@ -9,7 +9,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Plus, Edit, Trash2, Star, MessageSquare, MapPin } from "lucide-react";
+import AdminNavigation from "@/components/admin/AdminNavigation";
 import MapSelector from "@/components/admin/MapSelector";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 import {
   Dialog,
   DialogContent,
@@ -281,17 +283,11 @@ const AdminProducts = () => {
 
   return (
     <div className="min-h-screen bg-muted/50">
-      <header className="bg-background border-b">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <Link to="/admin/dashboard">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Назад
-              </Button>
-            </Link>
-            <h1 className="text-2xl font-bold">Управление товарами</h1>
-          </div>
+      <AdminNavigation 
+        title="Управление товарами"
+      />
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex justify-end">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button onClick={openCreateDialog}>
@@ -360,13 +356,23 @@ const AdminProducts = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="image_url">URL изображения</Label>
-                  <Input
-                    id="image_url"
-                    type="url"
-                    value={formData.image_url}
-                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                  <Label htmlFor="image_url">Изображение товара</Label>
+                  <ImageUploader
+                    currentImage={formData.image_url}
+                    onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                    bucket="admin-uploads"
+                    folder="products"
+                    label="Загрузить изображение товара"
                   />
+                  {formData.image_url && (
+                    <div className="mt-2">
+                      <img 
+                        src={formData.image_url} 
+                        alt="Product preview" 
+                        className="w-32 h-32 object-cover rounded-md border"
+                      />
+                    </div>
+                  )}
                 </div>
                 
                 {/* Map selector for coordinates */}
@@ -402,7 +408,7 @@ const AdminProducts = () => {
             </DialogContent>
           </Dialog>
         </div>
-      </header>
+      </div>
 
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

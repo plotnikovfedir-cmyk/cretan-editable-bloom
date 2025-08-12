@@ -141,8 +141,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const addToCart = async (product: any) => {
     try {
+      console.log('Adding to cart:', { productId: product.id, productName: product.name });
+      
       const { data: user } = await supabase.auth.getUser();
       const sessionId = getSessionId();
+      
+      console.log('User auth state:', { userId: user.user?.id, sessionId });
+
+      // Validate product ID is a valid UUID
+      const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (!uuidPattern.test(product.id)) {
+        throw new Error(`Invalid product ID format: ${product.id}. Expected UUID format.`);
+      }
 
       const cartData: any = {
         product_id: product.id,
@@ -157,13 +167,51 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         cartData.user_id = null;
       }
 
-      const { error } = await supabase
-        .from('cart_items')
-        .upsert(cartData, {
-          onConflict: user.user ? 'user_id,product_id' : 'session_id,product_id'
-        });
+      console.log('Cart data being inserted:', cartData);
 
-      if (error) throw error;
+      // First check if item already exists
+      let existingQuery = supabase
+        .from('cart_items')
+        .select('id, quantity')
+        .eq('product_id', product.id);
+
+      if (user.user) {
+        existingQuery = existingQuery.eq('user_id', user.user.id);
+      } else {
+        existingQuery = existingQuery.eq('session_id', sessionId);
+      }
+
+      const { data: existingItems, error: queryError } = await existingQuery;
+      
+      if (queryError) {
+        console.error('Error querying existing cart items:', queryError);
+        throw queryError;
+      }
+
+      console.log('Existing cart items:', existingItems);
+
+      let result;
+      if (existingItems && existingItems.length > 0) {
+        // Update existing item
+        const newQuantity = existingItems[0].quantity + 1;
+        console.log('Updating existing item with quantity:', newQuantity);
+        
+        result = await supabase
+          .from('cart_items')
+          .update({ quantity: newQuantity })
+          .eq('id', existingItems[0].id);
+      } else {
+        // Insert new item
+        console.log('Inserting new cart item');
+        result = await supabase
+          .from('cart_items')
+          .insert([cartData]);
+      }
+
+      if (result.error) {
+        console.error('Database operation error:', result.error);
+        throw result.error;
+      }
 
       const cartItem: CartItem = {
         id: '',
@@ -179,11 +227,21 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         title: "Added to cart",
         description: `${product.name} has been added to your cart.`
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding to cart:', error);
+      
+      let errorMessage = "Failed to add item to cart. Please try again.";
+      if (error.message?.includes('Invalid product ID format')) {
+        errorMessage = "Invalid product selected. Please try again.";
+      } else if (error.message?.includes('row-level security policy')) {
+        errorMessage = "Authentication issue. Please refresh the page and try again.";
+      } else if (error.code === '23505') {
+        errorMessage = "Item already in cart. Please check your cart.";
+      }
+      
       toast({
         title: "Error",
-        description: "Failed to add item to cart. Please try again.",
+        description: errorMessage,
         variant: "destructive"
       });
     }

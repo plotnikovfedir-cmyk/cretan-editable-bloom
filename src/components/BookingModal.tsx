@@ -54,6 +54,16 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
     setLoading(true);
 
     try {
+      console.log('Creating booking:', { type, referenceId, title });
+
+      // Validate referenceId if provided - it should be a UUID or null
+      if (referenceId) {
+        const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        if (!uuidPattern.test(referenceId)) {
+          console.warn('Invalid referenceId format, setting to null:', referenceId);
+        }
+      }
+
       const bookingData = {
         type,
         customer_name: formData.customer_name,
@@ -62,9 +72,11 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
         booking_date: date.toISOString(),
         number_of_people: parseInt(formData.number_of_people),
         special_requests: formData.special_requests || null,
-        reference_id: referenceId || null,
+        reference_id: (referenceId && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(referenceId)) ? referenceId : null,
         total_price: price ? parseFloat(price.replace('€', '').replace(' per person', '')) * parseInt(formData.number_of_people) : null
       };
+
+      console.log('Booking data:', bookingData);
 
       // Insert booking into database
       const { data: booking, error } = await supabase
@@ -73,7 +85,12 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Booking insert error:', error);
+        throw error;
+      }
+
+      console.log('Booking created successfully:', booking);
 
       // Send confirmation email
       try {
@@ -125,11 +142,21 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
       });
       setDate(undefined);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating booking:', error);
+      
+      let errorMessage = "Failed to create booking. Please try again.";
+      if (error.message?.includes('row-level security policy')) {
+        errorMessage = "Authentication issue. Please refresh the page and try again.";
+      } else if (error.code === '23505') {
+        errorMessage = "A booking with these details already exists.";
+      } else if (error.message?.includes('Invalid input syntax')) {
+        errorMessage = "Invalid booking data. Please check your inputs.";
+      }
+      
       toast({
         title: "Error",
-        description: "Failed to create booking. Please try again.",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {

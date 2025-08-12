@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Plus, Edit, Trash2, Star, MessageSquare, MapPin } from "lucide-react";
 import AdminNavigation from "@/components/admin/AdminNavigation";
 import MapSelector from "@/components/admin/MapSelector";
-import { ImageUploader } from "@/components/admin/ImageUploader";
+import ImageUploader from "@/components/admin/ImageUploader";
 import {
   Dialog,
   DialogContent,

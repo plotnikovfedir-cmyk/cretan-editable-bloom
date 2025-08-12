@@ -8,7 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Plus, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Edit, Trash2, Star, MessageSquare, MapPin } from "lucide-react";
+import MapSelector from "@/components/admin/MapSelector";
 import {
   Dialog,
   DialogContent,
@@ -27,11 +28,19 @@ interface Product {
   category: string;
   image_url: string;
   in_stock: boolean;
+  latitude?: number;
+  longitude?: number;
   created_at: string;
+}
+
+interface ProductReviewStats {
+  count: number;
+  averageRating: number;
 }
 
 const AdminProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [productReviews, setProductReviews] = useState<{[key: string]: ProductReviewStats}>({});
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -42,6 +51,8 @@ const AdminProducts = () => {
     price: "",
     category: "",
     image_url: "",
+    latitude: null as number | null,
+    longitude: null as number | null,
     in_stock: true
   });
   const navigate = useNavigate();
@@ -50,6 +61,7 @@ const AdminProducts = () => {
   useEffect(() => {
     checkAdminAccess();
     loadProducts();
+    loadProductReviews();
   }, []);
 
   const checkAdminAccess = async () => {
@@ -93,6 +105,40 @@ const AdminProducts = () => {
     }
   };
 
+  const loadProductReviews = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("customer_reviews")
+        .select("product_id, rating")
+        .eq("is_approved", true);
+
+      if (error) throw error;
+
+      const reviewStats: {[key: string]: ProductReviewStats} = {};
+      
+      (data || []).forEach(review => {
+        if (!review.product_id) return;
+        
+        if (!reviewStats[review.product_id]) {
+          reviewStats[review.product_id] = { count: 0, averageRating: 0 };
+        }
+        
+        const current = reviewStats[review.product_id];
+        const newCount = current.count + 1;
+        const newAverage = ((current.averageRating * current.count) + review.rating) / newCount;
+        
+        reviewStats[review.product_id] = {
+          count: newCount,
+          averageRating: newAverage
+        };
+      });
+
+      setProductReviews(reviewStats);
+    } catch (error) {
+      console.error("Failed to load product reviews:", error);
+    }
+  };
+
   const generateSlug = (name: string) => {
     return name
       .toLowerCase()
@@ -112,6 +158,8 @@ const AdminProducts = () => {
         price: parseFloat(formData.price),
         category: formData.category,
         image_url: formData.image_url,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
         in_stock: formData.in_stock
       };
 
@@ -144,6 +192,7 @@ const AdminProducts = () => {
       setEditingProduct(null);
       resetForm();
       loadProducts();
+      loadProductReviews();
     } catch (error) {
       toast({
         variant: "destructive",
@@ -162,6 +211,8 @@ const AdminProducts = () => {
       price: product.price?.toString() || "",
       category: product.category || "",
       image_url: product.image_url || "",
+      latitude: product.latitude || null,
+      longitude: product.longitude || null,
       in_stock: product.in_stock
     });
     setIsDialogOpen(true);
@@ -201,8 +252,21 @@ const AdminProducts = () => {
       price: "",
       category: "",
       image_url: "",
+      latitude: null,
+      longitude: null,
       in_stock: true
     });
+  };
+
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <Star
+        key={i}
+        className={`w-3 h-3 ${
+          i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+        }`}
+      />
+    ));
   };
 
   const openCreateDialog = () => {
@@ -235,7 +299,7 @@ const AdminProducts = () => {
                 Добавить товар
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
                   {editingProduct ? "Редактировать товар" : "Создать товар"}
@@ -244,7 +308,7 @@ const AdminProducts = () => {
                   Заполните информацию о товаре
                 </DialogDescription>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Название</Label>
@@ -304,6 +368,20 @@ const AdminProducts = () => {
                     onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                   />
                 </div>
+                
+                {/* Map selector for coordinates */}
+                <MapSelector
+                  latitude={formData.latitude}
+                  longitude={formData.longitude}
+                  onCoordinatesChange={(lat, lng) => {
+                    setFormData({ 
+                      ...formData, 
+                      latitude: lat || null, 
+                      longitude: lng || null 
+                    });
+                  }}
+                />
+
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="in_stock"
@@ -358,6 +436,32 @@ const AdminProducts = () => {
                 <p className="text-sm text-muted-foreground mb-2">
                   {product.description?.substring(0, 100)}...
                 </p>
+                
+                {/* Product reviews and location info */}
+                <div className="space-y-2 mb-3">
+                  {productReviews[product.id] && (
+                    <div className="flex items-center gap-2">
+                      <MessageSquare className="w-4 h-4 text-muted-foreground" />
+                      <div className="flex items-center gap-1">
+                        {renderStars(Math.round(productReviews[product.id].averageRating))}
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {productReviews[product.id].averageRating.toFixed(1)} 
+                        ({productReviews[product.id].count} отзывов)
+                      </span>
+                    </div>
+                  )}
+                  
+                  {product.latitude && product.longitude && (
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">
+                        {product.latitude.toFixed(4)}, {product.longitude.toFixed(4)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                
                 <div className="flex justify-between items-center">
                   <span className="font-bold">€{product.price}</span>
                   <span className={`text-sm ${product.in_stock ? 'text-green-600' : 'text-red-600'}`}>

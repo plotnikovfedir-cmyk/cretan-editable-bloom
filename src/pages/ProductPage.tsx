@@ -1,13 +1,48 @@
 import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import ProductDetail from "@/components/ProductDetail";
+import ProductDetailEnhanced from "@/components/ProductDetailEnhanced";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import oliveOilImage from "@/assets/olive-oil-product.jpg";
 import herbsImage from "@/assets/herbs-product.jpg";
 
 const ProductPage = () => {
   const { id } = useParams();
+  const [isDbProduct, setIsDbProduct] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    checkIfDbProduct();
+  }, [id]);
+
+  const checkIfDbProduct = async () => {
+    if (!id) {
+      setIsDbProduct(false);
+      return;
+    }
+
+    // First check if it's a UUID (database product)
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (uuidRegex.test(id)) {
+      setIsDbProduct(true);
+      return;
+    }
+
+    // Otherwise check if it exists in database by slug
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("id")
+        .eq("slug", id)
+        .single();
+      
+      setIsDbProduct(!error && !!data);
+    } catch {
+      setIsDbProduct(false);
+    }
+  };
 
   const products = {
     "extra-virgin-olive-oil": {
@@ -273,6 +308,38 @@ const ProductPage = () => {
   };
 
   const product = id ? products[id as keyof typeof products] : null;
+
+  if (isDbProduct === null) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="container mx-auto px-4 py-20 text-center">
+          <div className="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p>Загрузка товара...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isDbProduct) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        
+        {/* Breadcrumb */}
+        <div className="container mx-auto px-4 py-4">
+          <Button variant="ghost" asChild className="mb-4">
+            <Link to="/products">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Назад к товарам
+            </Link>
+          </Button>
+        </div>
+
+        <ProductDetailEnhanced productId={id!} />
+      </div>
+    );
+  }
 
   if (!product) {
     return (

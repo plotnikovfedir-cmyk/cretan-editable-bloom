@@ -19,6 +19,9 @@ interface Booking {
   status: string;
   special_requests: string;
   reference_id: string;
+  activity_title?: string;
+  pickup_location?: string;
+  destination?: string;
   created_at: string;
   updated_at: string;
 }
@@ -161,6 +164,11 @@ const AdminBookings = () => {
                     <p className="text-sm text-muted-foreground">
                       {booking.customer_email} • {booking.customer_phone}
                     </p>
+                    {booking.activity_title && (
+                      <p className="text-sm font-medium text-foreground mt-1">
+                        {booking.activity_title}
+                      </p>
+                    )}
                   </div>
                   <div className="flex gap-2">
                     <Badge className={getTypeColor(booking.type)}>
@@ -196,6 +204,12 @@ const AdminBookings = () => {
                     </p>
                     {booking.reference_id && (
                       <p>Reference: {booking.reference_id}</p>
+                    )}
+                    {booking.pickup_location && (
+                      <p>Pickup: {booking.pickup_location}</p>
+                    )}
+                    {booking.destination && (
+                      <p>Destination: {booking.destination}</p>
                     )}
                   </div>
                 </div>

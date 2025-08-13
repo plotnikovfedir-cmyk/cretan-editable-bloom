@@ -73,7 +73,10 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
         number_of_people: parseInt(formData.number_of_people),
         special_requests: formData.special_requests || null,
         reference_id: (referenceId && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(referenceId)) ? referenceId : null,
-        total_price: price ? parseFloat(price.replace('€', '').replace(' per person', '')) * parseInt(formData.number_of_people) : null
+        total_price: price ? parseFloat(price.replace('€', '').replace(' per person', '')) * parseInt(formData.number_of_people) : null,
+        activity_title: title,
+        pickup_location: formData.pickup_location || null,
+        destination: formData.destination || null
       };
 
       console.log('Booking data:', bookingData);
@@ -125,8 +128,8 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
 
       // Show confirmation dialog
       toast({
-        title: "Заявка принята!",
-        description: "Ваша заявка успешно отправлена. Мы свяжемся с вами в ближайшее время для подтверждения деталей.",
+        title: "Booking Confirmed!",
+        description: "Your booking request has been successfully submitted. We'll contact you shortly to confirm the details.",
         duration: 5000
       });
 

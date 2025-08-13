@@ -50,22 +50,6 @@ const Activities = () => {
     },
   });
 
-  // Fetch events from database
-  const { data: events = [], isLoading: eventsLoading } = useQuery({
-    queryKey: ['events'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('events')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('Error fetching events:', error);
-        throw error;
-      }
-      return data as Event[];
-    },
-  });
 
   // Fallback static activities if database is empty
   const staticActivities = [
@@ -95,18 +79,6 @@ const Activities = () => {
     }
   ];
 
-  // Convert events to activity card format
-  const eventActivities = events.map(event => ({
-    title: event.title,
-    description: event.short_description || event.description || "Join us for this special event",
-    image: event.image_url || tastingImage,
-    slug: event.slug,
-    price: event.price,
-    isEvent: true,
-    event_date: event.event_date,
-    location: event.location,
-    max_attendees: event.max_attendees
-  }));
 
   // Convert database activities to card format
   const dbActivities = activities.map(activity => ({
@@ -120,15 +92,14 @@ const Activities = () => {
     max_participants: activity.max_participants
   }));
 
-  // Combine all activities and events
+  // Combine database activities with static activities if needed
   const allActivities = [
     ...dbActivities,
-    ...eventActivities,
     // Show static activities if no database content
-    ...(dbActivities.length === 0 && eventActivities.length === 0 ? staticActivities : [])
+    ...(dbActivities.length === 0 ? staticActivities : [])
   ];
 
-  if (activitiesLoading || eventsLoading) {
+  if (activitiesLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Navigation />
@@ -149,14 +120,14 @@ const Activities = () => {
       
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">Activities & Events</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">Activities</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Immerse yourself in authentic Cretan culture through our unique experiences 
             that connect you with the land and its traditions.
           </p>
-          {(activities.length > 0 || events.length > 0) && (
+          {activities.length > 0 && (
             <p className="text-sm text-muted-foreground mt-4">
-              Showing {activities.length} activities and {events.length} events
+              Showing {activities.length} activities
             </p>
           )}
         </div>
@@ -164,7 +135,7 @@ const Activities = () => {
         {allActivities.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-xl text-muted-foreground">
-              No activities or events available at the moment. Check back soon!
+              No activities available at the moment. Check back soon!
             </p>
           </div>
         ) : (

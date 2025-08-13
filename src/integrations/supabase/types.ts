@@ -286,13 +286,16 @@ export type Database = {
       }
       bookings: {
         Row: {
+          activity_title: string | null
           booking_date: string | null
           created_at: string | null
           customer_email: string
           customer_name: string
           customer_phone: string | null
+          destination: string | null
           id: string
           number_of_people: number | null
+          pickup_location: string | null
           reference_id: string | null
           special_requests: string | null
           status: string | null
@@ -301,13 +304,16 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          activity_title?: string | null
           booking_date?: string | null
           created_at?: string | null
           customer_email: string
           customer_name: string
           customer_phone?: string | null
+          destination?: string | null
           id?: string
           number_of_people?: number | null
+          pickup_location?: string | null
           reference_id?: string | null
           special_requests?: string | null
           status?: string | null
@@ -316,13 +322,16 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          activity_title?: string | null
           booking_date?: string | null
           created_at?: string | null
           customer_email?: string
           customer_name?: string
           customer_phone?: string | null
+          destination?: string | null
           id?: string
           number_of_people?: number | null
+          pickup_location?: string | null
           reference_id?: string | null
           special_requests?: string | null
           status?: string | null

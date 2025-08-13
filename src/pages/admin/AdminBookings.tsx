@@ -34,59 +34,117 @@ const AdminBookings = () => {
 
   useEffect(() => {
     checkAdminAccess();
-    loadBookings();
   }, []);
 
   const checkAdminAccess = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      navigate('/admin/login');
-      return;
-    }
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.log('No user found, redirecting to admin login');
+        navigate('/admin');
+        return;
+      }
 
-    const { data: isAdmin } = await supabase.rpc('is_admin');
-    if (!isAdmin) {
-      navigate('/');
-      return;
+      console.log('Checking admin access for user:', user.id);
+      const { data: adminCheck, error } = await supabase
+        .rpc('is_admin', { user_id: user.id });
+      
+      if (error) {
+        console.error('Error checking admin status:', error);
+        toast({
+          title: "Access Error",
+          description: "Could not verify admin status",
+          variant: "destructive",
+        });
+        navigate('/admin');
+        return;
+      }
+      
+      console.log('Admin check result:', adminCheck);
+      if (!adminCheck) {
+        console.log('User is not admin, redirecting');
+        toast({
+          title: "Access Denied",
+          description: "You don't have admin privileges",
+          variant: "destructive",
+        });
+        navigate('/admin');
+        return;
+      }
+      
+      console.log('Admin access confirmed, loading bookings');
+      loadBookings();
+    } catch (error) {
+      console.error('Error in admin access check:', error);
+      navigate('/admin');
     }
   };
 
   const loadBookings = async () => {
+    setLoading(true);
     try {
-      const { data, error } = await supabase
+      console.log('Loading bookings...');
+      
+      // First get all bookings
+      const { data: bookingsData, error: bookingsError } = await supabase
         .from('bookings')
-        .select(`
-          *,
-          activities:reference_id (title, description),
-          events:reference_id (title, description)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (bookingsError) throw bookingsError;
       
-      // Process bookings to add activity/event titles
-      const processedBookings = (data || []).map(booking => {
-        if (!booking.activity_title && booking.reference_id) {
-          // Try to get title from joined activities or events
-          const activityData = booking.activities as any;
-          const eventData = booking.events as any;
-          
-          if (activityData?.title) {
-            booking.activity_title = activityData.title;
-          } else if (eventData?.title) {
-            booking.activity_title = eventData.title;
+      console.log('Bookings loaded:', bookingsData?.length || 0);
+
+      // Process each booking to get additional activity/event data
+      const processedBookings = await Promise.all((bookingsData || []).map(async (booking) => {
+        // If we have reference_id and no activity_title, try to get it from activities or events
+        if (booking.reference_id && !booking.activity_title) {
+          try {
+            if (booking.type === 'activity') {
+              const { data: activityData } = await supabase
+                .from('activities')
+                .select('title')
+                .eq('id', booking.reference_id)
+                .maybeSingle();
+              
+              if (activityData?.title) {
+                booking.activity_title = activityData.title;
+              }
+            } else if (booking.type === 'event') {
+              const { data: eventData } = await supabase
+                .from('events')
+                .select('title')
+                .eq('id', booking.reference_id)
+                .maybeSingle();
+              
+              if (eventData?.title) {
+                booking.activity_title = eventData.title;
+              }
+            }
+          } catch (err) {
+            console.log('Could not fetch activity/event title for booking:', booking.id, err);
           }
         }
+        
+        // Fallback display name if no activity_title
+        if (!booking.activity_title) {
+          booking.activity_title = booking.type === 'taxi' ? 'Taxi Service' : 
+                                   booking.type === 'activity' ? 'Unknown Activity' : 
+                                   booking.type === 'event' ? 'Unknown Event' : 
+                                   'Unknown Service';
+        }
+        
         return booking;
-      });
+      }));
       
+      console.log('Processed bookings:', processedBookings.length);
       setBookings(processedBookings);
     } catch (error) {
       console.error('Error loading bookings:', error);
       toast({
         title: "Error",
-        description: "Failed to load bookings",
-        variant: "destructive"
+        description: "Failed to load bookings. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);

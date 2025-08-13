@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -27,6 +29,26 @@ interface ActivityData {
 const ActivityDetail = () => {
   const { slug } = useParams();
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+
+  // Fetch activity from database
+  const { data: dbActivity } = useQuery({
+    queryKey: ['activity', slug],
+    queryFn: async () => {
+      if (!slug) return null;
+      const { data, error } = await supabase
+        .from('activities')
+        .select('*')
+        .eq('slug', slug)
+        .maybeSingle();
+      
+      if (error) {
+        console.error('Error fetching activity:', error);
+        return null;
+      }
+      return data;
+    },
+    enabled: !!slug,
+  });
 
   const activities: Record<string, ActivityData> = {
     "olive-oil-tasting": {
@@ -162,7 +184,22 @@ const ActivityDetail = () => {
     }
   };
 
-  const activity = slug ? activities[slug] : null;
+  // Use database activity if available, otherwise fallback to static data
+  const staticActivity = slug ? activities[slug] : null;
+  const activity = dbActivity ? {
+    title: dbActivity.title,
+    description: dbActivity.description || dbActivity.short_description || "",
+    image: dbActivity.image_url || (staticActivity?.image || tastingImage),
+    duration: dbActivity.duration || "Various",
+    price: dbActivity.price ? `€${dbActivity.price} per person` : "Contact for pricing",
+    groupSize: dbActivity.max_participants ? `Up to ${dbActivity.max_participants} people` : "Various",
+    includes: staticActivity?.includes || ["Professional guidance", "All necessary equipment", "Local expertise"],
+    schedule: staticActivity?.schedule || ["Flexible scheduling available"],
+    highlights: staticActivity?.highlights || ["Authentic experience", "Expert guidance", "Local insights"],
+    difficulty: dbActivity.difficulty || "Suitable for all levels",
+    location: staticActivity?.location || "Various locations",
+    detailedDescription: dbActivity.description || staticActivity?.detailedDescription || "Contact us for more details about this amazing activity."
+  } : staticActivity;
 
   if (!activity) {
     return <Navigate to="/activities" replace />;

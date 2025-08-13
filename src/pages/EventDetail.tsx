@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,6 +31,26 @@ interface EventData {
 const EventDetail = () => {
   const { slug } = useParams();
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+
+  // Fetch event from database
+  const { data: dbEvent } = useQuery({
+    queryKey: ['event', slug],
+    queryFn: async () => {
+      if (!slug) return null;
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('slug', slug)
+        .maybeSingle();
+      
+      if (error) {
+        console.error('Error fetching event:', error);
+        return null;
+      }
+      return data;
+    },
+    enabled: !!slug,
+  });
 
   const events: Record<string, EventData> = {
     "sunset-bbq": {
@@ -156,7 +178,23 @@ const EventDetail = () => {
     }
   };
 
-  const event = slug ? events[slug] : null;
+  // Use database event if available, otherwise fallback to static data
+  const staticEvent = slug ? events[slug] : null;
+  const event = dbEvent ? {
+    title: dbEvent.title,
+    description: dbEvent.description || dbEvent.short_description || "",
+    image: dbEvent.image_url || (staticEvent?.image || sunsetBbqImage),
+    frequency: staticEvent?.frequency || "Regular",
+    time: staticEvent?.time || "Evening",
+    duration: staticEvent?.duration || "Several hours",
+    price: dbEvent.price ? `€${dbEvent.price} per person` : "Contact for pricing",
+    location: dbEvent.location || "Various locations",
+    includes: staticEvent?.includes || ["Professional service", "Local expertise", "Memorable experience"],
+    highlights: staticEvent?.highlights || ["Authentic experience", "Local culture", "Great atmosphere"],
+    schedule: staticEvent?.schedule || ["Flexible scheduling available"],
+    detailedDescription: dbEvent.description || staticEvent?.detailedDescription || "Contact us for more details about this amazing event.",
+    nextDates: staticEvent?.nextDates || ["Contact us for upcoming dates"]
+  } : staticEvent;
 
   if (!event) {
     return <Navigate to="/events" replace />;

@@ -31,7 +31,7 @@ const ActivityDetail = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   // Fetch activity from database
-  const { data: dbActivity } = useQuery({
+  const { data: dbActivity, isLoading } = useQuery({
     queryKey: ['activity', slug],
     queryFn: async () => {
       if (!slug) return null;
@@ -200,6 +200,24 @@ const ActivityDetail = () => {
     location: staticActivity?.location || "Various locations",
     detailedDescription: dbActivity.description || staticActivity?.detailedDescription || "Contact us for more details about this amazing activity."
   } : staticActivity;
+
+  // Show loading while data is being fetched
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="container mx-auto px-4 py-16">
+          <div className="animate-pulse">
+            <div className="h-64 bg-muted rounded-lg mb-8"></div>
+            <div className="h-8 bg-muted rounded w-1/2 mb-4"></div>
+            <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-muted rounded w-1/2"></div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!activity) {
     return <Navigate to="/activities" replace />;
@@ -382,14 +400,14 @@ const ActivityDetail = () => {
 
       <Footer />
       
-      <BookingModal
-        isOpen={isBookingModalOpen}
-        onClose={() => setIsBookingModalOpen(false)}
-        type="activity"
-        title={activity.title}
-        price={activity.price}
-        referenceId={slug}
-      />
+                  <BookingModal
+                    isOpen={isBookingModalOpen}
+                    onClose={() => setIsBookingModalOpen(false)}
+                    type="activity"
+                    title={activity.title}
+                    price={activity.price}
+                    referenceId={dbActivity?.id}
+                  />
     </div>
   );
 };

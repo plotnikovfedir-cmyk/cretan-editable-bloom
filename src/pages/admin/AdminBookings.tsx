@@ -55,11 +55,32 @@ const AdminBookings = () => {
     try {
       const { data, error } = await supabase
         .from('bookings')
-        .select('*')
+        .select(`
+          *,
+          activities:reference_id (title, description),
+          events:reference_id (title, description)
+        `)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setBookings(data || []);
+      
+      // Process bookings to add activity/event titles
+      const processedBookings = (data || []).map(booking => {
+        if (!booking.activity_title && booking.reference_id) {
+          // Try to get title from joined activities or events
+          const activityData = booking.activities as any;
+          const eventData = booking.events as any;
+          
+          if (activityData?.title) {
+            booking.activity_title = activityData.title;
+          } else if (eventData?.title) {
+            booking.activity_title = eventData.title;
+          }
+        }
+        return booking;
+      });
+      
+      setBookings(processedBookings);
     } catch (error) {
       console.error('Error loading bookings:', error);
       toast({

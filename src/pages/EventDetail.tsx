@@ -33,7 +33,7 @@ const EventDetail = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   // Fetch event from database
-  const { data: dbEvent } = useQuery({
+  const { data: dbEvent, isLoading } = useQuery({
     queryKey: ['event', slug],
     queryFn: async () => {
       if (!slug) return null;
@@ -195,6 +195,24 @@ const EventDetail = () => {
     detailedDescription: dbEvent.description || staticEvent?.detailedDescription || "Contact us for more details about this amazing event.",
     nextDates: staticEvent?.nextDates || ["Contact us for upcoming dates"]
   } : staticEvent;
+
+  // Show loading while data is being fetched
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="container mx-auto px-4 py-16">
+          <div className="animate-pulse">
+            <div className="h-64 bg-muted rounded-lg mb-8"></div>
+            <div className="h-8 bg-muted rounded w-1/2 mb-4"></div>
+            <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-muted rounded w-1/2"></div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!event) {
     return <Navigate to="/events" replace />;
@@ -409,7 +427,7 @@ const EventDetail = () => {
         type="event"
         title={event.title}
         price={event.price}
-        referenceId={slug}
+        referenceId={dbEvent?.id}
       />
     </div>
   );

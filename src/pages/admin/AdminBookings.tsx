@@ -4,7 +4,27 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Calendar, User, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
+import { 
+  AlertDialog, 
+  AlertDialogAction, 
+  AlertDialogCancel, 
+  AlertDialogContent, 
+  AlertDialogDescription, 
+  AlertDialogFooter, 
+  AlertDialogHeader, 
+  AlertDialogTitle, 
+  AlertDialogTrigger 
+} from '@/components/ui/alert-dialog';
+import { ArrowLeft, Calendar, User, CheckCircle, XCircle, Clock, MoreVertical, Trash2, Search, Filter } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Booking {
@@ -30,7 +50,11 @@ const AdminBookings = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
 
   useEffect(() => {
     checkAdminAccess();
@@ -139,6 +163,7 @@ const AdminBookings = () => {
       
       console.log('Processed bookings:', processedBookings.length);
       setBookings(processedBookings);
+      setFilteredBookings(processedBookings);
     } catch (error) {
       console.error('Error loading bookings:', error);
       toast({
@@ -175,6 +200,57 @@ const AdminBookings = () => {
       });
     }
   };
+
+  const deleteBooking = async (bookingId: string) => {
+    try {
+      const { error } = await supabase
+        .from('bookings')
+        .delete()
+        .eq('id', bookingId);
+
+      if (error) throw error;
+      
+      toast({
+        title: "Success",
+        description: "Booking deleted successfully"
+      });
+      
+      loadBookings();
+    } catch (error) {
+      console.error('Error deleting booking:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete booking",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Filter bookings based on search and filters
+  useEffect(() => {
+    let filtered = bookings;
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(booking => 
+        booking.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        booking.customer_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        booking.activity_title?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Status filter
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(booking => booking.status === statusFilter);
+    }
+
+    // Type filter
+    if (typeFilter !== 'all') {
+      filtered = filtered.filter(booking => booking.type === typeFilter);
+    }
+
+    setFilteredBookings(filtered);
+  }, [bookings, searchTerm, statusFilter, typeFilter]);
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -229,9 +305,45 @@ const AdminBookings = () => {
         </div>
       </div>
 
+      {/* Filters and Search */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            placeholder="Search by customer name, email, or activity..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectValue placeholder="Filter by status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="confirmed">Confirmed</SelectItem>
+            <SelectItem value="completed">Completed</SelectItem>
+            <SelectItem value="cancelled">Cancelled</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={typeFilter} onValueChange={setTypeFilter}>
+          <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectValue placeholder="Filter by type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Types</SelectItem>
+            <SelectItem value="activity">Activity</SelectItem>
+            <SelectItem value="event">Event</SelectItem>
+            <SelectItem value="taxi">Taxi</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       {/* Bookings List */}
       <div className="grid gap-4">
-        {bookings.map((booking) => (
+        {filteredBookings.map((booking) => (
           <Card key={booking.id}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
@@ -259,13 +371,70 @@ const AdminBookings = () => {
                     </Badge>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-lg font-semibold text-foreground">
-                    €{Number(booking.total_price || 0).toFixed(2)}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {booking.number_of_people} people
-                  </p>
+                <div className="flex items-center gap-4">
+                  <div className="text-right">
+                    <p className="text-lg font-semibold text-foreground">
+                      €{Number(booking.total_price || 0).toFixed(2)}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {booking.number_of_people} people
+                    </p>
+                  </div>
+                  
+                  {/* Actions Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      {booking.status === 'pending' && (
+                        <DropdownMenuItem onClick={() => updateBookingStatus(booking.id, 'confirmed')}>
+                          <CheckCircle className="mr-2 h-4 w-4" />
+                          Confirm Booking
+                        </DropdownMenuItem>
+                      )}
+                      {booking.status === 'confirmed' && (
+                        <DropdownMenuItem onClick={() => updateBookingStatus(booking.id, 'completed')}>
+                          <CheckCircle className="mr-2 h-4 w-4" />
+                          Mark as Completed
+                        </DropdownMenuItem>
+                      )}
+                      {booking.status !== 'cancelled' && (
+                        <DropdownMenuItem onClick={() => updateBookingStatus(booking.id, 'cancelled')}>
+                          <XCircle className="mr-2 h-4 w-4" />
+                          Cancel Booking
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuSeparator />
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete Booking
+                          </DropdownMenuItem>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will permanently delete the booking for {booking.customer_name}.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteBooking(booking.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
 
@@ -307,35 +476,19 @@ const AdminBookings = () => {
                 </div>
               )}
 
-              <div className="flex gap-2">
-                {booking.status === 'pending' && (
-                  <Button
-                    size="sm"
-                    onClick={() => updateBookingStatus(booking.id, 'confirmed')}
-                  >
-                    Confirm Booking
-                  </Button>
-                )}
-                {booking.status === 'confirmed' && (
-                  <Button
-                    size="sm"
-                    onClick={() => updateBookingStatus(booking.id, 'completed')}
-                  >
-                    Mark as Completed
-                  </Button>
-                )}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => updateBookingStatus(booking.id, 'cancelled')}
-                  className="text-red-600 hover:text-red-700"
-                >
-                  Cancel Booking
-                </Button>
-              </div>
             </CardContent>
           </Card>
         ))}
+
+        {filteredBookings.length === 0 && bookings.length > 0 && (
+          <Card>
+            <CardContent className="p-8 text-center">
+              <Filter className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-lg font-semibold text-foreground mb-2">No bookings match your filters</h3>
+              <p className="text-muted-foreground">Try adjusting your search criteria or filters.</p>
+            </CardContent>
+          </Card>
+        )}
 
         {bookings.length === 0 && (
           <Card>

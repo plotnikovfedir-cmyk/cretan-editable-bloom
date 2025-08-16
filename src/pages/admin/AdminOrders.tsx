@@ -4,7 +4,27 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Package, Eye, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
+import { 
+  AlertDialog, 
+  AlertDialogAction, 
+  AlertDialogCancel, 
+  AlertDialogContent, 
+  AlertDialogDescription, 
+  AlertDialogFooter, 
+  AlertDialogHeader, 
+  AlertDialogTitle, 
+  AlertDialogTrigger 
+} from '@/components/ui/alert-dialog';
+import { ArrowLeft, Package, Eye, CheckCircle, XCircle, Clock, MoreVertical, Trash2, Search, Filter } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Order {
@@ -26,7 +46,10 @@ const AdminOrders = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
     checkAdminAccess();
@@ -56,6 +79,7 @@ const AdminOrders = () => {
 
       if (error) throw error;
       setOrders(data || []);
+      setFilteredOrders(data || []);
     } catch (error) {
       console.error('Error loading orders:', error);
       toast({
@@ -92,6 +116,61 @@ const AdminOrders = () => {
       });
     }
   };
+
+  const deleteOrder = async (orderId: string) => {
+    try {
+      // First delete order items
+      const { error: itemsError } = await supabase
+        .from('order_items')
+        .delete()
+        .eq('order_id', orderId);
+
+      if (itemsError) throw itemsError;
+
+      // Then delete the order
+      const { error } = await supabase
+        .from('orders')
+        .delete()
+        .eq('id', orderId);
+
+      if (error) throw error;
+      
+      toast({
+        title: "Success",
+        description: "Order deleted successfully"
+      });
+      
+      loadOrders();
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete order",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Filter orders based on search and filters
+  useEffect(() => {
+    let filtered = orders;
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(order => 
+        order.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.customer_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.order_number.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Status filter
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(order => order.status === statusFilter);
+    }
+
+    setFilteredOrders(filtered);
+  }, [orders, searchTerm, statusFilter]);
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -138,9 +217,35 @@ const AdminOrders = () => {
         </div>
       </div>
 
+      {/* Filters and Search */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            placeholder="Search by customer name, email, or order number..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectValue placeholder="Filter by status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="processing">Processing</SelectItem>
+            <SelectItem value="shipped">Shipped</SelectItem>
+            <SelectItem value="delivered">Delivered</SelectItem>
+            <SelectItem value="cancelled">Cancelled</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       {/* Orders List */}
       <div className="grid gap-4">
-        {orders.map((order) => (
+        {filteredOrders.map((order) => (
           <Card key={order.id}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
@@ -158,13 +263,76 @@ const AdminOrders = () => {
                     {order.status}
                   </Badge>
                 </div>
-                <div className="text-right">
-                  <p className="text-lg font-semibold text-foreground">
-                    €{Number(order.total_amount).toFixed(2)}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {new Date(order.created_at).toLocaleDateString()}
-                  </p>
+                <div className="flex items-center gap-4">
+                  <div className="text-right">
+                    <p className="text-lg font-semibold text-foreground">
+                      €{Number(order.total_amount).toFixed(2)}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(order.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  
+                  {/* Actions Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      {order.status === 'pending' && (
+                        <DropdownMenuItem onClick={() => updateOrderStatus(order.id, 'processing')}>
+                          <Package className="mr-2 h-4 w-4" />
+                          Mark as Processing
+                        </DropdownMenuItem>
+                      )}
+                      {order.status === 'processing' && (
+                        <DropdownMenuItem onClick={() => updateOrderStatus(order.id, 'shipped')}>
+                          <Package className="mr-2 h-4 w-4" />
+                          Mark as Shipped
+                        </DropdownMenuItem>
+                      )}
+                      {order.status === 'shipped' && (
+                        <DropdownMenuItem onClick={() => updateOrderStatus(order.id, 'delivered')}>
+                          <CheckCircle className="mr-2 h-4 w-4" />
+                          Mark as Delivered
+                        </DropdownMenuItem>
+                      )}
+                      {order.status !== 'cancelled' && (
+                        <DropdownMenuItem onClick={() => updateOrderStatus(order.id, 'cancelled')}>
+                          <XCircle className="mr-2 h-4 w-4" />
+                          Cancel Order
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuSeparator />
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete Order
+                          </DropdownMenuItem>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will permanently delete order #{order.order_number} and all associated order items.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteOrder(order.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
 
@@ -189,43 +357,19 @@ const AdminOrders = () => {
                 </div>
               )}
 
-              <div className="flex gap-2">
-                {order.status === 'pending' && (
-                  <Button
-                    size="sm"
-                    onClick={() => updateOrderStatus(order.id, 'processing')}
-                  >
-                    Mark as Processing
-                  </Button>
-                )}
-                {order.status === 'processing' && (
-                  <Button
-                    size="sm"
-                    onClick={() => updateOrderStatus(order.id, 'shipped')}
-                  >
-                    Mark as Shipped
-                  </Button>
-                )}
-                {order.status === 'shipped' && (
-                  <Button
-                    size="sm"
-                    onClick={() => updateOrderStatus(order.id, 'delivered')}
-                  >
-                    Mark as Delivered
-                  </Button>
-                )}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => updateOrderStatus(order.id, 'cancelled')}
-                  className="text-red-600 hover:text-red-700"
-                >
-                  Cancel Order
-                </Button>
-              </div>
             </CardContent>
           </Card>
         ))}
+
+        {filteredOrders.length === 0 && orders.length > 0 && (
+          <Card>
+            <CardContent className="p-8 text-center">
+              <Filter className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-lg font-semibold text-foreground mb-2">No orders match your filters</h3>
+              <p className="text-muted-foreground">Try adjusting your search criteria or filters.</p>
+            </CardContent>
+          </Card>
+        )}
 
         {orders.length === 0 && (
           <Card>

@@ -65,7 +65,7 @@ const AdminBookings = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         console.log('No user found, redirecting to admin login');
-        navigate('/admin');
+        navigate('/admin/login');
         return;
       }
 
@@ -80,7 +80,7 @@ const AdminBookings = () => {
           description: "Could not verify admin status",
           variant: "destructive",
         });
-        navigate('/admin');
+        navigate('/admin/login');
         return;
       }
       
@@ -92,7 +92,7 @@ const AdminBookings = () => {
           description: "You don't have admin privileges",
           variant: "destructive",
         });
-        navigate('/admin');
+        navigate('/admin/login');
         return;
       }
       
@@ -100,7 +100,7 @@ const AdminBookings = () => {
       loadBookings();
     } catch (error) {
       console.error('Error in admin access check:', error);
-      navigate('/admin');
+      navigate('/admin/login');
     }
   };
 
@@ -295,7 +295,7 @@ const AdminBookings = () => {
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"
-            onClick={() => navigate('/admin')}
+            onClick={() => navigate('/admin/dashboard')}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />

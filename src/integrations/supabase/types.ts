@@ -62,6 +62,87 @@ export type Database = {
         }
         Relationships: []
       }
+      activity_highlights_items: {
+        Row: {
+          activity_id: string
+          created_at: string
+          id: string
+          item_text: string
+          order_position: number
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          created_at?: string
+          id?: string
+          item_text: string
+          order_position?: number
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          created_at?: string
+          id?: string
+          item_text?: string
+          order_position?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      activity_includes_items: {
+        Row: {
+          activity_id: string
+          created_at: string
+          id: string
+          item_text: string
+          order_position: number
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          created_at?: string
+          id?: string
+          item_text: string
+          order_position?: number
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          created_at?: string
+          id?: string
+          item_text?: string
+          order_position?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      activity_schedule_items: {
+        Row: {
+          activity_id: string
+          created_at: string
+          id: string
+          item_text: string
+          order_position: number
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          created_at?: string
+          id?: string
+          item_text: string
+          order_position?: number
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          created_at?: string
+          id?: string
+          item_text?: string
+          order_position?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       admin_users: {
         Row: {
           created_at: string
@@ -450,6 +531,87 @@ export type Database = {
           template_name?: string
           text_content?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      event_highlights_items: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          item_text: string
+          order_position: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          item_text: string
+          order_position?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          item_text?: string
+          order_position?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      event_includes_items: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          item_text: string
+          order_position: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          item_text: string
+          order_position?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          item_text?: string
+          order_position?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      event_schedule_items: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          item_text: string
+          order_position: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          item_text: string
+          order_position?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          item_text?: string
+          order_position?: number
+          updated_at?: string
         }
         Relationships: []
       }

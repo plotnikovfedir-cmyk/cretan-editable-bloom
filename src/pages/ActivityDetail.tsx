@@ -30,7 +30,7 @@ const ActivityDetail = () => {
   const { slug } = useParams();
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
-  // Fetch activity from database
+  // Fetch activity from database with dynamic lists
   const { data: dbActivity, isLoading } = useQuery({
     queryKey: ['activity', slug],
     queryFn: async () => {
@@ -48,6 +48,64 @@ const ActivityDetail = () => {
       return data;
     },
     enabled: !!slug,
+  });
+
+  // Fetch dynamic lists for the activity
+  const { data: scheduleItems } = useQuery({
+    queryKey: ['activity-schedule', dbActivity?.id],
+    queryFn: async () => {
+      if (!dbActivity?.id) return [];
+      const { data, error } = await supabase
+        .from('activity_schedule_items')
+        .select('*')
+        .eq('activity_id', dbActivity.id)
+        .order('order_position', { ascending: true });
+      
+      if (error) {
+        console.error('Error fetching schedule items:', error);
+        return [];
+      }
+      return data;
+    },
+    enabled: !!dbActivity?.id,
+  });
+
+  const { data: includesItems } = useQuery({
+    queryKey: ['activity-includes', dbActivity?.id],
+    queryFn: async () => {
+      if (!dbActivity?.id) return [];
+      const { data, error } = await supabase
+        .from('activity_includes_items')
+        .select('*')
+        .eq('activity_id', dbActivity.id)
+        .order('order_position', { ascending: true });
+      
+      if (error) {
+        console.error('Error fetching includes items:', error);
+        return [];
+      }
+      return data;
+    },
+    enabled: !!dbActivity?.id,
+  });
+
+  const { data: highlightsItems } = useQuery({
+    queryKey: ['activity-highlights', dbActivity?.id],
+    queryFn: async () => {
+      if (!dbActivity?.id) return [];
+      const { data, error } = await supabase
+        .from('activity_highlights_items')
+        .select('*')
+        .eq('activity_id', dbActivity.id)
+        .order('order_position', { ascending: true });
+      
+      if (error) {
+        console.error('Error fetching highlights items:', error);
+        return [];
+      }
+      return data;
+    },
+    enabled: !!dbActivity?.id,
   });
 
   const activities: Record<string, ActivityData> = {
@@ -193,9 +251,9 @@ const ActivityDetail = () => {
     duration: dbActivity.duration || "Various",
     price: dbActivity.price ? `€${dbActivity.price} per person` : "Contact for pricing",
     groupSize: dbActivity.max_participants ? `Up to ${dbActivity.max_participants} people` : "Various",
-    includes: staticActivity?.includes || ["Professional guidance", "All necessary equipment", "Local expertise"],
-    schedule: staticActivity?.schedule || ["Flexible scheduling available"],
-    highlights: staticActivity?.highlights || ["Authentic experience", "Expert guidance", "Local insights"],
+    includes: includesItems?.map(item => item.item_text) || staticActivity?.includes || ["Professional guidance", "All necessary equipment", "Local expertise"],
+    schedule: scheduleItems?.map(item => item.item_text) || staticActivity?.schedule || ["Flexible scheduling available"],
+    highlights: highlightsItems?.map(item => item.item_text) || staticActivity?.highlights || ["Authentic experience", "Expert guidance", "Local insights"],
     difficulty: dbActivity.difficulty || "Suitable for all levels",
     location: staticActivity?.location || "Various locations",
     detailedDescription: dbActivity.description || staticActivity?.detailedDescription || "Contact us for more details about this amazing activity."

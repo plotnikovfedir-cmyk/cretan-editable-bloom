@@ -32,7 +32,7 @@ const EventDetail = () => {
   const { slug } = useParams();
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
-  // Fetch event from database
+  // Fetch event from database with dynamic lists
   const { data: dbEvent, isLoading } = useQuery({
     queryKey: ['event', slug],
     queryFn: async () => {
@@ -50,6 +50,64 @@ const EventDetail = () => {
       return data;
     },
     enabled: !!slug,
+  });
+
+  // Fetch dynamic lists for the event
+  const { data: scheduleItems } = useQuery({
+    queryKey: ['event-schedule', dbEvent?.id],
+    queryFn: async () => {
+      if (!dbEvent?.id) return [];
+      const { data, error } = await supabase
+        .from('event_schedule_items')
+        .select('*')
+        .eq('event_id', dbEvent.id)
+        .order('order_position', { ascending: true });
+      
+      if (error) {
+        console.error('Error fetching schedule items:', error);
+        return [];
+      }
+      return data;
+    },
+    enabled: !!dbEvent?.id,
+  });
+
+  const { data: includesItems } = useQuery({
+    queryKey: ['event-includes', dbEvent?.id],
+    queryFn: async () => {
+      if (!dbEvent?.id) return [];
+      const { data, error } = await supabase
+        .from('event_includes_items')
+        .select('*')
+        .eq('event_id', dbEvent.id)
+        .order('order_position', { ascending: true });
+      
+      if (error) {
+        console.error('Error fetching includes items:', error);
+        return [];
+      }
+      return data;
+    },
+    enabled: !!dbEvent?.id,
+  });
+
+  const { data: highlightsItems } = useQuery({
+    queryKey: ['event-highlights', dbEvent?.id],
+    queryFn: async () => {
+      if (!dbEvent?.id) return [];
+      const { data, error } = await supabase
+        .from('event_highlights_items')
+        .select('*')
+        .eq('event_id', dbEvent.id)
+        .order('order_position', { ascending: true });
+      
+      if (error) {
+        console.error('Error fetching highlights items:', error);
+        return [];
+      }
+      return data;
+    },
+    enabled: !!dbEvent?.id,
   });
 
   const events: Record<string, EventData> = {
@@ -189,9 +247,9 @@ const EventDetail = () => {
     duration: staticEvent?.duration || "Several hours",
     price: dbEvent.price ? `€${dbEvent.price} per person` : "Contact for pricing",
     location: dbEvent.location || "Various locations",
-    includes: staticEvent?.includes || ["Professional service", "Local expertise", "Memorable experience"],
-    highlights: staticEvent?.highlights || ["Authentic experience", "Local culture", "Great atmosphere"],
-    schedule: staticEvent?.schedule || ["Flexible scheduling available"],
+    includes: includesItems?.map(item => item.item_text) || staticEvent?.includes || ["Professional service", "Local expertise", "Memorable experience"],
+    highlights: highlightsItems?.map(item => item.item_text) || staticEvent?.highlights || ["Authentic experience", "Local culture", "Great atmosphere"],
+    schedule: scheduleItems?.map(item => item.item_text) || staticEvent?.schedule || ["Flexible scheduling available"],
     detailedDescription: dbEvent.description || staticEvent?.detailedDescription || "Contact us for more details about this amazing event.",
     nextDates: staticEvent?.nextDates || ["Contact us for upcoming dates"]
   } : staticEvent;

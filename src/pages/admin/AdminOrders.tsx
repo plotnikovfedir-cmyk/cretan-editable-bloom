@@ -40,6 +40,16 @@ interface Order {
   notes: string;
   created_at: string;
   updated_at: string;
+  order_items?: {
+    id: string;
+    quantity: number;
+    unit_price: number;
+    total_price: number;
+    products?: {
+      name: string;
+      image_url: string;
+    };
+  }[];
 }
 
 const AdminOrders = () => {
@@ -74,7 +84,19 @@ const AdminOrders = () => {
     try {
       const { data, error } = await supabase
         .from('orders')
-        .select('*')
+        .select(`
+          *,
+          order_items (
+            id,
+            quantity,
+            unit_price,
+            total_price,
+            products (
+              name,
+              image_url
+            )
+          )
+        `)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -354,6 +376,39 @@ const AdminOrders = () => {
                 <div className="mb-4">
                   <h4 className="font-medium text-foreground mb-2">Notes</h4>
                   <p className="text-sm text-muted-foreground">{order.notes}</p>
+                </div>
+              )}
+
+              {/* Order Items Section */}
+              {order.order_items && order.order_items.length > 0 && (
+                <div className="border-t pt-4">
+                  <h4 className="font-semibold text-foreground mb-3">Ordered Items</h4>
+                  <div className="space-y-3">
+                    {order.order_items.map((item, index) => (
+                      <div key={index} className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                        {item.products?.image_url && (
+                          <img 
+                            src={item.products.image_url} 
+                            alt={item.products.name}
+                            className="w-12 h-12 object-cover rounded-md"
+                          />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm text-foreground truncate">
+                            {item.products?.name || 'Product'}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Qty: {item.quantity} × €{Number(item.unit_price).toFixed(2)}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold text-sm text-foreground">
+                            €{Number(item.total_price).toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 

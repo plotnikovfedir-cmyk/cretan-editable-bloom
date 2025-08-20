@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Plus, Edit, Trash2 } from 'lucide-react';
 import { ImageUploader } from '@/components/admin/ImageUploader';
 import { FormDialog } from '@/components/admin/FormDialog';
+import ActivityListManager from '@/components/admin/ActivityListManager';
 
 interface Activity {
   id: string;
@@ -351,6 +352,33 @@ const AdminActivities: React.FC = () => {
             onImageUploaded={(url) => setFormData(prev => ({ ...prev, image_url: url }))}
             label="Main Image"
           />
+
+          {editingActivity && (
+            <div className="space-y-6 pt-6 border-t">
+              <h3 className="text-lg font-semibold">Activity Details</h3>
+              
+              <ActivityListManager
+                activityId={editingActivity.id}
+                listType="schedule"
+                title="Schedule Items"
+                description="Manage the schedule for this activity"
+              />
+              
+              <ActivityListManager
+                activityId={editingActivity.id}
+                listType="includes"
+                title="What's Included"
+                description="Manage what's included in this activity"
+              />
+              
+              <ActivityListManager
+                activityId={editingActivity.id}
+                listType="highlights"
+                title="Activity Highlights"
+                description="Manage the highlights for this activity"
+              />
+            </div>
+          )}
 
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>

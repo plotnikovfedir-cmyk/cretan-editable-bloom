@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { FormDialog } from '@/components/admin/FormDialog';
 import { ImageUploader } from '@/components/admin/ImageUploader';
+import EventListManager from '@/components/admin/EventListManager';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -439,6 +440,33 @@ const AdminEvents = () => {
                 </FormItem>
               )}
             />
+
+            {editingEvent && (
+              <div className="space-y-6 pt-6 border-t">
+                <h3 className="text-lg font-semibold">Event Details</h3>
+                
+                <EventListManager
+                  eventId={editingEvent.id}
+                  listType="schedule"
+                  title="Schedule Items"
+                  description="Manage the schedule for this event"
+                />
+                
+                <EventListManager
+                  eventId={editingEvent.id}
+                  listType="includes"
+                  title="What's Included"
+                  description="Manage what's included in this event"
+                />
+                
+                <EventListManager
+                  eventId={editingEvent.id}
+                  listType="highlights"
+                  title="Event Highlights"
+                  description="Manage the highlights for this event"
+                />
+              </div>
+            )}
 
             <div className="flex justify-end gap-2">
               <Button

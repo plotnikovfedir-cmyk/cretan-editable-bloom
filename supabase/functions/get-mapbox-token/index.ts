@@ -12,8 +12,12 @@ serve(async (req) => {
   }
 
   try {
-    // Use the provided Mapbox token directly
-    const mapboxToken = 'pk.eyJ1Ijoid29sZnNzdHVuZGUiLCJhIjoiY21lMWc2Z3V4MGZhcDJsc2F4OXIxM3hnaiJ9.-bIR01o8OIl80c1X5-mJ0w'
+    // Get the Mapbox token from secrets
+    const mapboxToken = Deno.env.get('MAPBOX_ACCESS_TOKEN')
+    
+    if (!mapboxToken) {
+      throw new Error('Mapbox token not configured')
+    }
     
     return new Response(
       JSON.stringify({ token: mapboxToken }),

@@ -138,6 +138,13 @@ const AdminDashboard = () => {
       count: 0
     },
     {
+      title: "Hero Слайды", 
+      description: "Управление главными слайдами страниц",
+      icon: Settings,
+      link: "/admin/hero-slides",
+      count: 0
+    },
+    {
       title: "Testimonials",
       description: "Управление отзывами клиентов",
       icon: MessageSquare,

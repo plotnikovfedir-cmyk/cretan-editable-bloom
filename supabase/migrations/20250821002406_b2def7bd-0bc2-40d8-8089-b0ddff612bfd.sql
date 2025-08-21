@@ -1,0 +1,5 @@
+-- Insert sample hero slides for different pages
+INSERT INTO public.hero_slides (title, subtitle, image_url, cta_text, cta_link, page_type, order_position, is_active) VALUES
+('Welcome to Cretan Guru', 'Discover the best of Crete: olive oil, herbs, nature tours, and more.', '/api/placeholder/1920/1080', 'Explore Products', '/products', 'home', 1, true),
+('Fine Food. Wild Places.', 'Premium delivery to Crete''s most beautiful and remote locations. Experience luxury where nature meets the Mediterranean spirit.', '/api/placeholder/1920/1080', 'Order Now', '/delivery#order', 'delivery', 1, true),
+('Taxi & Transfer Service', 'Reliable and comfortable transportation across beautiful Crete. From airport transfers to scenic tours, we''ll get you there safely and on time.', '/api/placeholder/1920/1080', 'Book Your Ride Now', '/taxi#booking', 'taxi', 1, true);

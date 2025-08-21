@@ -27,6 +27,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminActivities from "./pages/admin/AdminActivities";
 import AdminInstagramGallery from "./pages/admin/AdminInstagramGallery";
+import AdminHeroSlides from "./pages/admin/AdminHeroSlides";
 import AdminTestimonials from "./pages/admin/AdminTestimonials";
 import AdminLocations from "./pages/admin/AdminLocations";
 import AdminOrders from "./pages/admin/AdminOrders";
@@ -68,6 +69,7 @@ const App = () => (
             <Route path="/admin/products" element={<AdminProducts />} />
             <Route path="/admin/activities" element={<AdminActivities />} />
             <Route path="/admin/instagram-gallery" element={<AdminInstagramGallery />} />
+            <Route path="/admin/hero-slides" element={<AdminHeroSlides />} />
             <Route path="/admin/testimonials" element={<AdminTestimonials />} />
             <Route path="/admin/locations" element={<AdminLocations />} />
             <Route path="/admin/orders" element={<AdminOrders />} />

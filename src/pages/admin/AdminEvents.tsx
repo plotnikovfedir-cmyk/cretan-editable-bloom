@@ -441,32 +441,43 @@ const AdminEvents = () => {
               )}
             />
 
-            {editingEvent && (
-              <div className="space-y-6 pt-6 border-t">
-                <h3 className="text-lg font-semibold">Event Details</h3>
-                
-                <EventListManager
-                  eventId={editingEvent.id}
-                  listType="schedule"
-                  title="Schedule Items"
-                  description="Manage the schedule for this event"
-                />
-                
-                <EventListManager
-                  eventId={editingEvent.id}
-                  listType="includes"
-                  title="What's Included"
-                  description="Manage what's included in this event"
-                />
-                
-                <EventListManager
-                  eventId={editingEvent.id}
-                  listType="highlights"
-                  title="Event Highlights"
-                  description="Manage the highlights for this event"
-                />
-              </div>
-            )}
+            <div className="space-y-6 pt-6 border-t">
+              <h3 className="text-lg font-semibold">Event Details</h3>
+              <p className="text-sm text-muted-foreground">
+                {editingEvent ? 'Manage event details below' : 'Save the event first to manage details'}
+              </p>
+              
+              {editingEvent ? (
+                <>
+                  <EventListManager
+                    eventId={editingEvent.id}
+                    listType="schedule"
+                    title="Schedule Items"
+                    description="Manage the schedule for this event"
+                  />
+                  
+                  <EventListManager
+                    eventId={editingEvent.id}
+                    listType="includes"
+                    title="What's Included"
+                    description="Manage what's included in this event"
+                  />
+                  
+                  <EventListManager
+                    eventId={editingEvent.id}
+                    listType="highlights"
+                    title="Event Highlights"
+                    description="Manage the highlights for this event"
+                  />
+                </>
+              ) : (
+                <div className="text-sm text-muted-foreground space-y-2">
+                  <div>• Schedule Items - Will be available after creating</div>
+                  <div>• What's Included - Will be available after creating</div>
+                  <div>• Event Highlights - Will be available after creating</div>
+                </div>
+              )}
+            </div>
 
             <div className="flex justify-end gap-2">
               <Button

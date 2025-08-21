@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import HeroSlider from "@/components/HeroSlider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCart } from '@/contexts/CartContext';
@@ -77,30 +78,7 @@ const Delivery = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
-      {/* Hero Section */}
-      <section 
-        className="relative h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${deliveryHeroImage})` }}
-      >
-        <div className="absolute inset-0 bg-black/40"></div>
-        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 drop-shadow-lg">
-            Fine Food. Wild Places.
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto drop-shadow-md opacity-90">
-            Premium delivery to Crete's most beautiful and remote locations. 
-            Experience luxury where nature meets the Mediterranean spirit.
-          </p>
-          <Button 
-            size="lg" 
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-            asChild
-          >
-            <a href="#order">Order Now</a>
-          </Button>
-        </div>
-      </section>
+      <HeroSlider pageType="delivery" />
 
       {/* About Us */}
       <section className="py-20 bg-stone-50">
@@ -257,7 +235,7 @@ const Delivery = () => {
               asChild
             >
               <a 
-                href="https://wa.me/1234567890?text=Hi! I'd like to place an order for delivery to a remote location" 
+                href="https://wa.me/4917857738346?text=Hi! I'd like to place an order for delivery to a remote location" 
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -270,7 +248,7 @@ const Delivery = () => {
               asChild
             >
               <a 
-                href="https://t.me/yourtelegram" 
+                href="https://t.me/cretanguru" 
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -353,32 +353,43 @@ const AdminActivities: React.FC = () => {
             label="Main Image"
           />
 
-          {editingActivity && (
-            <div className="space-y-6 pt-6 border-t">
-              <h3 className="text-lg font-semibold">Activity Details</h3>
-              
-              <ActivityListManager
-                activityId={editingActivity.id}
-                listType="schedule"
-                title="Schedule Items"
-                description="Manage the schedule for this activity"
-              />
-              
-              <ActivityListManager
-                activityId={editingActivity.id}
-                listType="includes"
-                title="What's Included"
-                description="Manage what's included in this activity"
-              />
-              
-              <ActivityListManager
-                activityId={editingActivity.id}
-                listType="highlights"
-                title="Activity Highlights"
-                description="Manage the highlights for this activity"
-              />
-            </div>
-          )}
+          <div className="space-y-6 pt-6 border-t">
+            <h3 className="text-lg font-semibold">Activity Details</h3>
+            <p className="text-sm text-muted-foreground">
+              {editingActivity ? 'Manage activity details below' : 'Save the activity first to manage details'}
+            </p>
+            
+            {editingActivity ? (
+              <>
+                <ActivityListManager
+                  activityId={editingActivity.id}
+                  listType="schedule"
+                  title="Schedule Items"
+                  description="Manage the schedule for this activity"
+                />
+                
+                <ActivityListManager
+                  activityId={editingActivity.id}
+                  listType="includes"
+                  title="What's Included"
+                  description="Manage what's included in this activity"
+                />
+                
+                <ActivityListManager
+                  activityId={editingActivity.id}
+                  listType="highlights"
+                  title="Activity Highlights"
+                  description="Manage the highlights for this activity"
+                />
+              </>
+            ) : (
+              <div className="text-sm text-muted-foreground space-y-2">
+                <div>• Schedule Items - Will be available after creating</div>
+                <div>• What's Included - Will be available after creating</div>
+                <div>• Activity Highlights - Will be available after creating</div>
+              </div>
+            )}
+          </div>
 
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>

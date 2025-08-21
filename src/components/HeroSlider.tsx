@@ -7,14 +7,19 @@ import { supabase } from '@/integrations/supabase/client';
 interface HeroSlide {
   id: string;
   title: string;
-  subtitle: string;
+  subtitle: string | null;
   image_url: string;
-  cta_text: string;
-  cta_link: string;
-  order_position: number;
+  cta_text: string | null;
+  cta_link: string | null;
+  order_position: number | null;
+  page_type?: string;
 }
 
-const HeroSlider = () => {
+interface HeroSliderProps {
+  pageType?: string;
+}
+
+const HeroSlider = ({ pageType = 'home' }: HeroSliderProps) => {
   const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -22,11 +27,12 @@ const HeroSlider = () => {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const { data, error } = await supabase
-          .from('hero_slides')
-          .select('*')
-          .eq('is_active', true)
-          .order('order_position', { ascending: true });
+      const { data, error } = await supabase
+        .from('hero_slides')
+        .select('*')
+        .eq('is_active', true)
+        .eq('page_type', pageType)
+        .order('order_position');
 
         if (error) throw error;
 
@@ -39,7 +45,7 @@ const HeroSlider = () => {
     };
 
     fetchSlides();
-  }, []);
+  }, [pageType]);
 
   useEffect(() => {
     if (slides.length > 1) {

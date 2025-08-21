@@ -1,5 +1,5 @@
 import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
+import HeroSlider from "@/components/HeroSlider";
 import FeaturedProductCard from "@/components/FeaturedProductCard";
 import ServiceCard from "@/components/ServiceCard";
 import WhyChooseUs from "@/components/WhyChooseUs";
@@ -22,7 +22,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <Hero />
+      <HeroSlider pageType="home" />
       
       {/* About Section */}
       <section className="py-20 bg-muted/30">

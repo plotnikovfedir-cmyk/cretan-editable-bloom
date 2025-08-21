@@ -669,6 +669,7 @@ export type Database = {
           image_url: string
           is_active: boolean | null
           order_position: number | null
+          page_type: string
           subtitle: string | null
           title: string
           updated_at: string | null
@@ -681,6 +682,7 @@ export type Database = {
           image_url: string
           is_active?: boolean | null
           order_position?: number | null
+          page_type?: string
           subtitle?: string | null
           title: string
           updated_at?: string | null
@@ -693,6 +695,7 @@ export type Database = {
           image_url?: string
           is_active?: boolean | null
           order_position?: number | null
+          page_type?: string
           subtitle?: string | null
           title?: string
           updated_at?: string | null

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Instagram, Facebook, Phone, Mail, MapPin, Send } from "lucide-react";
+import { Instagram, Facebook, Phone, Mail, MapPin, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -70,7 +70,7 @@ const Footer = () => {
                 className="hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
                 asChild
               >
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.instagram.com/cretan_guru" target="_blank" rel="noopener noreferrer">
                   <Instagram className="w-4 h-4" />
                 </a>
               </Button>
@@ -80,7 +80,7 @@ const Footer = () => {
                 className="hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
                 asChild
               >
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                <a href="https://facebook.com/cretanguru" target="_blank" rel="noopener noreferrer">
                   <Facebook className="w-4 h-4" />
                 </a>
               </Button>
@@ -92,6 +92,16 @@ const Footer = () => {
               >
                 <a href="https://t.me/cretanguru" target="_blank" rel="noopener noreferrer">
                   <Send className="w-4 h-4" />
+                </a>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
+                asChild
+              >
+                <a href="https://wa.me/4917857738346" target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="w-4 h-4" />
                 </a>
               </Button>
             </div>
@@ -142,11 +152,21 @@ const Footer = () => {
             <div className="space-y-4">
               <div className="flex items-center space-x-3 text-muted-foreground">
                 <Phone className="w-4 h-4 text-primary" />
-                <span className="text-sm">+49 178 5773846</span>
+                <a 
+                  href="tel:+4917857738346" 
+                  className="text-sm hover:text-primary transition-colors cursor-pointer"
+                >
+                  +49 178 5773846
+                </a>
               </div>
               <div className="flex items-center space-x-3 text-muted-foreground">
                 <Mail className="w-4 h-4 text-primary" />
-                <span className="text-sm">hello@cretanguru.com</span>
+                <a 
+                  href="mailto:hello@cretan.guru" 
+                  className="text-sm hover:text-primary transition-colors cursor-pointer"
+                >
+                  hello@cretan.guru
+                </a>
               </div>
               <div className="flex items-center space-x-3 text-muted-foreground">
                 <MapPin className="w-4 h-4 text-primary" />

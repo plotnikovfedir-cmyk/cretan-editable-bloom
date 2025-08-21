@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import PriceTable from "@/components/PriceTable";
 import Footer from "@/components/Footer";
+import HeroSlider from "@/components/HeroSlider";
 import { Button } from "@/components/ui/button";
 import { Car, Shield, MapPin, MessageCircle } from "lucide-react";
 import BookingModal from "@/components/BookingModal";
@@ -22,30 +23,7 @@ const Taxi = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
-      {/* Hero Section */}
-      <section 
-        className="relative h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${taxiHeroImage})` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40"></div>
-        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg">
-            Taxi & Transfer Service
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto drop-shadow-md">
-            Reliable and comfortable transportation across beautiful Crete. From airport transfers to scenic tours, we'll get you there safely and on time.
-          </p>
-          <Button 
-            size="lg" 
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-            onClick={() => setIsBookingModalOpen(true)}
-          >
-            <MessageCircle className="w-5 h-5 mr-2" />
-            Book Your Ride Now
-          </Button>
-        </div>
-      </section>
+      <HeroSlider pageType="taxi" />
 
       {/* Pricing Section */}
       <section className="py-20">
@@ -73,7 +51,7 @@ const Taxi = () => {
                 asChild
               >
                 <a 
-                  href="https://wa.me/1234567890?text=Hi! I need a taxi transfer from Plakias" 
+                  href="https://wa.me/4917857738346?text=Hi! I need a taxi transfer from Plakias" 
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -135,7 +113,7 @@ const Taxi = () => {
               className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg hover:shadow-xl transition-all duration-300"
               asChild
             >
-              <a href="tel:+1234567890" className="flex items-center gap-2">
+              <a href="tel:+4917857738346" className="flex items-center gap-2">
                 📞 Call Directly
               </a>
             </Button>
@@ -145,7 +123,7 @@ const Taxi = () => {
               className="bg-primary/10 hover:bg-primary/20 text-primary-foreground border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300"
               asChild
             >
-              <a href="mailto:info@cretanguru.com" className="flex items-center gap-2">
+              <a href="mailto:hello@cretan.guru" className="flex items-center gap-2">
                 ✉️ Send Email
               </a>
             </Button>

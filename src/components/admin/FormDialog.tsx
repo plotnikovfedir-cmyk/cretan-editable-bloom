@@ -19,15 +19,17 @@ export const FormDialog: React.FC<FormDialogProps> = ({
   onOpenChange,
   title,
   children,
-  className = 'max-w-2xl'
+  className = 'max-w-4xl max-h-[80vh]'
 }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={className}>
+      <DialogContent className={`${className} overflow-y-auto`}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        {children}
+        <div className="overflow-y-auto max-h-[calc(80vh-120px)]">
+          {children}
+        </div>
       </DialogContent>
     </Dialog>
   );

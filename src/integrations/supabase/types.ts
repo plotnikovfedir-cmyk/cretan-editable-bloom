@@ -428,6 +428,7 @@ export type Database = {
           id: string
           product_id: string
           quantity: number
+          session_expires_at: string | null
           session_id: string
           updated_at: string
           user_id: string | null
@@ -437,6 +438,7 @@ export type Database = {
           id?: string
           product_id: string
           quantity?: number
+          session_expires_at?: string | null
           session_id: string
           updated_at?: string
           user_id?: string | null
@@ -446,6 +448,7 @@ export type Database = {
           id?: string
           product_id?: string
           quantity?: number
+          session_expires_at?: string | null
           session_id?: string
           updated_at?: string
           user_id?: string | null
@@ -1067,6 +1070,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_expired_cart_items: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       generate_order_number: {
         Args: Record<PropertyKey, never>
         Returns: string

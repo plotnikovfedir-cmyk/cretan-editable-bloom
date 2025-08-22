@@ -353,40 +353,34 @@ const AdminActivities: React.FC = () => {
             label="Main Image"
           />
 
-          <div className="space-y-6 pt-6 border-t">
-            <h3 className="text-lg font-semibold">Activity Details</h3>
-            <p className="text-sm text-muted-foreground">
-              {editingActivity ? 'Manage activity details below' : 'Save the activity first to manage details'}
-            </p>
+            <div className="space-y-4 pt-6 border-t">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold">Activity Content Management</h3>
+                <p className="text-sm text-muted-foreground">
+                  {editingActivity ? 'Use the dedicated content manager for better experience' : 'Save the activity first to manage content'}
+                </p>
+              </div>
+              {editingActivity && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => window.open(`/admin/activity-manager`, '_blank')}
+                >
+                  Open Content Manager
+                </Button>
+              )}
+            </div>
             
-            {editingActivity ? (
-              <>
-                <ActivityListManager
-                  activityId={editingActivity.id}
-                  listType="schedule"
-                  title="Schedule Items"
-                  description="Manage the schedule for this activity"
-                />
-                
-                <ActivityListManager
-                  activityId={editingActivity.id}
-                  listType="includes"
-                  title="What's Included"
-                  description="Manage what's included in this activity"
-                />
-                
-                <ActivityListManager
-                  activityId={editingActivity.id}
-                  listType="highlights"
-                  title="Activity Highlights"
-                  description="Manage the highlights for this activity"
-                />
-              </>
-            ) : (
-              <div className="text-sm text-muted-foreground space-y-2">
-                <div>• Schedule Items - Will be available after creating</div>
-                <div>• What's Included - Will be available after creating</div>
-                <div>• Activity Highlights - Will be available after creating</div>
+            {editingActivity && (
+              <div className="text-sm text-muted-foreground bg-muted/30 p-4 rounded-lg">
+                <p className="font-medium mb-2">Quick Access:</p>
+                <div className="space-y-1">
+                  <div>• Schedule Items - Add daily itinerary</div>
+                  <div>• What's Included - List inclusions and services</div>
+                  <div>• Activity Highlights - Key selling points</div>
+                </div>
+                <p className="mt-2 text-xs">For better management, use the dedicated content manager above.</p>
               </div>
             )}
           </div>

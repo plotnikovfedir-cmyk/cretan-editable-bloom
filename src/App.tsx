@@ -35,6 +35,7 @@ import AdminBookings from "./pages/admin/AdminBookings";
 import AdminReviews from "./pages/admin/AdminReviews";
 import AdminBlog from "./pages/admin/AdminBlog";
 import AdminEvents from "./pages/admin/AdminEvents";
+import AdminActivityManager from "./pages/admin/AdminActivityManager";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,7 @@ const App = () => (
             <Route path="/admin/reviews" element={<AdminReviews />} />
             <Route path="/admin/blog" element={<AdminBlog />} />
             <Route path="/admin/events" element={<AdminEvents />} />
+            <Route path="/admin/activity-manager" element={<AdminActivityManager />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

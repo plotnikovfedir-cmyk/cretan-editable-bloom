@@ -41,13 +41,16 @@ const ActivityListManager: React.FC<ActivityListManagerProps> = ({
 
   useEffect(() => {
     if (activityId) {
+      console.log(`Loading ${listType} items for activity:`, activityId);
       loadItems();
     }
-  }, [activityId]);
+  }, [activityId, listType]);
 
   const loadItems = async () => {
     try {
       setLoading(true);
+      console.log(`Loading ${listType} items for activity ID: ${activityId}`);
+      
       let query;
       
       switch (listType) {
@@ -73,13 +76,18 @@ const ActivityListManager: React.FC<ActivityListManagerProps> = ({
       
       const { data, error } = await query.order('order_position', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error(`Database error loading ${listType} items:`, error);
+        throw error;
+      }
+      
+      console.log(`Loaded ${data?.length || 0} ${listType} items:`, data);
       setItems(data || []);
     } catch (error) {
       console.error(`Error loading ${listType} items:`, error);
       toast({
         title: "Error",
-        description: `Failed to load ${listType} items`,
+        description: `Failed to load ${listType} items: ${error.message}`,
         variant: "destructive"
       });
     } finally {
@@ -91,43 +99,45 @@ const ActivityListManager: React.FC<ActivityListManagerProps> = ({
     if (!newItemText.trim()) return;
 
     try {
+      console.log(`Adding ${listType} item to activity ${activityId}:`, newItemText.trim());
+      
       const maxPosition = items.length > 0 ? Math.max(...items.map(item => item.order_position)) : 0;
+      const newItem = {
+        activity_id: activityId,
+        item_text: newItemText.trim(),
+        order_position: maxPosition + 1
+      };
+      
+      console.log('New item data:', newItem);
+      
       let query;
       
       switch (listType) {
         case 'schedule':
           query = supabase
             .from('activity_schedule_items')
-            .insert([{
-              activity_id: activityId,
-              item_text: newItemText.trim(),
-              order_position: maxPosition + 1
-            }]);
+            .insert([newItem]);
           break;
         case 'includes':
           query = supabase
             .from('activity_includes_items')
-            .insert([{
-              activity_id: activityId,
-              item_text: newItemText.trim(),
-              order_position: maxPosition + 1
-            }]);
+            .insert([newItem]);
           break;
         case 'highlights':
           query = supabase
             .from('activity_highlights_items')
-            .insert([{
-              activity_id: activityId,
-              item_text: newItemText.trim(),
-              order_position: maxPosition + 1
-            }]);
+            .insert([newItem]);
           break;
       }
       
       const { data, error } = await query.select().single();
 
-      if (error) throw error;
+      if (error) {
+        console.error(`Database error adding ${listType} item:`, error);
+        throw error;
+      }
 
+      console.log(`Successfully added ${listType} item:`, data);
       setItems([...items, data]);
       setNewItemText('');
       
@@ -139,7 +149,7 @@ const ActivityListManager: React.FC<ActivityListManagerProps> = ({
       console.error(`Error adding ${listType} item:`, error);
       toast({
         title: "Error",
-        description: `Failed to add ${listType} item`,
+        description: `Failed to add ${listType} item: ${error.message}`,
         variant: "destructive"
       });
     }
@@ -326,6 +336,7 @@ const ActivityListManager: React.FC<ActivityListManagerProps> = ({
           <Badge variant="outline">{items.length} items</Badge>
         </CardTitle>
         {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        <p className="text-xs text-muted-foreground">Activity ID: {activityId}</p>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Add new item */}

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import CartIcon from "@/components/CartIcon";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -96,8 +97,13 @@ const Navigation = () => {
             </Sheet>
           </div>
           
-          {/* Right side - Cart and Mobile Menu */}
+          {/* Right side - Theme Toggle, Cart and Mobile Menu */}
           <div className="flex items-center gap-2 lg:gap-3">
+            {/* Theme Toggle */}
+            <div className="order-0">
+              <ThemeToggle />
+            </div>
+            
             {/* Cart - properly positioned on the right */}
             <div className="order-1">
               <CartIcon />
@@ -112,11 +118,14 @@ const Navigation = () => {
                     <span className="sr-only">Open menu</span>
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[280px] sm:w-[320px]">
-                  <div className="flex flex-col gap-6 mt-6">
-                    <Link to="/" className="text-xl font-bold text-primary mb-2" onClick={() => setIsOpen(false)}>
-                      Cretan Guru
-                    </Link>
+                  <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+                    <div className="flex flex-col gap-6 mt-6">
+                      <div className="flex items-center justify-between">
+                        <Link to="/" className="text-xl font-bold text-primary" onClick={() => setIsOpen(false)}>
+                          Cretan Guru
+                        </Link>
+                        <ThemeToggle />
+                      </div>
                     
                     <div className="flex flex-col gap-2">
                       {navItems.map((item) => (

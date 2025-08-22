@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -56,8 +58,65 @@ const AdminHeroSlides = () => {
   const [deleteSlideId, setDeleteSlideId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterPageType, setFilterPageType] = useState('');
+  const [adminLoading, setAdminLoading] = useState(true);
+  const [adminError, setAdminError] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+
+  // Check admin access
+  useEffect(() => {
+    const checkAdminAccess = async () => {
+      try {
+        console.log('AdminHeroSlides: Checking admin access...', { 
+          user: user?.id, 
+          authLoading 
+        });
+
+        if (authLoading) {
+          console.log('AdminHeroSlides: Still loading auth...');
+          return;
+        }
+
+        if (!user) {
+          console.log('AdminHeroSlides: No user found, redirecting to login');
+          setAdminError('Please log in to access admin features');
+          navigate('/admin');
+          return;
+        }
+
+        console.log('AdminHeroSlides: Checking admin user status for:', user.id);
+        const { data: adminUser, error } = await supabase
+          .from('admin_users')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('is_active', true)
+          .single();
+
+        if (error) {
+          console.error('AdminHeroSlides: Error checking admin status:', error);
+          setAdminError('Database error checking admin access');
+          return;
+        }
+
+        if (!adminUser) {
+          console.log('AdminHeroSlides: User is not an admin:', user.id);
+          setAdminError('Access denied: Admin privileges required');
+          navigate('/admin');
+          return;
+        }
+
+        console.log('AdminHeroSlides: Admin access confirmed for:', user.id);
+        setAdminLoading(false);
+      } catch (error) {
+        console.error('AdminHeroSlides: Exception checking admin access:', error);
+        setAdminError('Failed to verify admin access');
+      }
+    };
+
+    checkAdminAccess();
+  }, [user, authLoading, navigate]);
 
   const form = useForm<HeroSlideFormData>({
     resolver: zodResolver(heroSlideSchema),
@@ -194,6 +253,20 @@ const AdminHeroSlides = () => {
     const matchesPageType = filterPageType === '' || slide.page_type === filterPageType;
     return matchesSearch && matchesPageType;
   }) || [];
+
+  if (authLoading || adminLoading) {
+    return <div className="p-6">Loading admin access...</div>;
+  }
+
+  if (adminError) {
+    return (
+      <div className="p-6">
+        <div className="bg-destructive/10 border border-destructive text-destructive px-4 py-3 rounded">
+          {adminError}
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return <div className="p-6">Loading hero slides...</div>;

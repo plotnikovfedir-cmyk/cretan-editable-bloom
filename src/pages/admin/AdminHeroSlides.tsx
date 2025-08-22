@@ -57,7 +57,7 @@ const AdminHeroSlides = () => {
   const [editingSlide, setEditingSlide] = useState<HeroSlide | null>(null);
   const [deleteSlideId, setDeleteSlideId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterPageType, setFilterPageType] = useState('');
+  const [filterPageType, setFilterPageType] = useState('all');
   const [adminLoading, setAdminLoading] = useState(true);
   const [adminError, setAdminError] = useState<string | null>(null);
   const { toast } = useToast();
@@ -250,7 +250,7 @@ const AdminHeroSlides = () => {
 
   const filteredSlides = slides?.filter(slide => {
     const matchesSearch = slide.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesPageType = filterPageType === '' || slide.page_type === filterPageType;
+    const matchesPageType = filterPageType === 'all' || slide.page_type === filterPageType;
     return matchesSearch && matchesPageType;
   }) || [];
 
@@ -303,7 +303,7 @@ const AdminHeroSlides = () => {
                 <SelectValue placeholder="Filter by page" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Pages</SelectItem>
+                <SelectItem value="all">All Pages</SelectItem>
                 {pageTypeOptions.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}

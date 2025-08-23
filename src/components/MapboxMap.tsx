@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { MapPin } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 interface MapboxMapProps {
   latitude?: number;
@@ -40,6 +41,7 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
   const [tokenInput, setTokenInput] = useState<string>('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState<string>('');
+  const { theme } = useTheme();
 
   useEffect(() => {
     checkAdminStatus();
@@ -98,9 +100,14 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 
     mapboxgl.accessToken = token;
 
+    // Choose map style based on theme
+    const mapStyle = theme === 'dark' 
+      ? 'mapbox://styles/mapbox/dark-v11' 
+      : (style || 'mapbox://styles/mapbox/outdoors-v12');
+
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: style,
+      style: mapStyle,
       center: [longitude, latitude],
       zoom: zoom,
       attributionControl: false
@@ -158,7 +165,7 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
     if (mapboxToken) {
       initializeMap(mapboxToken);
     }
-  }, [latitude, longitude, zoom, style, markers, mapboxToken]);
+  }, [latitude, longitude, zoom, style, markers, mapboxToken, theme]);
 
   if (error && isAdmin) {
     return (

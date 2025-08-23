@@ -13,6 +13,8 @@ import preveliBeachImage from "@/assets/preveli-beach.jpg";
 import triopetraBeachImage from "@/assets/triopetra-beach.jpg";
 import agiosPavlosBeachImage from "@/assets/agios-pavlos-beach.jpg";
 import monasteryBeachImage from "@/assets/monastery-beach.jpg";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { TelegramIcon } from "@/components/icons/TelegramIcon";
 
 const Delivery = () => {
   const { addToCart } = useCart();
@@ -231,7 +233,7 @@ const Delivery = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 text-lg font-semibold rounded-full"
+              className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 text-lg font-semibold rounded-full flex items-center gap-3"
               asChild
             >
               <a 
@@ -239,12 +241,13 @@ const Delivery = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                📱 Order via WhatsApp
+                <WhatsAppIcon className="w-5 h-5" />
+                Order via WhatsApp
               </a>
             </Button>
             <Button 
               size="lg" 
-              className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 text-lg font-semibold rounded-full"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 text-lg font-semibold rounded-full flex items-center gap-3"
               asChild
             >
               <a 
@@ -252,7 +255,8 @@ const Delivery = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                📨 Order via Telegram
+                <TelegramIcon className="w-5 h-5" />
+                Order via Telegram
               </a>
             </Button>
           </div>

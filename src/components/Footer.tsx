@@ -1,10 +1,15 @@
 import { Link } from "react-router-dom";
-import { Instagram, Facebook, Phone, Mail, MapPin, Send, MessageCircle } from "lucide-react";
+import { Instagram, Facebook, Phone, Mail, MapPin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { TelegramIcon } from "@/components/icons/TelegramIcon";
+import { YouTubeIcon } from "@/components/icons/YouTubeIcon";
+import { TikTokIcon } from "@/components/icons/TikTokIcon";
+import { PinterestIcon } from "@/components/icons/PinterestIcon";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -63,7 +68,7 @@ const Footer = () => {
                 Discover the true taste of Crete with our premium olive oils, wild herbs, and unforgettable activities.
               </p>
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap gap-2">
               <Button 
                 variant="outline" 
                 size="icon" 
@@ -87,21 +92,51 @@ const Footer = () => {
               <Button 
                 variant="outline" 
                 size="icon" 
-                className="hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
+                className="hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-110"
                 asChild
               >
-                <a href="https://t.me/cretanguru" target="_blank" rel="noopener noreferrer">
-                  <Send className="w-4 h-4" />
+                <a href="https://youtube.com/@cretanguru" target="_blank" rel="noopener noreferrer">
+                  <YouTubeIcon className="w-4 h-4" />
                 </a>
               </Button>
               <Button 
                 variant="outline" 
                 size="icon" 
-                className="hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
+                className="hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-300 hover:scale-110"
+                asChild
+              >
+                <a href="https://tiktok.com/@cretanguru" target="_blank" rel="noopener noreferrer">
+                  <TikTokIcon className="w-4 h-4" />
+                </a>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="hover:bg-red-600 hover:text-white transition-all duration-300 hover:scale-110"
+                asChild
+              >
+                <a href="https://pinterest.com/cretanguru" target="_blank" rel="noopener noreferrer">
+                  <PinterestIcon className="w-4 h-4" />
+                </a>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="hover:bg-green-500 hover:text-white transition-all duration-300 hover:scale-110"
                 asChild
               >
                 <a href="https://wa.me/4917857738346" target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-4 h-4" />
+                  <WhatsAppIcon className="w-4 h-4" />
+                </a>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="hover:bg-blue-500 hover:text-white transition-all duration-300 hover:scale-110"
+                asChild
+              >
+                <a href="https://t.me/cretanguru" target="_blank" rel="noopener noreferrer">
+                  <TelegramIcon className="w-4 h-4" />
                 </a>
               </Button>
             </div>
@@ -136,12 +171,12 @@ const Footer = () => {
               <Link to="/delivery" className="block text-muted-foreground hover:text-primary transition-colors">
                 Delivery
               </Link>
-              <span className="block text-muted-foreground">
+              <Link to="/island-tours" className="block text-muted-foreground hover:text-primary transition-colors">
                 Island Tours
-              </span>
-              <span className="block text-muted-foreground">
+              </Link>
+              <Link to="/wine-tastings" className="block text-muted-foreground hover:text-primary transition-colors">
                 Wine Tastings
-              </span>
+              </Link>
             </nav>
           </div>
 

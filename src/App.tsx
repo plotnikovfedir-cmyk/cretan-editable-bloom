@@ -37,6 +37,8 @@ import AdminReviews from "./pages/admin/AdminReviews";
 import AdminBlog from "./pages/admin/AdminBlog";
 import AdminEvents from "./pages/admin/AdminEvents";
 import AdminActivityManager from "./pages/admin/AdminActivityManager";
+import IslandTours from "./pages/IslandTours";
+import WineTastings from "./pages/WineTastings";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +63,8 @@ const App = () => (
             <Route path="/events/:slug" element={<EventDetail />} />
             <Route path="/taxi" element={<Taxi />} />
             <Route path="/delivery" element={<Delivery />} />
+            <Route path="/island-tours" element={<IslandTours />} />
+            <Route path="/wine-tastings" element={<WineTastings />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/cart" element={<Cart />} />

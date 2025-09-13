@@ -32,7 +32,12 @@ const AdminDashboard = () => {
     bookings: 0,
     reviews: 0,
     islandTours: 0,
-    wineTastings: 0
+    wineTastings: 0,
+    heroSlides: 0,
+    instagramImages: 0,
+    testimonials: 0,
+    locations: 0,
+    settings: 0
   });
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -72,7 +77,22 @@ const AdminDashboard = () => {
 
   const loadStats = async () => {
     try {
-      const [products, activities, events, blogPosts, orders, bookings, reviews, islandTours, wineTastings] = await Promise.all([
+      const [
+        products, 
+        activities, 
+        events, 
+        blogPosts, 
+        orders, 
+        bookings, 
+        reviews, 
+        islandTours, 
+        wineTastings,
+        heroSlides,
+        instagramImages,
+        testimonials,
+        locations,
+        settings
+      ] = await Promise.all([
         supabase.from("products").select("id", { count: "exact", head: true }),
         supabase.from("activities").select("id", { count: "exact", head: true }),
         supabase.from("events").select("id", { count: "exact", head: true }),
@@ -81,7 +101,12 @@ const AdminDashboard = () => {
         supabase.from("bookings").select("id", { count: "exact", head: true }),
         supabase.from("customer_reviews").select("id", { count: "exact", head: true }),
         supabase.from("island_tours").select("id", { count: "exact", head: true }).eq("is_active", true),
-        supabase.from("wine_tastings").select("id", { count: "exact", head: true }).eq("is_active", true)
+        supabase.from("wine_tastings").select("id", { count: "exact", head: true }).eq("is_active", true),
+        supabase.from("hero_slides").select("id", { count: "exact", head: true }),
+        supabase.from("instagram_gallery").select("id", { count: "exact", head: true }).eq("is_active", true),
+        supabase.from("testimonials").select("id", { count: "exact", head: true }).eq("is_active", true),
+        supabase.from("locations").select("id", { count: "exact", head: true }).eq("is_active", true),
+        supabase.from("settings").select("id", { count: "exact", head: true })
       ]);
 
       setStats({
@@ -93,10 +118,20 @@ const AdminDashboard = () => {
         bookings: bookings.count || 0,
         reviews: reviews.count || 0,
         islandTours: islandTours.count || 0,
-        wineTastings: wineTastings.count || 0
+        wineTastings: wineTastings.count || 0,
+        heroSlides: heroSlides.count || 0,
+        instagramImages: instagramImages.count || 0,
+        testimonials: testimonials.count || 0,
+        locations: locations.count || 0,
+        settings: settings.count || 0
       });
     } catch (error) {
       console.error("Error loading stats:", error);
+      toast({
+        variant: "destructive",
+        title: "Ошибка загрузки",
+        description: "Не удалось загрузить статистику"
+      });
     }
   };
 
@@ -157,21 +192,21 @@ const AdminDashboard = () => {
       description: "Управление 'Follow Our Journey'",
       icon: Camera,
       link: "/admin/instagram-gallery",
-      count: 0
+      count: stats.instagramImages
     },
     {
       title: "Hero Слайды", 
       description: "Управление главными слайдами страниц",
       icon: Settings,
       link: "/admin/hero-slides",
-      count: 0
+      count: stats.heroSlides
     },
     {
       title: "Testimonials",
       description: "Управление отзывами клиентов",
       icon: MessageSquare,
       link: "/admin/testimonials",
-      count: 0
+      count: stats.testimonials
     },
     {
       title: "Заказы",
@@ -199,14 +234,14 @@ const AdminDashboard = () => {
       description: "Управление точками на карте",
       icon: MapPin,
       link: "/admin/locations",
-      count: 0
+      count: stats.locations
     },
     {
       title: "Настройки сайта",
       description: "Управление настройками и конфигурацией",
       icon: Settings,
       link: "/admin/settings",
-      count: 0
+      count: stats.settings
     }
   ];
 

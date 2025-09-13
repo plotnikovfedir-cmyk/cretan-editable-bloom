@@ -130,12 +130,13 @@ const TestimonialsSection = () => {
               align: "start",
               loop: true,
               slidesToScroll: 1,
+              containScroll: "trimSnaps",
             }}
             className="w-full"
           >
-            <CarouselContent className="-ml-2 md:-ml-4">
+            <CarouselContent className="-ml-2 md:-ml-4 lg:-ml-6">
               {testimonials.map((testimonial) => (
-                <CarouselItem key={testimonial.id} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3 flex">
+                <CarouselItem key={testimonial.id} className="pl-2 md:pl-4 lg:pl-6 basis-[85%] sm:basis-[70%] md:basis-1/2 lg:basis-1/3 flex">
                   <Card className="hover:shadow-lg transition-shadow duration-300 bg-card border border-border/50 h-full w-full flex flex-col">
                     <CardContent className="p-6 flex flex-col h-full">
                       <div className="flex items-center mb-4">
@@ -163,8 +164,18 @@ const TestimonialsSection = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
+            <CarouselPrevious className="hidden sm:flex -left-2 lg:-left-4" />
+            <CarouselNext className="hidden sm:flex -right-2 lg:-right-4" />
+            
+            {/* Точки-индикаторы */}
+            <div className="flex justify-center mt-6 space-x-2">
+              {testimonials.map((_, index) => (
+                <div 
+                  key={index} 
+                  className="w-2 h-2 rounded-full bg-muted-foreground/30 hover:bg-primary/50 transition-colors cursor-pointer"
+                />
+              ))}
+            </div>
           </Carousel>
         )}
       </div>

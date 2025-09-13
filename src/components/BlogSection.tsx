@@ -124,12 +124,13 @@ const BlogSection = () => {
                 align: "start",
                 loop: true,
                 slidesToScroll: 1,
+                containScroll: "trimSnaps",
               }}
               className="w-full"
             >
-              <CarouselContent className="-ml-2 md:-ml-4">
+              <CarouselContent className="-ml-2 md:-ml-4 lg:-ml-6">
                 {(posts.length > 0 ? posts : fallbackPosts).map((post, index) => (
-                  <CarouselItem key={posts.length > 0 ? post.id : index} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3 flex">
+                  <CarouselItem key={posts.length > 0 ? post.id : index} className="pl-2 md:pl-4 lg:pl-6 basis-[85%] sm:basis-[70%] md:basis-1/2 lg:basis-1/3 flex">
                     <div className="w-full">
                       <BlogCard
                         title={post.title}
@@ -141,8 +142,18 @@ const BlogSection = () => {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden md:flex" />
-              <CarouselNext className="hidden md:flex" />
+              <CarouselPrevious className="hidden sm:flex -left-2 lg:-left-4" />
+              <CarouselNext className="hidden sm:flex -right-2 lg:-right-4" />
+              
+              {/* Точки-индикаторы */}
+              <div className="flex justify-center mt-6 space-x-2">
+                {(posts.length > 0 ? posts : fallbackPosts).map((_, index) => (
+                  <div 
+                    key={index} 
+                    className="w-2 h-2 rounded-full bg-muted-foreground/30 hover:bg-primary/50 transition-colors cursor-pointer"
+                  />
+                ))}
+              </div>
             </Carousel>
           )}
         </div>

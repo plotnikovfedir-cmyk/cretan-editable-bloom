@@ -129,13 +129,15 @@ const BlogSection = () => {
             >
               <CarouselContent className="-ml-2 md:-ml-4">
                 {(posts.length > 0 ? posts : fallbackPosts).map((post, index) => (
-                  <CarouselItem key={posts.length > 0 ? post.id : index} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
-                    <BlogCard
-                      title={post.title}
-                      excerpt={posts.length > 0 ? (post as BlogPost).excerpt || '' : (post as any).excerpt}
-                      image={posts.length > 0 ? (post as BlogPost).featured_image_url || oliveOilImage : (post as any).image}
-                      url={posts.length > 0 ? `/blog/${(post as BlogPost).slug}` : (post as any).url}
-                    />
+                  <CarouselItem key={posts.length > 0 ? post.id : index} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3 flex">
+                    <div className="w-full">
+                      <BlogCard
+                        title={post.title}
+                        excerpt={posts.length > 0 ? (post as BlogPost).excerpt || '' : (post as any).excerpt}
+                        image={posts.length > 0 ? (post as BlogPost).featured_image_url || oliveOilImage : (post as any).image}
+                        url={posts.length > 0 ? `/blog/${(post as BlogPost).slug}` : (post as any).url}
+                      />
+                    </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>

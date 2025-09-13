@@ -135,8 +135,8 @@ const TestimonialsSection = () => {
           >
             <CarouselContent className="-ml-2 md:-ml-4">
               {testimonials.map((testimonial) => (
-                <CarouselItem key={testimonial.id} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
-                  <Card className="hover:shadow-lg transition-shadow duration-300 bg-card border border-border/50 h-full">
+                <CarouselItem key={testimonial.id} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3 flex">
+                  <Card className="hover:shadow-lg transition-shadow duration-300 bg-card border border-border/50 h-full w-full flex flex-col">
                     <CardContent className="p-6 flex flex-col h-full">
                       <div className="flex items-center mb-4">
                         <Quote className="w-8 h-8 text-primary mr-3" />

@@ -31,7 +31,7 @@ const BlogSection = () => {
         .select('id, title, excerpt, slug, featured_image_url, published_at')
         .eq('is_published', true)
         .order('published_at', { ascending: false })
-        .limit(3);
+        .limit(8);
 
       if (error) throw error;
       
@@ -67,6 +67,24 @@ const BlogSection = () => {
       excerpt: "Learn authentic Cretan recipes that showcase the incredible flavors of our premium olive oils and wild herbs.",
       image: oliveOilImage,
       url: "/blog/traditional-recipes"
+    },
+    {
+      title: "Ancient Monasteries and Sacred Sites",
+      excerpt: "Journey through Crete's spiritual heritage and discover monasteries that have stood for centuries.",
+      image: oliveOilImage,
+      url: "/blog/ancient-monasteries"
+    },
+    {
+      title: "Hiking Adventures in the Cretan Mountains",
+      excerpt: "Explore rugged landscapes and breathtaking mountain trails that offer spectacular views of the Mediterranean.",
+      image: herbsImage,
+      url: "/blog/hiking-mountains"
+    },
+    {
+      title: "Local Markets and Artisan Crafts",
+      excerpt: "Discover vibrant local markets and meet talented artisans who keep traditional Cretan crafts alive.",
+      image: oliveOilImage,
+      url: "/blog/local-markets"
     }
   ];
 
@@ -105,12 +123,13 @@ const BlogSection = () => {
               opts={{
                 align: "start",
                 loop: true,
+                slidesToScroll: 1,
               }}
               className="w-full"
             >
               <CarouselContent className="-ml-2 md:-ml-4">
                 {(posts.length > 0 ? posts : fallbackPosts).map((post, index) => (
-                  <CarouselItem key={posts.length > 0 ? post.id : index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                  <CarouselItem key={posts.length > 0 ? post.id : index} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
                     <BlogCard
                       title={post.title}
                       excerpt={posts.length > 0 ? (post as BlogPost).excerpt || '' : (post as any).excerpt}

@@ -50,6 +50,43 @@ const defaultSettings: Record<string, Array<Omit<Setting, 'id'>>> = {
   blog: [
     { setting_key: 'posts_per_page', setting_value: '6', setting_type: 'number', category: 'blog', description: 'Number of posts per page', is_public: true },
     { setting_key: 'enable_comments', setting_value: 'true', setting_type: 'boolean', category: 'blog', description: 'Enable comments on blog posts', is_public: true },
+  ],
+  social: [
+    { setting_key: 'instagram_url', setting_value: '', setting_type: 'text', category: 'social', description: 'Instagram profile URL', is_public: true },
+    { setting_key: 'facebook_url', setting_value: '', setting_type: 'text', category: 'social', description: 'Facebook page URL', is_public: true },
+    { setting_key: 'whatsapp_number', setting_value: '', setting_type: 'text', category: 'social', description: 'WhatsApp contact number', is_public: true },
+    { setting_key: 'telegram_username', setting_value: '', setting_type: 'text', category: 'social', description: 'Telegram username', is_public: true },
+    { setting_key: 'youtube_url', setting_value: '', setting_type: 'text', category: 'social', description: 'YouTube channel URL', is_public: true },
+    { setting_key: 'tiktok_url', setting_value: '', setting_type: 'text', category: 'social', description: 'TikTok profile URL', is_public: true },
+  ],
+  map: [
+    { setting_key: 'map_center_lat', setting_value: '35.2401', setting_type: 'number', category: 'map', description: 'Default map center latitude', is_public: true },
+    { setting_key: 'map_center_lng', setting_value: '24.8093', setting_type: 'number', category: 'map', description: 'Default map center longitude', is_public: true },
+    { setting_key: 'map_default_zoom', setting_value: '9', setting_type: 'number', category: 'map', description: 'Default map zoom level', is_public: true },
+    { setting_key: 'mapbox_style', setting_value: 'outdoors-v12', setting_type: 'select', category: 'map', description: 'Default Mapbox style', is_public: true },
+  ],
+  delivery: [
+    { setting_key: 'delivery_zones', setting_value: 'Chania,Rethymno,Heraklion', setting_type: 'textarea', category: 'delivery', description: 'Delivery zones (comma separated)', is_public: true },
+    { setting_key: 'delivery_fee', setting_value: '5.00', setting_type: 'number', category: 'delivery', description: 'Standard delivery fee', is_public: true },
+    { setting_key: 'free_delivery_threshold', setting_value: '50.00', setting_type: 'number', category: 'delivery', description: 'Free delivery threshold amount', is_public: true },
+    { setting_key: 'delivery_time_min', setting_value: '30', setting_type: 'number', category: 'delivery', description: 'Minimum delivery time (minutes)', is_public: true },
+    { setting_key: 'delivery_time_max', setting_value: '90', setting_type: 'number', category: 'delivery', description: 'Maximum delivery time (minutes)', is_public: true },
+  ],
+  booking: [
+    { setting_key: 'booking_advance_days', setting_value: '2', setting_type: 'number', category: 'booking', description: 'Minimum days in advance for bookings', is_public: true },
+    { setting_key: 'max_participants', setting_value: '12', setting_type: 'number', category: 'booking', description: 'Maximum participants per booking', is_public: true },
+    { setting_key: 'deposit_percentage', setting_value: '0.30', setting_type: 'number', category: 'booking', description: 'Deposit percentage (0.30 = 30%)', is_public: true },
+    { setting_key: 'cancellation_policy', setting_value: '24 hours', setting_type: 'text', category: 'booking', description: 'Cancellation policy description', is_public: true },
+  ],
+  analytics: [
+    { setting_key: 'google_tag_manager_id', setting_value: '', setting_type: 'text', category: 'analytics', description: 'Google Tag Manager ID', is_public: false },
+    { setting_key: 'facebook_pixel_id', setting_value: '', setting_type: 'text', category: 'analytics', description: 'Facebook Pixel ID', is_public: false },
+    { setting_key: 'hotjar_id', setting_value: '', setting_type: 'text', category: 'analytics', description: 'Hotjar tracking ID', is_public: false },
+  ],
+  maintenance: [
+    { setting_key: 'maintenance_mode', setting_value: 'false', setting_type: 'boolean', category: 'maintenance', description: 'Enable maintenance mode', is_public: true },
+    { setting_key: 'maintenance_message', setting_value: 'We are currently updating our website. Please check back soon!', setting_type: 'textarea', category: 'maintenance', description: 'Maintenance mode message', is_public: true },
+    { setting_key: 'backup_frequency', setting_value: 'daily', setting_type: 'select', category: 'maintenance', description: 'Backup frequency', is_public: false },
   ]
 };
 

@@ -2,7 +2,6 @@ import { MapPin, Leaf, Mountain, Waves, Church, Building, Eye, Gem } from "lucid
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import MapboxMap from './MapboxMap';
-import LocationFilter from './LocationFilter';
 
 const CreteMap = () => {
   const [locations, setLocations] = useState<any[]>([]);
@@ -78,7 +77,9 @@ const CreteMap = () => {
     longitude: location.longitude,
     title: location.name,
     description: location.description,
-    color: getMarkerColor(location.location_type)
+    color: getMarkerColor(location.location_type),
+    icon: getMarkerIcon(location.location_type),
+    type: location.location_type
   }));
 
   return (
@@ -94,14 +95,6 @@ const CreteMap = () => {
         </div>
 
         <div className="max-w-5xl mx-auto">
-          {/* Location Filter */}
-          <div className="mb-8">
-            <LocationFilter 
-              selectedTypes={selectedTypes}
-              onTypeToggle={handleTypeToggle}
-            />
-          </div>
-
           {/* Real Interactive Mapbox Map of Crete */}
           <div className="relative">
             <MapboxMap
@@ -132,33 +125,92 @@ const CreteMap = () => {
             )}
           </div>
           
-          {/* Enhanced Legend */}
+          {/* Interactive Location Filter & Legend */}
           <div className="mt-12 bg-background/60 backdrop-blur-sm rounded-2xl p-6 border border-border/50">
             <h3 className="font-display font-semibold text-center mb-6 text-foreground">
-              Location Legend ({filteredLocations.length} of {locations.length} shown)
+              Filter Locations ({filteredLocations.length} of {locations.length} shown)
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { type: 'beaches', label: 'Beaches', icon: Waves, color: '#0ea5e9' },
-                { type: 'canyons', label: 'Canyons', icon: Mountain, color: '#f59e0b' },
-                { type: 'monasteries', label: 'Monasteries', icon: Church, color: '#8b5cf6' },
-                { type: 'villages', label: 'Villages', icon: Building, color: '#f97316' },
-                { type: 'viewpoints', label: 'Viewpoints', icon: Eye, color: '#06b6d4' },
-                { type: 'caves', label: 'Caves', icon: Gem, color: '#64748b' },
-                { type: 'production', label: 'Production', icon: Mountain, color: '#059669' },
-                { type: 'farm', label: 'Farms', icon: Leaf, color: '#7c3aed' },
-              ].map(({ type, label, icon: Icon, color }) => {
+                { type: 'beaches', label: 'Beaches', icon: Waves, color: '#0ea5e9', description: 'Crystal clear waters and pristine shores' },
+                { type: 'canyons', label: 'Canyons', icon: Mountain, color: '#f59e0b', description: 'Dramatic gorges and hiking paths' },
+                { type: 'monasteries', label: 'Monasteries', icon: Church, color: '#8b5cf6', description: 'Historic religious sites' },
+                { type: 'villages', label: 'Villages', icon: Building, color: '#f97316', description: 'Traditional Cretan settlements' },
+                { type: 'viewpoints', label: 'Viewpoints', icon: Eye, color: '#06b6d4', description: 'Scenic overlooks and sunset spots' },
+                { type: 'caves', label: 'Caves', icon: Gem, color: '#64748b', description: 'Underground wonders and formations' },
+                { type: 'production', label: 'Production', icon: Mountain, color: '#059669', description: 'Local production facilities' },
+                { type: 'farm', label: 'Farms', icon: Leaf, color: '#7c3aed', description: 'Agricultural sites and groves' },
+              ].map(({ type, label, icon: Icon, color, description }) => {
                 const count = locations.filter(loc => loc.location_type === type).length;
+                const isSelected = selectedTypes.includes(type);
                 if (count === 0) return null;
                 
                 return (
-                  <div key={type} className="flex items-center space-x-3">
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center shadow-lg" style={{ backgroundColor: color }}>
-                      <Icon className="w-3 h-3 text-white" />
+                  <div 
+                    key={type} 
+                    onClick={() => handleTypeToggle(type)}
+                    className={`
+                      relative group cursor-pointer p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-105 hover:shadow-lg
+                      ${isSelected 
+                        ? 'border-transparent shadow-xl backdrop-blur-sm' 
+                        : 'border-border/30 hover:border-border/60 bg-background/40'
+                      }
+                    `}
+                    style={isSelected ? {
+                      background: `linear-gradient(135deg, ${color}15, ${color}25)`,
+                      borderColor: color,
+                      boxShadow: `0 8px 32px ${color}40`
+                    } : {}}
+                  >
+                    <div className="flex flex-col items-center text-center space-y-3">
+                      <div 
+                        className={`
+                          w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 transform
+                          ${isSelected 
+                            ? 'shadow-lg scale-110 animate-pulse' 
+                            : 'bg-background/60 group-hover:scale-105'
+                          }
+                        `}
+                        style={isSelected ? {
+                          backgroundColor: color,
+                          boxShadow: `0 8px 24px ${color}60`
+                        } : {}}
+                      >
+                        <Icon 
+                          className={`w-8 h-8 transition-all duration-300 ${
+                            isSelected ? 'text-white' : 'text-muted-foreground group-hover:text-foreground'
+                          }`} 
+                        />
+                      </div>
+                      <div>
+                        <h4 className={`font-medium transition-colors ${
+                          isSelected ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
+                        }`}>
+                          {label}
+                        </h4>
+                        <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                          {description}
+                        </p>
+                        <div className="text-xs font-mono mt-2 opacity-60">
+                          ({count})
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-sm text-muted-foreground">
-                      {label} ({count})
-                    </span>
+                    
+                    {/* Selection indicator */}
+                    <div className={`
+                      absolute -top-2 -right-2 w-6 h-6 rounded-full border-2 border-background transition-all duration-300
+                      ${isSelected 
+                        ? 'opacity-100 scale-100' 
+                        : 'opacity-0 scale-0'
+                      }
+                    `}
+                    style={isSelected ? { backgroundColor: color } : {}}
+                    >
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                      </div>
+                    </div>
                   </div>
                 );
               })}

@@ -15,7 +15,7 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import InstagramGalleryEnhanced from "@/components/InstagramGalleryEnhanced";
 import CreteMap from "@/components/CreteMap";
-import BlogCard from "@/components/BlogCard";
+import BlogSection from "@/components/BlogSection";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -177,43 +177,7 @@ const Index = () => {
       </section>
 
       {/* Latest From Our Blog */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16 animate-fade-in-up">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 font-display">Latest From Our Blog</h2>
-            <p className="text-lg text-muted-foreground">Discover stories, recipes, and insights from Crete</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <BlogCard
-              title="The Health Benefits of Cretan Olive Oil"
-              excerpt="Explore the remarkable health benefits and centuries-old heritage behind our premium olive oils that make them truly special."
-              image={oliveOilImage}
-              url="/blog/cretan-olive-oil"
-            />
-            
-            <BlogCard
-              title="Wild Herbs of Crete: A Forager's Guide"
-              excerpt="Discover which herbs thrive naturally on our island and how local families have used them for generations."
-              image={herbsImage}
-              url="/blog/wild-herbs"
-            />
-            
-            <BlogCard
-              title="Traditional Cretan Recipes Using Our Products"
-              excerpt="Learn authentic Cretan recipes that showcase the incredible flavors of our premium olive oils and wild herbs."
-              image={oliveOilImage}
-              url="/blog/traditional-recipes"
-            />
-          </div>
-          
-          <div className="text-center">
-            <Button asChild size="lg" variant="outline" className="bg-background hover:bg-muted border-primary text-primary hover:text-primary">
-              <Link to="/blog">Read All Articles</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <BlogSection />
 
       {/* Why Choose Us */}
       <WhyChooseUs />

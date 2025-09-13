@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Settings, Globe, Mail, FileText, Users } from "lucide-react";
+import { ArrowLeft, Settings, Globe, Mail, FileText, Users, Map, Truck, Calendar as CalendarIcon, BarChart3, Wrench } from "lucide-react";
 import { SettingsForm } from "@/components/admin/SettingsForm";
 
 interface Setting {
@@ -93,6 +93,36 @@ const AdminSettings = () => {
       label: "Social",
       icon: Users,
       description: "Social media and sharing settings"
+    },
+    {
+      id: "map",
+      label: "Map",
+      icon: Map,
+      description: "Map and location settings"
+    },
+    {
+      id: "delivery",
+      label: "Delivery",
+      icon: Truck,
+      description: "Delivery zones and settings"
+    },
+    {
+      id: "booking",
+      label: "Booking",
+      icon: CalendarIcon,
+      description: "Booking and reservation settings"
+    },
+    {
+      id: "analytics",
+      label: "Analytics",
+      icon: BarChart3,
+      description: "Analytics and tracking settings"
+    },
+    {
+      id: "maintenance",
+      label: "Maintenance",
+      icon: Wrench,
+      description: "System maintenance settings"
     }
   ];
 
@@ -122,7 +152,7 @@ const AdminSettings = () => {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10">
             {settingCategories.map((category) => {
               const Icon = category.icon;
               return (

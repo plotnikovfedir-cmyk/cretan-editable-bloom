@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Menu, ChevronDown, ShoppingBag, MapPin, Coffee, Car } from "lucide-react";
+import { Menu, ChevronDown, ShoppingBag, MapPin, Coffee, Car, LucideIcon } from "lucide-react";
 import CartIcon from "@/components/CartIcon";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -24,11 +24,12 @@ interface NavItem {
 
 interface DropdownMenu {
   trigger: string;
-  icon: any;
+  icon: LucideIcon;
   items: NavItem[];
 }
 
 const Navigation = () => {
+  // Navigation component with multi-level menu structure
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();

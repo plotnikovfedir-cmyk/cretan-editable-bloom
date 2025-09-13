@@ -741,6 +741,66 @@ export type Database = {
         }
         Relationships: []
       }
+      island_tours: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration: string | null
+          gallery_images: string[] | null
+          group_size: string | null
+          highlights: string[] | null
+          id: string
+          image_url: string | null
+          includes: string[] | null
+          is_active: boolean
+          location: string | null
+          order_position: number | null
+          price: number | null
+          short_description: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          gallery_images?: string[] | null
+          group_size?: string | null
+          highlights?: string[] | null
+          id?: string
+          image_url?: string | null
+          includes?: string[] | null
+          is_active?: boolean
+          location?: string | null
+          order_position?: number | null
+          price?: number | null
+          short_description?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          gallery_images?: string[] | null
+          group_size?: string | null
+          highlights?: string[] | null
+          id?: string
+          image_url?: string | null
+          includes?: string[] | null
+          is_active?: boolean
+          location?: string | null
+          order_position?: number | null
+          price?: number | null
+          short_description?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       locations: {
         Row: {
           created_at: string
@@ -1062,6 +1122,66 @@ export type Database = {
           public_url?: string
           updated_at?: string
           usage_type?: string
+        }
+        Relationships: []
+      }
+      wine_tastings: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration: string | null
+          gallery_images: string[] | null
+          group_size: string | null
+          highlights: string[] | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          location: string | null
+          order_position: number | null
+          price: number | null
+          short_description: string | null
+          slug: string
+          title: string
+          updated_at: string
+          wines: string[] | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          gallery_images?: string[] | null
+          group_size?: string | null
+          highlights?: string[] | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          location?: string | null
+          order_position?: number | null
+          price?: number | null
+          short_description?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+          wines?: string[] | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          gallery_images?: string[] | null
+          group_size?: string | null
+          highlights?: string[] | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          location?: string | null
+          order_position?: number | null
+          price?: number | null
+          short_description?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+          wines?: string[] | null
         }
         Relationships: []
       }

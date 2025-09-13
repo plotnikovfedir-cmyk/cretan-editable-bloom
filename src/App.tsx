@@ -37,8 +37,12 @@ import AdminReviews from "./pages/admin/AdminReviews";
 import AdminBlog from "./pages/admin/AdminBlog";
 import AdminEvents from "./pages/admin/AdminEvents";
 import AdminActivityManager from "./pages/admin/AdminActivityManager";
+import AdminIslandTours from "./pages/admin/AdminIslandTours";
+import AdminWineTastings from "./pages/admin/AdminWineTastings";
 import IslandTours from "./pages/IslandTours";
 import WineTastings from "./pages/WineTastings";
+import IslandToursDynamic from "./pages/IslandToursDynamic";
+import WineTastingsDynamic from "./pages/WineTastingsDynamic";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
@@ -66,8 +70,8 @@ const App = () => (
             <Route path="/events/:slug" element={<EventDetail />} />
             <Route path="/taxi" element={<Taxi />} />
             <Route path="/delivery" element={<Delivery />} />
-            <Route path="/island-tours" element={<IslandTours />} />
-            <Route path="/wine-tastings" element={<WineTastings />} />
+            <Route path="/island-tours" element={<IslandToursDynamic />} />
+            <Route path="/wine-tastings" element={<WineTastingsDynamic />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/cart" element={<Cart />} />
@@ -88,6 +92,8 @@ const App = () => (
             <Route path="/admin/blog" element={<AdminBlog />} />
             <Route path="/admin/events" element={<AdminEvents />} />
             <Route path="/admin/activity-manager" element={<AdminActivityManager />} />
+            <Route path="/admin/island-tours" element={<AdminIslandTours />} />
+            <Route path="/admin/wine-tastings" element={<AdminWineTastings />} />
             {/* Legal Pages */}
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />

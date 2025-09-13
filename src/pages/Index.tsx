@@ -4,7 +4,7 @@ import FeaturedProductCard from "@/components/FeaturedProductCard";
 import ServiceCard from "@/components/ServiceCard";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import TestimonialsSection from "@/components/TestimonialsSection";
-import InstagramCarousel from "@/components/InstagramCarousel";
+import InstagramGalleryEnhanced from "@/components/InstagramGalleryEnhanced";
 import CreteMap from "@/components/CreteMap";
 import BlogCard from "@/components/BlogCard";
 import { Button } from "@/components/ui/button";

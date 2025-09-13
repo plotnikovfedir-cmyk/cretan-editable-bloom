@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Star, Quote } from "lucide-react";
 
 const TestimonialsSection = () => {
@@ -47,34 +48,46 @@ const TestimonialsSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow duration-300 bg-card border border-border/50">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <Quote className="w-8 h-8 text-primary mr-3" />
-                  <div className="flex">{renderStars(testimonial.rating)}</div>
-                </div>
-                
-                <p className="text-muted-foreground mb-6 italic leading-relaxed">
-                  "{testimonial.text}"
-                </p>
-                
-                <div className="flex items-center">
-                  <img 
-                    src={testimonial.image} 
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full mr-4 object-cover"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
-                    <p className="text-sm text-muted-foreground">{testimonial.location}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {testimonials.map((testimonial, index) => (
+              <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                <Card className="hover:shadow-lg transition-shadow duration-300 bg-card border border-border/50 h-full">
+                  <CardContent className="p-6 flex flex-col h-full">
+                    <div className="flex items-center mb-4">
+                      <Quote className="w-8 h-8 text-primary mr-3" />
+                      <div className="flex">{renderStars(testimonial.rating)}</div>
+                    </div>
+                    
+                    <p className="text-muted-foreground mb-6 italic leading-relaxed flex-grow">
+                      "{testimonial.text}"
+                    </p>
+                    
+                    <div className="flex items-center mt-auto">
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full mr-4 object-cover"
+                      />
+                      <div>
+                        <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
+                        <p className="text-sm text-muted-foreground">{testimonial.location}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden md:flex" />
+          <CarouselNext className="hidden md:flex" />
+        </Carousel>
       </div>
     </section>
   );

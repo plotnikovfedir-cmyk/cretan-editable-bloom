@@ -155,27 +155,20 @@ const CreteMap = () => {
                     key={type} 
                     onClick={() => handleTypeToggle(type)}
                     className={`
-                      cursor-pointer p-2 rounded-lg border
+                      cursor-pointer p-2 rounded-lg transition-colors
                       ${isSelected 
-                        ? 'border-primary bg-primary/10' 
-                        : 'border-border/30 hover:border-border/60 bg-background/40'
+                        ? 'bg-primary/10' 
+                        : 'hover:bg-background/60 bg-background/40'
                       }
                     `}
                   >
                     <div className="flex flex-col items-center text-center space-y-1">
                       <div 
-                        className={`
-                          w-8 h-8 rounded-full flex items-center justify-center
-                          ${isSelected 
-                            ? 'bg-primary' 
-                            : 'bg-muted'
-                          }
-                        `}
+                        className="w-8 h-8 rounded-full flex items-center justify-center bg-background/80"
                       >
                         <Icon 
-                          className={`w-4 h-4 ${
-                            isSelected ? 'text-primary-foreground' : 'text-muted-foreground'
-                          }`} 
+                          className="w-4 h-4"
+                          style={{ color: color }}
                         />
                       </div>
                       <div>

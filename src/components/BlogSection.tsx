@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import BlogCard from '@/components/BlogCard';
 import { Button } from '@/components/ui/button';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { Link } from 'react-router-dom';
 import oliveOilImage from '@/assets/olive-oil-product.jpg';
 import herbsImage from '@/assets/herbs-product.jpg';
@@ -81,39 +82,47 @@ const BlogSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="mb-12">
           {loading ? (
-            // Loading skeleton
-            Array.from({ length: 3 }).map((_, index) => (
-              <div key={index} className="animate-pulse">
-                <div className="bg-muted rounded-lg h-48 mb-4"></div>
-                <div className="h-6 bg-muted rounded mb-2"></div>
-                <div className="h-4 bg-muted rounded mb-2"></div>
-                <div className="h-4 bg-muted rounded w-3/4"></div>
-              </div>
-            ))
-          ) : posts.length > 0 ? (
-            // Dynamic blog posts from database
-            posts.map((post) => (
-              <BlogCard
-                key={post.id}
-                title={post.title}
-                excerpt={post.excerpt || ''}
-                image={post.featured_image_url || oliveOilImage}
-                url={`/blog/${post.slug}`}
-              />
-            ))
+            <Carousel className="w-full">
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                    <div className="animate-pulse">
+                      <div className="bg-muted rounded-lg h-48 mb-4"></div>
+                      <div className="h-6 bg-muted rounded mb-2"></div>
+                      <div className="h-4 bg-muted rounded mb-2"></div>
+                      <div className="h-4 bg-muted rounded w-3/4"></div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
           ) : (
-            // Fallback static content
-            fallbackPosts.map((post, index) => (
-              <BlogCard
-                key={index}
-                title={post.title}
-                excerpt={post.excerpt}
-                image={post.image}
-                url={post.url}
-              />
-            ))
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {(posts.length > 0 ? posts : fallbackPosts).map((post, index) => (
+                  <CarouselItem key={posts.length > 0 ? post.id : index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                    <BlogCard
+                      title={post.title}
+                      excerpt={posts.length > 0 ? (post as BlogPost).excerpt || '' : (post as any).excerpt}
+                      image={posts.length > 0 ? (post as BlogPost).featured_image_url || oliveOilImage : (post as any).image}
+                      url={posts.length > 0 ? `/blog/${(post as BlogPost).slug}` : (post as any).url}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
           )}
         </div>
         

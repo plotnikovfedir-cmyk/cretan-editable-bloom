@@ -46,66 +46,69 @@ import WineTastingsDynamic from "./pages/WineTastingsDynamic";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
+import { HelmetProvider } from "react-helmet-async";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-      <AuthProvider>
-        <CartProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-            <ScrollToTop />
-            <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:id" element={<ProductPage />} />
-            <Route path="/activities" element={<Activities />} />
-            <Route path="/activities/:slug" element={<ActivityDetail />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/events/:slug" element={<EventDetail />} />
-            <Route path="/taxi" element={<Taxi />} />
-            <Route path="/delivery" element={<Delivery />} />
-            <Route path="/island-tours" element={<IslandToursDynamic />} />
-            <Route path="/wine-tastings" element={<WineTastingsDynamic />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order-confirmation" element={<OrderConfirmation />} />
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/products" element={<AdminProducts />} />
-            <Route path="/admin/activities" element={<AdminActivities />} />
-            <Route path="/admin/instagram-gallery" element={<AdminInstagramGallery />} />
-            <Route path="/admin/hero-slides" element={<AdminHeroSlides />} />
-            <Route path="/admin/testimonials" element={<AdminTestimonials />} />
-            <Route path="/admin/locations" element={<AdminLocations />} />
-            <Route path="/admin/orders" element={<AdminOrders />} />
-            <Route path="/admin/bookings" element={<AdminBookings />} />
-            <Route path="/admin/reviews" element={<AdminReviews />} />
-            <Route path="/admin/blog" element={<AdminBlog />} />
-            <Route path="/admin/events" element={<AdminEvents />} />
-            <Route path="/admin/activity-manager" element={<AdminActivityManager />} />
-            <Route path="/admin/island-tours" element={<AdminIslandTours />} />
-            <Route path="/admin/wine-tastings" element={<AdminWineTastings />} />
-            {/* Legal Pages */}
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-            <Route path="/cookie-policy" element={<CookiePolicy />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </CartProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <AuthProvider>
+          <CartProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <ScrollToTop />
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/about" element={<AboutUs />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/products/:id" element={<ProductPage />} />
+                  <Route path="/activities" element={<Activities />} />
+                  <Route path="/activities/:slug" element={<ActivityDetail />} />
+                  <Route path="/events" element={<Events />} />
+                  <Route path="/events/:slug" element={<EventDetail />} />
+                  <Route path="/taxi" element={<Taxi />} />
+                  <Route path="/delivery" element={<Delivery />} />
+                  <Route path="/island-tours" element={<IslandToursDynamic />} />
+                  <Route path="/wine-tastings" element={<WineTastingsDynamic />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:slug" element={<BlogPost />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                  {/* Admin Routes */}
+                  <Route path="/admin" element={<AdminLogin />} />
+                  <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                  <Route path="/admin/products" element={<AdminProducts />} />
+                  <Route path="/admin/activities" element={<AdminActivities />} />
+                  <Route path="/admin/instagram-gallery" element={<AdminInstagramGallery />} />
+                  <Route path="/admin/hero-slides" element={<AdminHeroSlides />} />
+                  <Route path="/admin/testimonials" element={<AdminTestimonials />} />
+                  <Route path="/admin/locations" element={<AdminLocations />} />
+                  <Route path="/admin/orders" element={<AdminOrders />} />
+                  <Route path="/admin/bookings" element={<AdminBookings />} />
+                  <Route path="/admin/reviews" element={<AdminReviews />} />
+                  <Route path="/admin/blog" element={<AdminBlog />} />
+                  <Route path="/admin/events" element={<AdminEvents />} />
+                  <Route path="/admin/activity-manager" element={<AdminActivityManager />} />
+                  <Route path="/admin/island-tours" element={<AdminIslandTours />} />
+                  <Route path="/admin/wine-tastings" element={<AdminWineTastings />} />
+                  {/* Legal Pages */}
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-of-service" element={<TermsOfService />} />
+                  <Route path="/cookie-policy" element={<CookiePolicy />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </CartProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </HelmetProvider>
   </QueryClientProvider>
 );
 

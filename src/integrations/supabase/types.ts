@@ -302,6 +302,30 @@ export type Database = {
           },
         ]
       }
+      blog_post_views: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          post_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          post_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          post_id?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author_name: string | null
@@ -1245,6 +1269,34 @@ export type Database = {
       generate_order_number: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_category_post_counts: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          category_id: string
+          category_name: string
+          category_slug: string
+          post_count: number
+        }[]
+      }
+      get_popular_posts: {
+        Args: { limit_count?: number }
+        Returns: {
+          id: string
+          published_at: string
+          slug: string
+          title: string
+          view_count: number
+        }[]
+      }
+      get_tag_post_counts: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          post_count: number
+          tag_id: string
+          tag_name: string
+          tag_slug: string
+        }[]
       }
       is_admin: {
         Args: { user_id?: string }

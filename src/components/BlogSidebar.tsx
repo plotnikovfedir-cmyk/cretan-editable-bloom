@@ -52,25 +52,26 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({
 
   const loadSidebarData = async () => {
     try {
-      // Load categories
-      const { data: categoriesData } = await supabase
-        .from('blog_categories')
-        .select('*')
-        .order('name');
-
+      // Load categories with post counts
+      const { data: categoriesData } = await supabase.rpc('get_category_post_counts');
       if (categoriesData) {
-        setCategories(categoriesData);
+        setCategories(categoriesData.map(cat => ({
+          id: cat.category_id,
+          name: cat.category_name,
+          slug: cat.category_slug,
+          post_count: Number(cat.post_count)
+        })));
       }
 
-      // Load tags (limit to most used)
-      const { data: tagsData } = await supabase
-        .from('blog_tags')
-        .select('*')
-        .order('name')
-        .limit(10);
-
+      // Load tags with post counts
+      const { data: tagsData } = await supabase.rpc('get_tag_post_counts');
       if (tagsData) {
-        setTags(tagsData);
+        setTags(tagsData.slice(0, 10).map(tag => ({
+          id: tag.tag_id,
+          name: tag.tag_name,
+          slug: tag.tag_slug,
+          post_count: Number(tag.post_count)
+        })));
       }
 
       // Load recent posts
@@ -83,8 +84,18 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({
 
       if (recentPostsData) {
         setRecentPosts(recentPostsData);
-        // For now, popular posts are the same as recent (will be real analytics later)
-        setPopularPosts(recentPostsData);
+      }
+
+      // Load popular posts using analytics
+      const { data: popularPostsData } = await supabase.rpc('get_popular_posts', { limit_count: 5 });
+      if (popularPostsData) {
+        setPopularPosts(popularPostsData.map(post => ({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          published_at: post.published_at,
+          featured_image_url: undefined
+        })));
       }
     } catch (error) {
       console.error('Error loading sidebar data:', error);

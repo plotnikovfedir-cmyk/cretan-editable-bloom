@@ -20,12 +20,20 @@ interface BlogPost {
 
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'popular' | 'recent'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedTag, setSelectedTag] = useState<string>('');
 
   useEffect(() => {
     loadPosts();
   }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [posts, filter, searchQuery, selectedCategory, selectedTag]);
 
   const loadPosts = async () => {
     try {
@@ -44,7 +52,111 @@ const Blog = () => {
     }
   };
 
-  const filteredPosts = posts.slice(0, filter === 'recent' ? 6 : posts.length);
+  const applyFilters = async () => {
+    let filtered = [...posts];
+
+    // Apply search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(post => 
+        post.title.toLowerCase().includes(query) ||
+        (post.excerpt && post.excerpt.toLowerCase().includes(query))
+      );
+    }
+
+    // Apply category filter
+    if (selectedCategory) {
+      try {
+        const { data: categoryPosts } = await supabase
+          .from('blog_posts')
+          .select(`
+            id, title, slug, excerpt, featured_image_url, published_at, author_name,
+            blog_post_categories!inner(
+              blog_categories!inner(slug)
+            )
+          `)
+          .eq('is_published', true)
+          .eq('blog_post_categories.blog_categories.slug', selectedCategory);
+        
+        if (categoryPosts) {
+          const categoryPostIds = categoryPosts.map(p => p.id);
+          filtered = filtered.filter(post => categoryPostIds.includes(post.id));
+        }
+      } catch (error) {
+        console.error('Error filtering by category:', error);
+      }
+    }
+
+    // Apply tag filter
+    if (selectedTag) {
+      try {
+        const { data: tagPosts } = await supabase
+          .from('blog_posts')
+          .select(`
+            id, title, slug, excerpt, featured_image_url, published_at, author_name,
+            blog_post_tags!inner(
+              blog_tags!inner(slug)
+            )
+          `)
+          .eq('is_published', true)
+          .eq('blog_post_tags.blog_tags.slug', selectedTag);
+        
+        if (tagPosts) {
+          const tagPostIds = tagPosts.map(p => p.id);
+          filtered = filtered.filter(post => tagPostIds.includes(post.id));
+        }
+      } catch (error) {
+        console.error('Error filtering by tag:', error);
+      }
+    }
+
+    // Apply sorting based on filter
+    switch (filter) {
+      case 'recent':
+        filtered = filtered.slice(0, 6);
+        break;
+      case 'popular':
+        try {
+          const { data: popularPosts } = await supabase.rpc('get_popular_posts', { limit_count: 10 });
+          if (popularPosts) {
+            const popularIds = popularPosts.map(p => p.id);
+            filtered.sort((a, b) => popularIds.indexOf(a.id) - popularIds.indexOf(b.id));
+          }
+        } catch (error) {
+          console.error('Error sorting by popularity:', error);
+        }
+        break;
+      default:
+        break;
+    }
+
+    setFilteredPosts(filtered);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setSelectedCategory('');
+    setSelectedTag('');
+  };
+
+  const handleCategorySelect = (categorySlug: string) => {
+    setSelectedCategory(categorySlug);
+    setSearchQuery('');
+    setSelectedTag('');
+  };
+
+  const handleTagSelect = (tagSlug: string) => {
+    setSelectedTag(tagSlug);
+    setSearchQuery('');
+    setSelectedCategory('');
+  };
+
+  const clearFilters = () => {
+    setSearchQuery('');
+    setSelectedCategory('');
+    setSelectedTag('');
+    setFilter('all');
+  };
 
   return (
     <HelmetProvider>
@@ -122,7 +234,41 @@ const Blog = () => {
 
             {/* Sidebar */}
             <div className="lg:w-1/4">
-              <BlogSidebar />
+              <BlogSidebar 
+                onSearch={handleSearch}
+                onCategorySelect={handleCategorySelect}
+                onTagSelect={handleTagSelect}
+              />
+              
+              {/* Active Filters */}
+              {(searchQuery || selectedCategory || selectedTag) && (
+                <div className="mt-4 p-4 bg-muted rounded-lg">
+                  <h4 className="font-semibold mb-2">Active Filters:</h4>
+                  {searchQuery && (
+                    <Badge variant="secondary" className="mr-2 mb-2">
+                      Search: {searchQuery}
+                    </Badge>
+                  )}
+                  {selectedCategory && (
+                    <Badge variant="secondary" className="mr-2 mb-2">
+                      Category: {selectedCategory}
+                    </Badge>
+                  )}
+                  {selectedTag && (
+                    <Badge variant="secondary" className="mr-2 mb-2">
+                      Tag: {selectedTag}
+                    </Badge>
+                  )}
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={clearFilters}
+                    className="mt-2"
+                  >
+                    Clear All Filters
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>

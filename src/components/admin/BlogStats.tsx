@@ -68,19 +68,24 @@ export const BlogStats: React.FC = () => {
         });
       }
 
-      // Get popular posts (mock data for now, will be real when analytics implemented)
-      const { data: posts } = await supabase
-        .from('blog_posts')
-        .select('id, title, published_at')
-        .eq('is_published', true)
-        .order('published_at', { ascending: false })
-        .limit(5);
-
-      if (posts) {
-        setPopularPosts(posts.map((post, index) => ({
-          ...post,
-          views: Math.floor(Math.random() * 1000) + 100 // Mock views for now
+      // Get popular posts using real analytics
+      const { data: popularPostsData } = await supabase.rpc('get_popular_posts', { limit_count: 5 });
+      if (popularPostsData) {
+        setPopularPosts(popularPostsData.map(post => ({
+          id: post.id,
+          title: post.title,
+          views: Number(post.view_count),
+          published_at: post.published_at
         })));
+      }
+
+      // Get total views count
+      const { data: viewsData } = await supabase
+        .from('blog_post_views')
+        .select('id');
+      
+      if (viewsData) {
+        setStats(prev => ({ ...prev, totalViews: viewsData.length }));
       }
     } catch (error) {
       console.error('Error loading blog stats:', error);

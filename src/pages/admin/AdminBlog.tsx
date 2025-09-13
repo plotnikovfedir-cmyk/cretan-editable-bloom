@@ -31,14 +31,32 @@ interface BlogPost {
   read_time_minutes: number;
   published_at: string;
   created_at: string;
+  categories?: Array<{ id: string; name: string; }>;
+  tags?: Array<{ id: string; name: string; }>;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+interface Tag {
+  id: string;
+  name: string;
+  slug: string;
 }
 
 const AdminBlog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [activeTab, setActiveTab] = useState("posts");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -57,6 +75,7 @@ const AdminBlog = () => {
   useEffect(() => {
     checkAdminAccess();
     loadPosts();
+    loadCategoriesAndTags();
   }, []);
 
   const checkAdminAccess = async () => {
@@ -84,11 +103,27 @@ const AdminBlog = () => {
     try {
       const { data, error } = await supabase
         .from("blog_posts")
-        .select("*")
+        .select(`
+          *,
+          blog_post_categories(
+            blog_categories(id, name)
+          ),
+          blog_post_tags(
+            blog_tags(id, name)
+          )
+        `)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setPosts(data || []);
+      
+      // Transform the data to include categories and tags
+      const postsWithRelations = (data || []).map(post => ({
+        ...post,
+        categories: post.blog_post_categories?.map((pc: any) => pc.blog_categories).filter(Boolean) || [],
+        tags: post.blog_post_tags?.map((pt: any) => pt.blog_tags).filter(Boolean) || []
+      }));
+      
+      setPosts(postsWithRelations);
     } catch (error) {
       toast({
         variant: "destructive",
@@ -97,6 +132,20 @@ const AdminBlog = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadCategoriesAndTags = async () => {
+    try {
+      const [categoriesData, tagsData] = await Promise.all([
+        supabase.from("blog_categories").select("*").order("name"),
+        supabase.from("blog_tags").select("*").order("name")
+      ]);
+
+      if (categoriesData.data) setCategories(categoriesData.data);
+      if (tagsData.data) setTags(tagsData.data);
+    } catch (error) {
+      console.error("Error loading categories and tags:", error);
     }
   };
 
@@ -132,6 +181,8 @@ const AdminBlog = () => {
         published_at: formData.is_published ? new Date().toISOString() : null
       };
 
+      let postId: string;
+
       if (editingPost) {
         const { error } = await supabase
           .from("blog_posts")
@@ -139,22 +190,64 @@ const AdminBlog = () => {
           .eq("id", editingPost.id);
 
         if (error) throw error;
+        postId = editingPost.id;
         
         toast({
           title: "Успех",
           description: "Статья обновлена",
         });
       } else {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from("blog_posts")
-          .insert([postData]);
+          .insert([postData])
+          .select("id")
+          .single();
 
         if (error) throw error;
+        postId = data.id;
         
         toast({
           title: "Успех",
           description: "Статья создана",
         });
+      }
+
+      // Handle category associations
+      if (selectedCategories.length > 0) {
+        // Remove existing categories
+        await supabase
+          .from("blog_post_categories")
+          .delete()
+          .eq("post_id", postId);
+
+        // Add new categories
+        const categoryAssociations = selectedCategories.map(categoryId => ({
+          post_id: postId,
+          category_id: categoryId
+        }));
+
+        await supabase
+          .from("blog_post_categories")
+          .insert(categoryAssociations);
+      }
+
+      // Handle tag associations
+      if (selectedTags.length > 0) {
+        // Remove existing tags
+        await supabase
+          .from("blog_post_tags")
+          .delete()
+          .eq("post_id", postId);
+
+        // Add new tags
+        const tagAssociations = selectedTags.map(tagId => ({
+          post_id: postId,
+          tag_id: tagId
+        }));
+
+        await supabase
+          .from("blog_post_tags")
+          .insert(tagAssociations);
       }
 
       setIsDialogOpen(false);
@@ -226,6 +319,8 @@ const AdminBlog = () => {
       meta_keywords: "",
       read_time_minutes: ""
     });
+    setSelectedCategories([]);
+    setSelectedTags([]);
   };
 
   const openCreateDialog = () => {
@@ -452,6 +547,58 @@ const AdminBlog = () => {
               onChange={(e) => setFormData({ ...formData, meta_keywords: e.target.value })}
               placeholder="ключевое слово 1, ключевое слово 2, ключевое слово 3"
             />
+          </div>
+
+          {/* Categories Selection */}
+          <div className="space-y-2">
+            <Label>Категории</Label>
+            <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto border rounded-md p-2">
+              {categories.map((category) => (
+                <div key={category.id} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id={`category-${category.id}`}
+                    checked={selectedCategories.includes(category.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedCategories([...selectedCategories, category.id]);
+                      } else {
+                        setSelectedCategories(selectedCategories.filter(id => id !== category.id));
+                      }
+                    }}
+                  />
+                  <Label htmlFor={`category-${category.id}`} className="text-sm">
+                    {category.name}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Tags Selection */}
+          <div className="space-y-2">
+            <Label>Теги</Label>
+            <div className="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto border rounded-md p-2">
+              {tags.map((tag) => (
+                <div key={tag.id} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id={`tag-${tag.id}`}
+                    checked={selectedTags.includes(tag.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedTags([...selectedTags, tag.id]);
+                      } else {
+                        setSelectedTags(selectedTags.filter(id => id !== tag.id));
+                      }
+                    }}
+                  />
+                  <Label htmlFor={`tag-${tag.id}`} className="text-sm">
+                    {tag.name}
+                  </Label>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="flex items-center space-x-2">

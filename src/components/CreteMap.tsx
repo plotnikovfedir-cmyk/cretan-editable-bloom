@@ -127,9 +127,14 @@ const CreteMap = () => {
           
           {/* Interactive Location Filter & Legend */}
           <div className="mt-12 bg-background/60 backdrop-blur-sm rounded-2xl p-6 border border-border/50">
-            <h3 className="font-display font-semibold text-center mb-6 text-foreground">
-              Filter Locations ({filteredLocations.length} of {locations.length} shown)
-            </h3>
+            <div className="text-center mb-6">
+              <h3 className="font-display font-bold text-xl text-foreground mb-2">
+                Explore Locations
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                {filteredLocations.length} of {locations.length} locations visible • Click to filter by type
+              </p>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { type: 'beaches', label: 'Beaches', icon: Waves, color: '#0ea5e9', description: 'Crystal clear waters and pristine shores' },
@@ -150,9 +155,9 @@ const CreteMap = () => {
                     key={type} 
                     onClick={() => handleTypeToggle(type)}
                     className={`
-                      relative group cursor-pointer p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-105 hover:shadow-lg
+                      relative group cursor-pointer p-4 rounded-xl border-2 transition-all duration-500 transform hover:scale-[1.02] hover:shadow-xl
                       ${isSelected 
-                        ? 'border-transparent shadow-xl backdrop-blur-sm' 
+                        ? 'border-transparent shadow-2xl backdrop-blur-sm' 
                         : 'border-border/30 hover:border-border/60 bg-background/40'
                       }
                     `}
@@ -163,19 +168,19 @@ const CreteMap = () => {
                     } : {}}
                   >
                     <div className="flex flex-col items-center text-center space-y-3">
-                      <div 
-                        className={`
-                          w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 transform
-                          ${isSelected 
-                            ? 'shadow-lg scale-110 animate-pulse' 
-                            : 'bg-background/60 group-hover:scale-105'
-                          }
-                        `}
-                        style={isSelected ? {
-                          backgroundColor: color,
-                          boxShadow: `0 8px 24px ${color}60`
-                        } : {}}
-                      >
+                        <div 
+                          className={`
+                            w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 transform
+                            ${isSelected 
+                              ? 'shadow-xl scale-110' 
+                              : 'bg-background/60 group-hover:scale-105'
+                            }
+                          `}
+                          style={isSelected ? {
+                            backgroundColor: color,
+                            boxShadow: `0 12px 32px ${color}50, 0 0 0 2px ${color}30`
+                          } : {}}
+                        >
                         <Icon 
                           className={`w-8 h-8 transition-all duration-300 ${
                             isSelected ? 'text-white' : 'text-muted-foreground group-hover:text-foreground'

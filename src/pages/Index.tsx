@@ -218,25 +218,70 @@ const Index = () => {
       {/* Instagram Gallery */}
       <InstagramGalleryEnhanced />
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-primary to-primary/90 text-primary-foreground relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20" 
-             style={{
-               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-             }}></div>
+      {/* Experience Authentic Crete - Enhanced CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-primary via-primary/95 to-secondary text-primary-foreground relative overflow-hidden">
+        {/* Enhanced Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" 
+               style={{
+                 backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='40' cy='40' r='3'/%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3Ccircle cx='60' cy='20' r='2'/%3E%3Ccircle cx='20' cy='60' r='2'/%3E%3Ccircle cx='60' cy='60' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+               }}></div>
+          <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-white/5 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-tr from-white/5 to-transparent rounded-full blur-3xl"></div>
+        </div>
+
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 font-display">Experience Authentic Crete</h2>
-          <p className="text-lg mb-8 max-w-2xl mx-auto opacity-90 leading-relaxed">
-            From premium products to unforgettable experiences - discover everything 
-            that makes Crete special with Cretan Guru.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" variant="secondary" className="bg-gold hover:bg-gold/90 text-gold-foreground shadow-lg hover:shadow-xl transition-all duration-300">
-              <Link to="/products">Shop Products</Link>
-            </Button>
-            <Button asChild size="lg" className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
-              <Link to="/activities">Book Experience</Link>
-            </Button>
+          <div className="max-w-4xl mx-auto">
+            {/* Enhanced Header */}
+            <div className="mb-8 animate-fade-in">
+              <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm text-white/90 text-sm font-medium rounded-full mb-4 border border-white/20">
+                ✨ Authentic Cretan Experience
+              </span>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-display leading-tight">
+                Experience 
+                <span className="block bg-gradient-to-r from-gold via-gold/90 to-accent bg-clip-text text-transparent">
+                  Authentic Crete
+                </span>
+              </h2>
+            </div>
+
+            {/* Enhanced Description */}
+            <p className="text-lg md:text-xl mb-10 max-w-3xl mx-auto opacity-90 leading-relaxed">
+              From premium artisan products to unforgettable cultural experiences - discover the authentic soul 
+              of Crete through our carefully curated collection. Let us be your guide to the island's hidden treasures.
+            </p>
+
+            {/* Enhanced Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Button asChild size="lg" className="group bg-gold hover:bg-gold/90 text-gold-foreground shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-8 py-4 text-lg font-semibold rounded-xl">
+                <Link to="/products" className="flex items-center gap-2">
+                  <span>🫒</span>
+                  Shop Premium Products
+                </Link>
+              </Button>
+              <Button asChild size="lg" className="group bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-8 py-4 text-lg font-semibold rounded-xl">
+                <Link to="/activities" className="flex items-center gap-2">
+                  <span>🏛️</span>
+                  Book Experiences
+                </Link>
+              </Button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap justify-center items-center gap-8 text-white/70 text-sm">
+              <div className="flex items-center gap-2">
+                <span>🌟</span>
+                <span>4.9/5 Customer Rating</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>📦</span>
+                <span>Island-wide Delivery</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>🛡️</span>
+                <span>Authentic Guarantee</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>

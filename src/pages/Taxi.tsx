@@ -97,36 +97,101 @@ const Taxi = () => {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Need a Custom Route?
-          </h2>
-          <p className="text-lg mb-8 max-w-2xl mx-auto opacity-90">
-            Planning to visit multiple locations or need a custom itinerary? 
-            Contact us for personalized quotes and tour arrangements.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
-              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg hover:shadow-xl transition-all duration-300"
-              asChild
-            >
-              <a href="tel:+4917857738346" className="flex items-center gap-2">
-                📞 Call Directly
-              </a>
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline"
-              className="bg-primary/10 hover:bg-primary/20 text-primary-foreground border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300"
-              asChild
-            >
-              <a href="mailto:hello@cretan.guru" className="flex items-center gap-2">
-                ✉️ Send Email
-              </a>
-            </Button>
+      {/* Enhanced Custom Route Section */}
+      <section className="py-20 bg-gradient-to-br from-primary via-primary/95 to-secondary text-primary-foreground relative overflow-hidden">
+        {/* Enhanced Background Elements */}
+        <div className="absolute inset-0 opacity-15">
+          <div className="absolute inset-0" 
+               style={{
+                 backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M50 50m-30 0a30 30 0 1 1 60 0a30 30 0 1 1 -60 0'/%3E%3Cpath d='M50 20l5 10h10l-8 6 3 10-10-7-10 7 3-10-8-6h10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+               }}></div>
+          <div className="absolute top-10 right-10 w-32 h-32 bg-gradient-to-bl from-white/10 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute bottom-10 left-10 w-24 h-24 bg-gradient-to-tr from-white/10 to-transparent rounded-full blur-2xl"></div>
+        </div>
+
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="max-w-4xl mx-auto">
+            {/* Enhanced Header */}
+            <div className="mb-8 animate-fade-in">
+              <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm text-white/90 text-sm font-medium rounded-full mb-4 border border-white/20">
+                🗺️ Custom Travel Solutions
+              </span>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 font-display leading-tight">
+                Need a 
+                <span className="block bg-gradient-to-r from-gold via-gold/90 to-accent bg-clip-text text-transparent">
+                  Custom Route?
+                </span>
+              </h2>
+            </div>
+
+            {/* Enhanced Description */}
+            <p className="text-lg md:text-xl mb-10 max-w-3xl mx-auto opacity-90 leading-relaxed">
+              Planning to visit multiple hidden gems or need a personalized island itinerary? 
+              Our local experts craft custom routes tailored to your interests, schedule, and budget.
+            </p>
+
+            {/* Enhanced Feature Highlights */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <div className="text-3xl mb-3">🏛️</div>
+                <h4 className="font-semibold mb-2">Cultural Routes</h4>
+                <p className="text-sm opacity-80">Monasteries, archaeological sites, traditional villages</p>
+              </div>
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <div className="text-3xl mb-3">🏖️</div>
+                <h4 className="font-semibold mb-2">Beach Hopping</h4>
+                <p className="text-sm opacity-80">Secret coves, pristine beaches, crystal waters</p>
+              </div>
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <div className="text-3xl mb-3">🍷</div>
+                <h4 className="font-semibold mb-2">Culinary Tours</h4>
+                <p className="text-sm opacity-80">Wineries, local tavernas, organic farms</p>
+              </div>
+            </div>
+
+            {/* Enhanced Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+              <Button 
+                size="lg" 
+                className="group bg-gold hover:bg-gold/90 text-gold-foreground shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-8 py-4 text-lg font-semibold rounded-xl"
+                asChild
+              >
+                <a href="tel:+4917857738346" className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                    📞
+                  </div>
+                  Call for Instant Quote
+                </a>
+              </Button>
+              <Button 
+                size="lg"
+                className="group bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-8 py-4 text-lg font-semibold rounded-xl"
+                asChild
+              >
+                <a href="mailto:hello@cretan.guru" className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                    ✉️
+                  </div>
+                  Send Email Request
+                </a>
+              </Button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap justify-center items-center gap-6 text-white/70 text-sm">
+              <div className="flex items-center gap-2">
+                <span>⚡</span>
+                <span>Quick Response</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>🛡️</span>
+                <span>Licensed & Insured</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>🏆</span>
+                <span>Local Experts</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>

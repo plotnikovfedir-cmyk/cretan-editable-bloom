@@ -12,6 +12,7 @@ import { ArrowLeft, Plus, Edit, Trash2, Star, MessageSquare, MapPin } from "luci
 import AdminNavigation from "@/components/admin/AdminNavigation";
 import MapSelector from "@/components/admin/MapSelector";
 import ImageUploader from "@/components/admin/ImageUploader";
+import SEOFields from "@/components/admin/SEOFields";
 import {
   Dialog,
   DialogContent,
@@ -33,6 +34,9 @@ interface Product {
   latitude?: number;
   longitude?: number;
   created_at: string;
+  meta_title?: string;
+  meta_description?: string;
+  meta_keywords?: string[];
 }
 
 interface ProductReviewStats {
@@ -55,7 +59,10 @@ const AdminProducts = () => {
     image_url: "",
     latitude: null as number | null,
     longitude: null as number | null,
-    in_stock: true
+    in_stock: true,
+    meta_title: "",
+    meta_description: "",
+    meta_keywords: [] as string[]
   });
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -162,7 +169,10 @@ const AdminProducts = () => {
         image_url: formData.image_url,
         latitude: formData.latitude,
         longitude: formData.longitude,
-        in_stock: formData.in_stock
+        in_stock: formData.in_stock,
+        meta_title: formData.meta_title,
+        meta_description: formData.meta_description,
+        meta_keywords: formData.meta_keywords
       };
 
       if (editingProduct) {
@@ -215,7 +225,10 @@ const AdminProducts = () => {
       image_url: product.image_url || "",
       latitude: product.latitude || null,
       longitude: product.longitude || null,
-      in_stock: product.in_stock
+      in_stock: product.in_stock,
+      meta_title: product.meta_title || "",
+      meta_description: product.meta_description || "",
+      meta_keywords: product.meta_keywords || []
     });
     setIsDialogOpen(true);
   };
@@ -256,7 +269,10 @@ const AdminProducts = () => {
       image_url: "",
       latitude: null,
       longitude: null,
-      in_stock: true
+      in_stock: true,
+      meta_title: "",
+      meta_description: "",
+      meta_keywords: []
     });
   };
 
@@ -386,6 +402,16 @@ const AdminProducts = () => {
                       longitude: lng || null 
                     });
                   }}
+                />
+
+                {/* SEO Fields */}
+                <SEOFields
+                  metaTitle={formData.meta_title}
+                  metaDescription={formData.meta_description}
+                  metaKeywords={formData.meta_keywords}
+                  onMetaTitleChange={(value) => setFormData({ ...formData, meta_title: value })}
+                  onMetaDescriptionChange={(value) => setFormData({ ...formData, meta_description: value })}
+                  onMetaKeywordsChange={(keywords) => setFormData({ ...formData, meta_keywords: keywords })}
                 />
 
                 <div className="flex items-center space-x-2">

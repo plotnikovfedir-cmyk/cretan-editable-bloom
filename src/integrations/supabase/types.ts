@@ -24,6 +24,9 @@ export type Database = {
           id: string
           image_url: string | null
           max_participants: number | null
+          meta_description: string | null
+          meta_keywords: string[] | null
+          meta_title: string | null
           price: number | null
           short_description: string | null
           slug: string
@@ -39,6 +42,9 @@ export type Database = {
           id?: string
           image_url?: string | null
           max_participants?: number | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
           price?: number | null
           short_description?: string | null
           slug: string
@@ -54,6 +60,9 @@ export type Database = {
           id?: string
           image_url?: string | null
           max_participants?: number | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
           price?: number | null
           short_description?: string | null
           slug?: string
@@ -304,6 +313,7 @@ export type Database = {
           is_published: boolean | null
           meta_description: string | null
           meta_keywords: string[] | null
+          meta_title: string | null
           published_at: string | null
           read_time_minutes: number | null
           slug: string
@@ -320,6 +330,7 @@ export type Database = {
           is_published?: boolean | null
           meta_description?: string | null
           meta_keywords?: string[] | null
+          meta_title?: string | null
           published_at?: string | null
           read_time_minutes?: number | null
           slug: string
@@ -336,6 +347,7 @@ export type Database = {
           is_published?: boolean | null
           meta_description?: string | null
           meta_keywords?: string[] | null
+          meta_title?: string | null
           published_at?: string | null
           read_time_minutes?: number | null
           slug?: string
@@ -627,6 +639,9 @@ export type Database = {
           image_url: string | null
           location: string | null
           max_attendees: number | null
+          meta_description: string | null
+          meta_keywords: string[] | null
+          meta_title: string | null
           price: number | null
           short_description: string | null
           slug: string
@@ -641,6 +656,9 @@ export type Database = {
           image_url?: string | null
           location?: string | null
           max_attendees?: number | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
           price?: number | null
           short_description?: string | null
           slug: string
@@ -655,6 +673,9 @@ export type Database = {
           image_url?: string | null
           location?: string | null
           max_attendees?: number | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
           price?: number | null
           short_description?: string | null
           slug?: string
@@ -754,6 +775,9 @@ export type Database = {
           includes: string[] | null
           is_active: boolean
           location: string | null
+          meta_description: string | null
+          meta_keywords: string[] | null
+          meta_title: string | null
           order_position: number | null
           price: number | null
           short_description: string | null
@@ -773,6 +797,9 @@ export type Database = {
           includes?: string[] | null
           is_active?: boolean
           location?: string | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
           order_position?: number | null
           price?: number | null
           short_description?: string | null
@@ -792,6 +819,9 @@ export type Database = {
           includes?: string[] | null
           is_active?: boolean
           location?: string | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
           order_position?: number | null
           price?: number | null
           short_description?: string | null
@@ -970,6 +1000,9 @@ export type Database = {
           in_stock: boolean | null
           latitude: number | null
           longitude: number | null
+          meta_description: string | null
+          meta_keywords: string[] | null
+          meta_title: string | null
           name: string
           price: number | null
           slug: string
@@ -984,6 +1017,9 @@ export type Database = {
           in_stock?: boolean | null
           latitude?: number | null
           longitude?: number | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
           name: string
           price?: number | null
           slug: string
@@ -998,6 +1034,9 @@ export type Database = {
           in_stock?: boolean | null
           latitude?: number | null
           longitude?: number | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
           name?: string
           price?: number | null
           slug?: string
@@ -1137,6 +1176,9 @@ export type Database = {
           image_url: string | null
           is_active: boolean
           location: string | null
+          meta_description: string | null
+          meta_keywords: string[] | null
+          meta_title: string | null
           order_position: number | null
           price: number | null
           short_description: string | null
@@ -1156,6 +1198,9 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           location?: string | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
           order_position?: number | null
           price?: number | null
           short_description?: string | null
@@ -1175,6 +1220,9 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           location?: string | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          meta_title?: string | null
           order_position?: number | null
           price?: number | null
           short_description?: string | null

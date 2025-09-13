@@ -1,3 +1,12 @@
+import { 
+  Sparkles, 
+  Droplets, 
+  Calendar, 
+  Star, 
+  Package, 
+  Shield, 
+  Award 
+} from "lucide-react";
 import Navigation from "@/components/Navigation";
 import HeroSlider from "@/components/HeroSlider";
 import FeaturedProductCard from "@/components/FeaturedProductCard";
@@ -218,68 +227,89 @@ const Index = () => {
       {/* Instagram Gallery */}
       <InstagramGalleryEnhanced />
 
-      {/* Experience Authentic Crete - Enhanced CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-primary via-primary/95 to-secondary text-primary-foreground relative overflow-hidden">
-        {/* Enhanced Background Pattern */}
+      {/* Experience Authentic Crete Section */}
+      <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" 
-               style={{
-                 backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='40' cy='40' r='3'/%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3Ccircle cx='60' cy='20' r='2'/%3E%3Ccircle cx='20' cy='60' r='2'/%3E%3Ccircle cx='60' cy='60' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-               }}></div>
-          <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-white/5 to-transparent rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-tr from-white/5 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute top-0 left-0 w-72 h-72 bg-primary/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/20 rounded-full blur-3xl"></div>
         </div>
-
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="max-w-4xl mx-auto">
-            {/* Enhanced Header */}
-            <div className="mb-8 animate-fade-in">
-              <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm text-white/90 text-sm font-medium rounded-full mb-4 border border-white/20">
-                ✨ Authentic Cretan Experience
-              </span>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-display leading-tight">
-                Experience 
-                <span className="block bg-gradient-to-r from-gold via-gold/90 to-accent bg-clip-text text-transparent">
-                  Authentic Crete
-                </span>
-              </h2>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-3 bg-primary/10 rounded-full px-6 py-3 mb-6">
+              <Sparkles className="w-5 h-5 text-primary" />
+              <span className="text-primary font-semibold">Authentic Cretan Experience</span>
             </div>
-
-            {/* Enhanced Description */}
-            <p className="text-lg md:text-xl mb-10 max-w-3xl mx-auto opacity-90 leading-relaxed">
-              From premium artisan products to unforgettable cultural experiences - discover the authentic soul 
-              of Crete through our carefully curated collection. Let us be your guide to the island's hidden treasures.
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+              Experience<br />Authentic Crete
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              From premium artisan products to unforgettable cultural experiences - discover the authentic soul of Crete through our carefully curated collection. Let us be your guide to the island's hidden treasures.
             </p>
-
-            {/* Enhanced Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Button asChild size="lg" className="group bg-gold hover:bg-gold/90 text-gold-foreground shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-8 py-4 text-lg font-semibold rounded-xl">
-                <Link to="/products" className="flex items-center gap-2">
-                  <span>🫒</span>
-                  Shop Premium Products
-                </Link>
-              </Button>
-              <Button asChild size="lg" className="group bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-8 py-4 text-lg font-semibold rounded-xl">
-                <Link to="/activities" className="flex items-center gap-2">
-                  <span>🏛️</span>
-                  Book Experiences
-                </Link>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            <div className="group bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-8 text-center shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="w-20 h-20 bg-gradient-to-br from-green-500/20 to-green-600/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                <Droplets className="w-10 h-10 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4">Shop Premium Products</h3>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                Discover authentic Cretan olive oils, herbs, and artisan products sourced directly from local producers.
+              </p>
+              <Button asChild size="lg" className="w-full">
+                <Link to="/products">Explore Products</Link>
               </Button>
             </div>
-
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap justify-center items-center gap-8 text-white/70 text-sm">
-              <div className="flex items-center gap-2">
-                <span>🌟</span>
-                <span>4.9/5 Customer Rating</span>
+            
+            <div className="group bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-8 text-center shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                <Calendar className="w-10 h-10 text-blue-600" />
               </div>
-              <div className="flex items-center gap-2">
-                <span>📦</span>
-                <span>Island-wide Delivery</span>
+              <h3 className="text-2xl font-bold mb-4">Book Experiences</h3>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                Immerse yourself in Crete's culture with guided tours, wine tastings, and authentic local experiences.
+              </p>
+              <Button asChild variant="secondary" size="lg" className="w-full">
+                <Link to="/activities">Book Now</Link>
+              </Button>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div className="group">
+              <div className="bg-card/50 backdrop-blur-sm border border-border/30 rounded-xl p-6 group-hover:bg-card/70 transition-colors">
+                <div className="w-12 h-12 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Star className="w-6 h-6 text-yellow-600" />
+                </div>
+                <div className="text-2xl font-bold text-primary mb-1">4.9/5</div>
+                <p className="text-sm text-muted-foreground">Customer Rating</p>
               </div>
-              <div className="flex items-center gap-2">
-                <span>🛡️</span>
-                <span>Authentic Guarantee</span>
+            </div>
+            <div className="group">
+              <div className="bg-card/50 backdrop-blur-sm border border-border/30 rounded-xl p-6 group-hover:bg-card/70 transition-colors">
+                <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Package className="w-6 h-6 text-blue-600" />
+                </div>
+                <div className="text-sm font-medium mb-1">Island-wide</div>
+                <p className="text-sm text-muted-foreground">Delivery</p>
+              </div>
+            </div>
+            <div className="group">
+              <div className="bg-card/50 backdrop-blur-sm border border-border/30 rounded-xl p-6 group-hover:bg-card/70 transition-colors">
+                <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Shield className="w-6 h-6 text-green-600" />
+                </div>
+                <div className="text-sm font-medium mb-1">Authentic</div>
+                <p className="text-sm text-muted-foreground">Guarantee</p>
+              </div>
+            </div>
+            <div className="group">
+              <div className="bg-card/50 backdrop-blur-sm border border-border/30 rounded-xl p-6 group-hover:bg-card/70 transition-colors">
+                <div className="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Award className="w-6 h-6 text-purple-600" />
+                </div>
+                <div className="text-sm font-medium mb-1">Premium</div>
+                <p className="text-sm text-muted-foreground">Quality</p>
               </div>
             </div>
           </div>

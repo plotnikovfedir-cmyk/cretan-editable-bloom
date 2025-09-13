@@ -15,9 +15,11 @@ import {
   Settings,
   Camera,
   MessageSquare,
-  MapPin
+  MapPin,
+  Star,
+  Map,
+  Wine
 } from "lucide-react";
-import { Star } from "lucide-react";
 
 const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,9 @@ const AdminDashboard = () => {
     blogPosts: 0,
     orders: 0,
     bookings: 0,
-    reviews: 0
+    reviews: 0,
+    islandTours: 0,
+    wineTastings: 0
   });
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -68,14 +72,16 @@ const AdminDashboard = () => {
 
   const loadStats = async () => {
     try {
-      const [products, activities, events, blogPosts, orders, bookings, reviews] = await Promise.all([
+      const [products, activities, events, blogPosts, orders, bookings, reviews, islandTours, wineTastings] = await Promise.all([
         supabase.from("products").select("id", { count: "exact", head: true }),
         supabase.from("activities").select("id", { count: "exact", head: true }),
         supabase.from("events").select("id", { count: "exact", head: true }),
         supabase.from("blog_posts").select("id", { count: "exact", head: true }),
         supabase.from("orders").select("id", { count: "exact", head: true }),
         supabase.from("bookings").select("id", { count: "exact", head: true }),
-        supabase.from("customer_reviews").select("id", { count: "exact", head: true })
+        supabase.from("customer_reviews").select("id", { count: "exact", head: true }),
+        supabase.from("island_tours").select("id", { count: "exact", head: true }).eq("is_active", true),
+        supabase.from("wine_tastings").select("id", { count: "exact", head: true }).eq("is_active", true)
       ]);
 
       setStats({
@@ -85,7 +91,9 @@ const AdminDashboard = () => {
         blogPosts: blogPosts.count || 0,
         orders: orders.count || 0,
         bookings: bookings.count || 0,
-        reviews: reviews.count || 0
+        reviews: reviews.count || 0,
+        islandTours: islandTours.count || 0,
+        wineTastings: wineTastings.count || 0
       });
     } catch (error) {
       console.error("Error loading stats:", error);
@@ -122,6 +130,20 @@ const AdminDashboard = () => {
       icon: Calendar,
       link: "/admin/events",
       count: stats.events
+    },
+    {
+      title: "Туры по островам",
+      description: "Управление турами по островам",
+      icon: Map,
+      link: "/admin/island-tours",
+      count: stats.islandTours
+    },
+    {
+      title: "Винные дегустации",
+      description: "Управление винными дегустациями",
+      icon: Wine,
+      link: "/admin/wine-tastings",
+      count: stats.wineTastings
     },
     {
       title: "Блог",

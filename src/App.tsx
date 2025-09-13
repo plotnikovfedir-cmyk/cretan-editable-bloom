@@ -39,6 +39,9 @@ import AdminEvents from "./pages/admin/AdminEvents";
 import AdminActivityManager from "./pages/admin/AdminActivityManager";
 import IslandTours from "./pages/IslandTours";
 import WineTastings from "./pages/WineTastings";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import CookiePolicy from "./pages/CookiePolicy";
 
 const queryClient = new QueryClient();
 
@@ -85,6 +88,10 @@ const App = () => (
             <Route path="/admin/blog" element={<AdminBlog />} />
             <Route path="/admin/events" element={<AdminEvents />} />
             <Route path="/admin/activity-manager" element={<AdminActivityManager />} />
+            {/* Legal Pages */}
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/cookie-policy" element={<CookiePolicy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
             </Routes>

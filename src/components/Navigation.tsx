@@ -123,8 +123,21 @@ const Navigation = () => {
                       <menu.icon className="h-4 w-4 mr-2" />
                       {menu.trigger}
                     </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <div className="p-4 w-80">
+                     <NavigationMenuContent>
+                      <div className="p-4 w-96">
+                        <div className="mb-4 pb-3 border-b">
+                          <h3 className="font-semibold text-sm uppercase tracking-wide text-primary flex items-center gap-2">
+                            <menu.icon className="h-4 w-4" />
+                            {menu.trigger}
+                          </h3>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {menu.trigger === "Products & Services" 
+                              ? "Authentic Cretan products and convenient services"
+                              : menu.trigger === "Experiences" 
+                              ? "Unforgettable adventures and cultural experiences"
+                              : "Professional transportation and support services"}
+                          </p>
+                        </div>
                         <div className="grid gap-2">
                           {menu.items.map((item) => (
                             <Link

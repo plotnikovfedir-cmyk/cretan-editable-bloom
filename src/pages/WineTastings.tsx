@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -85,7 +87,9 @@ const WineTastings = () => {
   const whatsappMessage = "Hi! I'm interested in booking a Wine Tasting experience with Cretan Guru. Could you provide more information?";
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <Navigation />
+      <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary/10 to-secondary/10 py-20">
         <div className="container mx-auto px-4">
@@ -327,6 +331,8 @@ const WineTastings = () => {
         </div>
       </section>
     </div>
+    <Footer />
+  </>
   );
 };
 

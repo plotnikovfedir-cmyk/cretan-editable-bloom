@@ -53,12 +53,15 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     setIsUploading(true);
 
     try {
+      // Optimize image before upload
+      const optimizedFile = await optimizeImage(file);
+      
       const fileExt = file.name.split('.').pop();
       const fileName = `${folder}/${Date.now()}.${fileExt}`;
 
       const { data, error } = await supabase.storage
         .from(bucket)
-        .upload(fileName, file);
+        .upload(fileName, optimizedFile);
 
       if (error) throw error;
 
@@ -70,10 +73,9 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
       
       toast({
         title: "Image uploaded successfully",
-        description: "Your image has been uploaded and is ready to use"
+        description: "Your image has been optimized and uploaded"
       });
     } catch (error) {
-      console.error('Upload error:', error);
       toast({
         title: "Upload failed",
         description: "Failed to upload image. Please try again.",
@@ -82,6 +84,55 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const optimizeImage = (file: File): Promise<File> => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate dimensions (max 1200px width/height)
+        const maxSize = 1200;
+        let { width, height } = img;
+        
+        if (width > height) {
+          if (width > maxSize) {
+            height = (height * maxSize) / width;
+            width = maxSize;
+          }
+        } else {
+          if (height > maxSize) {
+            width = (width * maxSize) / height;
+            height = maxSize;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        ctx?.drawImage(img, 0, 0, width, height);
+        
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const optimizedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now()
+              });
+              resolve(optimizedFile);
+            } else {
+              resolve(file);
+            }
+          },
+          'image/jpeg',
+          0.85
+        );
+      };
+      
+      img.src = URL.createObjectURL(file);
+    });
   };
 
   const removeImage = () => {

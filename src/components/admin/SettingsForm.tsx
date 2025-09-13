@@ -98,7 +98,6 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
 
       onSettingsUpdate();
     } catch (error) {
-      console.error('Error creating default settings:', error);
       toast({
         title: "Error",
         description: "Failed to create default settings",
@@ -140,7 +139,6 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
 
       onSettingsUpdate();
     } catch (error) {
-      console.error('Error saving settings:', error);
       toast({
         title: "Error",
         description: "Failed to save settings",

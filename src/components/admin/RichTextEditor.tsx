@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import React from 'react';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 interface RichTextEditorProps {
   value: string;
@@ -16,45 +15,21 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   onChange,
   label,
   placeholder = "Start writing your blog post...",
-  height = "300px"
+  height = "400px"
 }) => {
-  const modules = useMemo(() => ({
-    toolbar: [
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
-      ['blockquote', 'code-block'],
-      ['link', 'image'],
-      [{ 'align': [] }],
-      [{ 'color': [] }, { 'background': [] }],
-      ['clean']
-    ]
-  }), []);
-
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet', 'indent',
-    'blockquote', 'code-block',
-    'link', 'image',
-    'align', 'color', 'background'
-  ];
-
   return (
     <div className="space-y-2">
       {label && <Label>{label}</Label>}
-      <div className="bg-background border rounded-md overflow-hidden">
-        <ReactQuill
-          theme="snow"
-          value={value}
-          onChange={onChange}
-          modules={modules}
-          formats={formats}
-          placeholder={placeholder}
-          style={{ height }}
-        />
-      </div>
+      <Textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        rows={12}
+        className="min-h-[400px]"
+      />
+      <p className="text-xs text-muted-foreground">
+        Supports Markdown formatting
+      </p>
     </div>
   );
 };

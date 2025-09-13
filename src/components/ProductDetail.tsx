@@ -7,6 +7,7 @@ import { Star, MapPin, Heart, ShoppingCart } from "lucide-react";
 import ProductLocationMap from "@/components/ProductLocationMap";
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from "@/integrations/supabase/client";
 
 interface ProductDetailProps {
   id: string;
@@ -47,20 +48,33 @@ const ProductDetail = ({
   const { addToCart } = useCart();
   const { toast } = useToast();
 
-  const handleAddToCart = () => {
-    // Map slug to UUID - need to get the correct UUID for the product
-    const productUuidMap: { [key: string]: string } = {
-      'wild-mountain-herbs': '08f10350-3e4d-4896-a68c-96f1151eeb78',
-      'extra-virgin-olive-oil': '55b40246-9fe5-4654-87cf-c4387a462701',
-      'cretan-honey': '87140e39-5756-49c3-bba2-3dcc609884fb',
-      'dittany-crete': '9f1e8bd0-7e3a-4c22-9ec1-87229fa1a659',
-      'olive-oil-soap': '4553460b-62a6-4aea-a82f-7e40379436ab'
-    };
+  const handleAddToCart = async () => {
+    // First check if this is a database product by slug
+    try {
+      const { data: dbProduct } = await supabase
+        .from('products')
+        .select('id, name, price, image_url, description')
+        .eq('slug', id)
+        .single();
+      
+      if (dbProduct) {
+        // Use database product data
+        for (let i = 0; i < quantity; i++) {
+          addToCart(dbProduct);
+        }
+        toast({
+          title: "Added to cart",
+          description: `${quantity}x ${dbProduct.name} (${selectedVolume.size}) added to your cart.`,
+        });
+        return;
+      }
+    } catch {
+      // Product not in database, use hardcoded data
+    }
     
-    const productUuid = productUuidMap[id] || id;
-    
+    // Fallback to hardcoded product logic
     const product = {
-      id: productUuid,
+      id: id, // Use slug as ID for hardcoded products
       name: title,
       price: parseFloat(selectedVolume.price),
       image_url: image,

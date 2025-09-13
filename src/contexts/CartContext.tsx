@@ -141,12 +141,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const addToCart = async (product: any) => {
     try {
-      console.log('Adding to cart:', { productId: product.id, productName: product.name });
-      
       const { data: user } = await supabase.auth.getUser();
       const sessionId = getSessionId();
-      
-      console.log('User auth state:', { userId: user.user?.id, sessionId });
 
       // Validate product ID is a valid UUID
       const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -167,7 +163,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         cartData.user_id = null;
       }
 
-      console.log('Cart data being inserted:', cartData);
+      
 
       // First check if item already exists
       let existingQuery = supabase
@@ -184,17 +180,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { data: existingItems, error: queryError } = await existingQuery;
       
       if (queryError) {
-        console.error('Error querying existing cart items:', queryError);
         throw queryError;
       }
-
-      console.log('Existing cart items:', existingItems);
 
       let result;
       if (existingItems && existingItems.length > 0) {
         // Update existing item
         const newQuantity = existingItems[0].quantity + 1;
-        console.log('Updating existing item with quantity:', newQuantity);
         
         result = await supabase
           .from('cart_items')
@@ -202,14 +194,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .eq('id', existingItems[0].id);
       } else {
         // Insert new item
-        console.log('Inserting new cart item');
         result = await supabase
           .from('cart_items')
           .insert([cartData]);
       }
 
       if (result.error) {
-        console.error('Database operation error:', result.error);
         throw result.error;
       }
 
@@ -228,7 +218,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: `${product.name} has been added to your cart.`
       });
     } catch (error: any) {
-      console.error('Error adding to cart:', error);
       
       let errorMessage = "Failed to add item to cart. Please try again.";
       if (error.message?.includes('Invalid product ID format')) {
@@ -273,7 +262,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       dispatch({ type: 'UPDATE_QUANTITY', product_id, quantity });
     } catch (error) {
-      console.error('Error updating quantity:', error);
       toast({
         title: "Error",
         description: "Failed to update quantity. Please try again.",
@@ -307,7 +295,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: "Item has been removed from your cart."
       });
     } catch (error) {
-      console.error('Error removing from cart:', error);
       toast({
         title: "Error",
         description: "Failed to remove item. Please try again.",
@@ -338,7 +325,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       dispatch({ type: 'CLEAR_CART' });
     } catch (error) {
-      console.error('Error clearing cart:', error);
+      // Error handling without console log
     }
   };
 

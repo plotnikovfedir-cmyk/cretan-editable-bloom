@@ -98,7 +98,7 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({
         })));
       }
     } catch (error) {
-      console.error('Error loading sidebar data:', error);
+      
     }
   };
 
@@ -190,14 +190,20 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({
               <p className="text-muted-foreground text-sm">No tags yet</p>
             ) : (
               tags.map((tag) => (
-                <Badge
+                <Link
                   key={tag.id}
-                  variant="outline"
-                  className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
-                  onClick={() => onTagSelect?.(tag.slug)}
+                  to={`/blog/tag/${tag.slug}`}
                 >
-                  #{tag.name}
-                </Badge>
+                  <Badge
+                    variant="outline"
+                    className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                  >
+                    #{tag.name}
+                    {tag.post_count && (
+                      <span className="ml-1 text-xs">({tag.post_count})</span>
+                    )}
+                  </Badge>
+                </Link>
               ))
             )}
           </div>

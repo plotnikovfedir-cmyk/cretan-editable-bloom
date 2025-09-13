@@ -19,43 +19,42 @@ interface BlogPost {
   author_name: string;
 }
 
-interface Category {
+interface Tag {
   id: string;
   name: string;
   slug: string;
-  description?: string;
 }
 
-const BlogCategory = () => {
+const BlogTag = () => {
   const { slug } = useParams<{ slug: string }>();
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [category, setCategory] = useState<Category | null>(null);
+  const [tag, setTag] = useState<Tag | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     if (slug) {
-      loadCategoryAndPosts();
+      loadTagAndPosts();
     }
   }, [slug]);
 
-  const loadCategoryAndPosts = async () => {
+  const loadTagAndPosts = async () => {
     try {
-      // Load category
-      const { data: categoryData, error: categoryError } = await supabase
-        .from("blog_categories")
+      // Load tag
+      const { data: tagData, error: tagError } = await supabase
+        .from("blog_tags")
         .select("*")
         .eq("slug", slug)
         .single();
 
-      if (categoryError || !categoryData) {
+      if (tagError || !tagData) {
         setNotFound(true);
         return;
       }
 
-      setCategory(categoryData);
+      setTag(tagData);
 
-      // Load posts in this category
+      // Load posts with this tag
       const { data: postsData, error: postsError } = await supabase
         .from("blog_posts")
         .select(`
@@ -66,17 +65,18 @@ const BlogCategory = () => {
           featured_image_url,
           published_at,
           author_name,
-          blog_post_categories!inner(
-            category_id
+          blog_post_tags!inner(
+            tag_id
           )
         `)
         .eq("is_published", true)
-        .eq("blog_post_categories.category_id", categoryData.id)
+        .eq("blog_post_tags.tag_id", tagData.id)
         .order("published_at", { ascending: false });
 
       if (postsError) throw postsError;
       setPosts(postsData || []);
     } catch (error) {
+      // Error handling without console log
     } finally {
       setLoading(false);
     }
@@ -96,15 +96,15 @@ const BlogCategory = () => {
     );
   }
 
-  if (notFound || !category) {
+  if (notFound || !tag) {
     return (
       <HelmetProvider>
         <Navigation />
         <main className="min-h-screen bg-background">
           <div className="container mx-auto px-4 py-12 text-center">
-            <h1 className="text-4xl font-bold mb-4">Category Not Found</h1>
+            <h1 className="text-4xl font-bold mb-4">Tag Not Found</h1>
             <p className="text-muted-foreground mb-8">
-              The category you're looking for doesn't exist.
+              The tag you're looking for doesn't exist.
             </p>
             <Link to="/blog">
               <Button>
@@ -122,10 +122,10 @@ const BlogCategory = () => {
   return (
     <HelmetProvider>
       <Helmet>
-        <title>{category.name} - Blog - Cretan Guru</title>
-        <meta name="description" content={category.description || `Browse all blog posts in the ${category.name} category on Cretan Guru`} />
-        <meta name="keywords" content={`${category.name}, Crete, blog, articles`} />
-        <link rel="canonical" href={`https://cretanguru.com/blog/category/${category.slug}`} />
+        <title>{tag.name} - Blog - Cretan Guru</title>
+        <meta name="description" content={`Browse all blog posts tagged with ${tag.name} on Cretan Guru`} />
+        <meta name="keywords" content={`${tag.name}, Crete, blog, articles`} />
+        <link rel="canonical" href={`https://cretanguru.com/blog/tag/${tag.slug}`} />
       </Helmet>
       
       <Navigation />
@@ -142,18 +142,15 @@ const BlogCategory = () => {
                     Back to Blog
                   </Button>
                 </Link>
-                <h1 className="text-4xl font-bold mb-4">{category.name}</h1>
-                {category.description && (
-                  <p className="text-lg text-muted-foreground mb-6">{category.description}</p>
-                )}
+                <h1 className="text-4xl font-bold mb-4">#{tag.name}</h1>
                 <p className="text-sm text-muted-foreground">
-                  {posts.length} {posts.length === 1 ? 'article' : 'articles'} in this category
+                  {posts.length} {posts.length === 1 ? 'article' : 'articles'} tagged with "{tag.name}"
                 </p>
               </div>
 
               {posts.length === 0 ? (
                 <div className="text-center py-12">
-                  <p className="text-muted-foreground">No articles found in this category yet.</p>
+                  <p className="text-muted-foreground">No articles found with this tag yet.</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -183,4 +180,4 @@ const BlogCategory = () => {
   );
 };
 
-export default BlogCategory;
+export default BlogTag;

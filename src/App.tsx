@@ -41,6 +41,7 @@ import AdminIslandTours from "./pages/admin/AdminIslandTours";
 import AdminWineTastings from "./pages/admin/AdminWineTastings";
 import AdminSettings from "./pages/admin/AdminSettings";
 import BlogCategory from "./pages/BlogCategory";
+import BlogTag from "./pages/BlogTag";
 import IslandTours from "./pages/IslandTours";
 import WineTastings from "./pages/WineTastings";
 import IslandToursDynamic from "./pages/IslandToursDynamic";
@@ -78,6 +79,7 @@ const App = () => (
                   <Route path="/wine-tastings" element={<WineTastingsDynamic />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/category/:slug" element={<BlogCategory />} />
+                  <Route path="/blog/tag/:slug" element={<BlogTag />} />
                   <Route path="/blog/:slug" element={<BlogPost />} />
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/checkout" element={<Checkout />} />

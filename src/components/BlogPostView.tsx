@@ -22,7 +22,6 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({ postId, postSlug }) 
           });
       } catch (error) {
         // Silently fail - analytics shouldn't break the user experience
-        console.debug('Failed to track blog post view:', error);
       }
     };
 

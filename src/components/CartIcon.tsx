@@ -24,7 +24,6 @@ const CartIcon = () => {
       </Button>
     );
   } catch (error) {
-    console.error('CartIcon error:', error);
     // Fallback UI when cart context is not available
     return (
       <Button asChild variant="ghost" size="sm" className="relative">

@@ -54,13 +54,13 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
     setLoading(true);
 
     try {
-      console.log('Creating booking:', { type, referenceId, title });
+      
 
       // Validate referenceId if provided - it should be a UUID or null
       if (referenceId) {
         const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
         if (!uuidPattern.test(referenceId)) {
-          console.warn('Invalid referenceId format, setting to null:', referenceId);
+          // Invalid format, will be set to null below
         }
       }
 
@@ -79,7 +79,7 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
         destination: formData.destination || null
       };
 
-      console.log('Booking data:', bookingData);
+      
 
       // Insert booking into database
       const { data: booking, error } = await supabase
@@ -89,11 +89,8 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
         .single();
 
       if (error) {
-        console.error('Booking insert error:', error);
         throw error;
       }
-
-      console.log('Booking created successfully:', booking);
 
       // Send confirmation email
       try {
@@ -120,9 +117,7 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
           body: emailData
         });
 
-        console.log('Confirmation email sent successfully');
       } catch (emailError) {
-        console.error('Failed to send confirmation email:', emailError);
         // Don't fail the booking if email fails
       }
 
@@ -146,7 +141,7 @@ const BookingModal = ({ isOpen, onClose, type, title, price, referenceId }: Book
       setDate(undefined);
 
     } catch (error: any) {
-      console.error('Error creating booking:', error);
+      
       
       let errorMessage = "Failed to create booking. Please try again.";
       if (error.message?.includes('row-level security policy')) {

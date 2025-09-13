@@ -216,7 +216,7 @@ const Index = () => {
       <CreteMap />
 
       {/* Instagram Gallery */}
-      <InstagramCarousel />
+      <InstagramGalleryEnhanced />
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-primary to-primary/90 text-primary-foreground relative overflow-hidden">

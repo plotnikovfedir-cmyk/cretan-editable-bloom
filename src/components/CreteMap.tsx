@@ -135,7 +135,7 @@ const CreteMap = () => {
                 {filteredLocations.length} of {locations.length} locations visible • Click to filter by type
               </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {[
                 { type: 'beaches', label: 'Beaches', icon: Waves, color: '#0ea5e9', description: 'Crystal clear waters and pristine shores' },
                 { type: 'canyons', label: 'Canyons', icon: Mountain, color: '#f59e0b', description: 'Dramatic gorges and hiking paths' },
@@ -155,65 +155,38 @@ const CreteMap = () => {
                     key={type} 
                     onClick={() => handleTypeToggle(type)}
                     className={`
-                      relative group cursor-pointer p-4 rounded-xl border-2 transition-all duration-500 transform hover:scale-[1.02] hover:shadow-xl
+                      cursor-pointer p-2 rounded-lg border
                       ${isSelected 
-                        ? 'border-transparent shadow-2xl backdrop-blur-sm' 
+                        ? 'border-primary bg-primary/10' 
                         : 'border-border/30 hover:border-border/60 bg-background/40'
                       }
                     `}
-                    style={isSelected ? {
-                      background: `linear-gradient(135deg, ${color}15, ${color}25)`,
-                      borderColor: color,
-                      boxShadow: `0 8px 32px ${color}40`
-                    } : {}}
                   >
-                    <div className="flex flex-col items-center text-center space-y-3">
-                        <div 
-                          className={`
-                            w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 transform
-                            ${isSelected 
-                              ? 'shadow-xl scale-110' 
-                              : 'bg-background/60 group-hover:scale-105'
-                            }
-                          `}
-                          style={isSelected ? {
-                            backgroundColor: color,
-                            boxShadow: `0 12px 32px ${color}50, 0 0 0 2px ${color}30`
-                          } : {}}
-                        >
+                    <div className="flex flex-col items-center text-center space-y-1">
+                      <div 
+                        className={`
+                          w-8 h-8 rounded-full flex items-center justify-center
+                          ${isSelected 
+                            ? 'bg-primary' 
+                            : 'bg-muted'
+                          }
+                        `}
+                      >
                         <Icon 
-                          className={`w-8 h-8 transition-all duration-300 ${
-                            isSelected ? 'text-white' : 'text-muted-foreground group-hover:text-foreground'
+                          className={`w-4 h-4 ${
+                            isSelected ? 'text-primary-foreground' : 'text-muted-foreground'
                           }`} 
                         />
                       </div>
                       <div>
-                        <h4 className={`font-medium transition-colors ${
-                          isSelected ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
+                        <h4 className={`text-xs font-medium ${
+                          isSelected ? 'text-foreground' : 'text-muted-foreground'
                         }`}>
                           {label}
                         </h4>
-                        <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                          {description}
-                        </p>
-                        <div className="text-xs font-mono mt-2 opacity-60">
+                        <div className="text-xs opacity-60">
                           ({count})
                         </div>
-                      </div>
-                    </div>
-                    
-                    {/* Selection indicator */}
-                    <div className={`
-                      absolute -top-2 -right-2 w-6 h-6 rounded-full border-2 border-background transition-all duration-300
-                      ${isSelected 
-                        ? 'opacity-100 scale-100' 
-                        : 'opacity-0 scale-0'
-                      }
-                    `}
-                    style={isSelected ? { backgroundColor: color } : {}}
-                    >
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
                       </div>
                     </div>
                   </div>

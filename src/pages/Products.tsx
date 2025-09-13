@@ -1,69 +1,84 @@
+import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import ProductCard from "@/components/ProductCard";
 import Footer from "@/components/Footer";
-import { Link } from "react-router-dom";
-import oliveOilImage from "@/assets/olive-oil-product.jpg";
-import herbsImage from "@/assets/herbs-product.jpg";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  price: number;
+  image_url: string;
+  category: string;
+  in_stock: boolean;
+}
 
 const Products = () => {
-  const products = [
-    {
-      id: "extra-virgin-olive-oil",
-      title: "Extra Virgin Olive Oil",
-      image: oliveOilImage,
-      description: "Cold-pressed from the finest Cretan olives, our olive oil is rich in antioxidants and flavor.",
-      price: "12.90"
-    },
-    {
-      id: "wild-mountain-herbs",
-      title: "Wild Mountain Herbs",
-      image: herbsImage,
-      description: "Hand-picked herbs from the Cretan mountains, dried naturally to preserve their intense aroma.",
-      price: "8.90"
-    },
-    {
-      id: "oil-st-johns-wort",
-      title: "Oil With St John's Wort",
-      image: oliveOilImage,
-      description: "Premium olive oil infused with wild St John's Wort, known for its healing properties.",
-      price: "18.90"
-    },
-    {
-      id: "wild-oregano-oil",
-      title: "Wild Oregano Olive Oil",
-      image: herbsImage,
-      description: "Extra virgin olive oil infused with wild Cretan oregano, perfect for Mediterranean cuisine.",
-      price: "16.90"
-    },
-    {
-      id: "agios-konstantinos-oil",
-      title: "Olive Oil – Agios Konstantinos",
-      image: oliveOilImage,
-      description: "Single-origin olive oil from the blessed groves of Agios Konstantinos monastery.",
-      price: "24.90"
-    },
-    {
-      id: "koxare-oil",
-      title: "Olive Oil – Koxaré",
-      image: oliveOilImage,
-      description: "Exceptional olive oil from the ancient village of Koxaré, with notes of pepper and herbs.",
-      price: "26.90"
-    },
-    {
-      id: "myxorouma-oil",
-      title: "Olive Oil – Myxorouma",
-      image: herbsImage,
-      description: "Premium estate oil from Myxorouma, with a rich golden color and fruity aroma.",
-      price: "28.90"
-    },
-    {
-      id: "preveli-oil",
-      title: "Olive Oil – Preveli",
-      image: oliveOilImage,
-      description: "Artisanal olive oil from the famous Preveli monastery, a true taste of Cretan heritage.",
-      price: "32.90"
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const loadProducts = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const { data, error: supabaseError } = await supabase
+        .from("products")
+        .select("*")
+        .eq("in_stock", true)
+        .order("created_at", { ascending: false });
+
+      if (supabaseError) throw supabaseError;
+      
+      setProducts(data || []);
+    } catch (err) {
+      setError("Failed to load products. Please try again later.");
+      console.error("Error loading products:", err);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="container mx-auto px-4 py-16">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
+              <p className="text-muted-foreground">Loading our amazing products...</p>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="container mx-auto px-4 py-16">
+          <Alert className="max-w-md mx-auto">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -78,19 +93,26 @@ const Products = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {products.map((product) => (
-            <div key={product.id}>
-              <ProductCard
-                id={product.id}
-                title={product.title}
-                image={product.image}
-                description={product.description}
-                price={product.price}
-              />
-            </div>
-          ))}
-        </div>
+        {products.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-lg text-muted-foreground mb-4">No products available at the moment.</p>
+            <p className="text-sm text-muted-foreground">Please check back later for our amazing Cretan products!</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mobile-product-grid animate-fade-in-up">
+            {products.map((product) => (
+              <div key={product.id}>
+                <ProductCard
+                  id={product.id}
+                  title={product.name}
+                  image={product.image_url}
+                  description={product.description}
+                  price={product.price.toString()}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       
       <Footer />

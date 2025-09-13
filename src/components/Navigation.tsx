@@ -19,17 +19,19 @@ const Navigation = () => {
     { path: "/products", label: "Our Products" },
     { path: "/activities", label: "Activities" },
     { path: "/events", label: "Events" },
+    { path: "/island-tours", label: "Island Tours" },
+    { path: "/wine-tastings", label: "Wine Tastings" },
     { path: "/taxi", label: "Taxi" },
     { path: "/delivery", label: "Delivery" },
     { path: "/blog", label: "Blog" },
   ];
 
   // For tablet view - show fewer items in main nav
-  const primaryNavItems = navItems.slice(0, 4);
-  const secondaryNavItems = navItems.slice(4);
+  const primaryNavItems = navItems.slice(0, 5);
+  const secondaryNavItems = navItems.slice(5);
 
   return (
-    <nav className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-50">
+    <nav className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-50 nav-enhanced">
       <div className="container mx-auto px-4 py-3 lg:py-4">
         <div className="flex items-center justify-between">
           {/* Logo - always on the left */}

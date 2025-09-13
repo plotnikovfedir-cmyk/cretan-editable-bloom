@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Star, Leaf } from "lucide-react";
+import { Star, Leaf, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
@@ -19,26 +20,11 @@ const ProductCard = ({ id, title, image, description, price, rating = 4.7, organ
   const { addToCart } = useCart();
   const { toast } = useToast();
 
-  const handleAddToCart = () => {
-    // Map slug to UUID - comprehensive mapping for all products
-    const productUuidMap: { [key: string]: string } = {
-      'wild-mountain-herbs': '08f10350-3e4d-4896-a68c-96f1151eeb78',
-      'extra-virgin-olive-oil': '55b40246-9fe5-4654-87cf-c4387a462701',
-      'cretan-honey': '87140e39-5756-49c3-bba2-3dcc609884fb',
-      'dittany-crete': '9f1e8bd0-7e3a-4c22-9ec1-87229fa1a659',
-      'olive-oil-soap': '4553460b-62a6-4aea-a82f-7e40379436ab',
-      // Additional mappings for all Products page items
-      "oil-st-johns-wort": "55b40246-9fe5-4654-87cf-c4387a462701",
-      "wild-oregano-oil": "55b40246-9fe5-4654-87cf-c4387a462701", 
-      "agios-konstantinos-oil": "55b40246-9fe5-4654-87cf-c4387a462701",
-      "koxare-oil": "55b40246-9fe5-4654-87cf-c4387a462701",
-      "myxorouma-oil": "55b40246-9fe5-4654-87cf-c4387a462701",
-      "preveli-oil": "55b40246-9fe5-4654-87cf-c4387a462701"
-    };
-    
-    const productUuid = productUuidMap[id] || id;
-    
-    if (!productUuidMap[id] && !id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAddToCart = async () => {
+    // UUID validation - check if it's already a valid UUID
+    if (!id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
       toast({
         title: "Error",
         description: "Product not available for purchase at the moment",
@@ -47,19 +33,31 @@ const ProductCard = ({ id, title, image, description, price, rating = 4.7, organ
       return;
     }
     
-    const product = {
-      id: productUuid,
-      name: title,
-      price: parseFloat(price),
-      image_url: image,
-      description
-    };
+    setIsLoading(true);
+    
+    try {
+      const product = {
+        id: id,
+        name: title,
+        price: parseFloat(price),
+        image_url: image,
+        description
+      };
 
-    addToCart(product);
-    toast({
-      title: "Added to cart",
-      description: `${title} has been added to your cart.`
-    });
+      await addToCart(product);
+      toast({
+        title: "Added to cart",
+        description: `${title} has been added to your cart.`
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to add product to cart. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
   const renderStars = (rating: number) => {
     const stars = [];
@@ -88,13 +86,13 @@ const ProductCard = ({ id, title, image, description, price, rating = 4.7, organ
     return stars;
   };
   return (
-    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-500 hover:scale-[1.02] bg-card border border-border/50 h-full flex flex-col">
+    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-500 hover:scale-[1.02] bg-card border border-border/50 h-full flex flex-col product-card-enhanced animate-fade-in-up">
       <CardHeader className="p-0 relative">
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden rounded-t-lg">
           <img 
             src={image} 
             alt={title}
-            className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+            className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110 rounded-t-lg"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           {organic && (
@@ -134,9 +132,17 @@ const ProductCard = ({ id, title, image, description, price, rating = 4.7, organ
           </Button>
           <Button 
             onClick={handleAddToCart}
-            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300"
+            disabled={isLoading}
+            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50"
           >
-            Add to Cart
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Adding...
+              </>
+            ) : (
+              "Add to Cart"
+            )}
           </Button>
         </div>
       </CardFooter>

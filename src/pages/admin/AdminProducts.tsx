@@ -99,8 +99,8 @@ const AdminProducts = () => {
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Ошибка",
-        description: "Не удалось загрузить товары",
+        title: "Error",
+        description: "Failed to load products",
       });
     } finally {
       setLoading(false);
@@ -174,8 +174,8 @@ const AdminProducts = () => {
         if (error) throw error;
         
         toast({
-          title: "Успех",
-          description: "Товар обновлен",
+          title: "Success",
+          description: "Product updated",
         });
       } else {
         const { error } = await supabase
@@ -185,8 +185,8 @@ const AdminProducts = () => {
         if (error) throw error;
         
         toast({
-          title: "Успех",
-          description: "Товар создан",
+          title: "Success",
+          description: "Product created",
         });
       }
 
@@ -198,8 +198,8 @@ const AdminProducts = () => {
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Ошибка",
-        description: "Не удалось сохранить товар",
+        title: "Error",
+        description: "Failed to save product",
       });
     }
   };
@@ -221,7 +221,7 @@ const AdminProducts = () => {
   };
 
   const handleDelete = async (productId: string) => {
-    if (!confirm("Вы уверены, что хотите удалить этот товар?")) return;
+    if (!confirm("Are you sure you want to delete this product?")) return;
 
     try {
       const { error } = await supabase
@@ -232,16 +232,16 @@ const AdminProducts = () => {
       if (error) throw error;
 
       toast({
-        title: "Успех",
-        description: "Товар удален",
+        title: "Success",
+        description: "Product deleted",
       });
       
       loadProducts();
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Ошибка",
-        description: "Не удалось удалить товар",
+        title: "Error",
+        description: "Failed to delete product",
       });
     }
   };
@@ -278,13 +278,13 @@ const AdminProducts = () => {
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Загрузка...</div>;
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
   return (
     <div className="min-h-screen bg-muted/50">
       <AdminNavigation 
-        title="Управление товарами"
+        title="Product Management"
       />
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-end">
@@ -292,22 +292,22 @@ const AdminProducts = () => {
             <DialogTrigger asChild>
               <Button onClick={openCreateDialog}>
                 <Plus className="w-4 h-4 mr-2" />
-                Добавить товар
+                Add Product
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
-                  {editingProduct ? "Редактировать товар" : "Создать товар"}
+                  {editingProduct ? "Edit Product" : "Create Product"}
                 </DialogTitle>
                 <DialogDescription>
-                  Заполните информацию о товаре
+                  Fill in the product information
                 </DialogDescription>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Название</Label>
+                    <Label htmlFor="name">Name</Label>
                     <Input
                       id="name"
                       value={formData.name}
@@ -316,17 +316,17 @@ const AdminProducts = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="slug">Слаг (URL)</Label>
+                    <Label htmlFor="slug">Slug (URL)</Label>
                     <Input
                       id="slug"
                       value={formData.slug}
                       onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                      placeholder="Автоматически из названия"
+                      placeholder="Auto-generated from name"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Описание</Label>
+                  <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
                     value={formData.description}
@@ -336,7 +336,7 @@ const AdminProducts = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="price">Цена (€)</Label>
+                    <Label htmlFor="price">Price (€)</Label>
                     <Input
                       id="price"
                       type="number"
@@ -347,7 +347,7 @@ const AdminProducts = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="category">Категория</Label>
+                    <Label htmlFor="category">Category</Label>
                     <Input
                       id="category"
                       value={formData.category}
@@ -356,13 +356,13 @@ const AdminProducts = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="image_url">Изображение товара</Label>
+                  <Label htmlFor="image_url">Product Image</Label>
                   <ImageUploader
                     currentImage={formData.image_url}
                     onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                     bucket="admin-uploads"
                     folder="products"
-                    label="Загрузить изображение товара"
+                    label="Upload Product Image"
                   />
                   {formData.image_url && (
                     <div className="mt-2">
@@ -394,14 +394,14 @@ const AdminProducts = () => {
                     checked={formData.in_stock}
                     onCheckedChange={(checked) => setFormData({ ...formData, in_stock: checked })}
                   />
-                  <Label htmlFor="in_stock">В наличии</Label>
+                  <Label htmlFor="in_stock">In Stock</Label>
                 </div>
                 <div className="flex justify-end gap-2">
                   <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                    Отмена
+                    Cancel
                   </Button>
                   <Button type="submit">
-                    {editingProduct ? "Обновить" : "Создать"}
+                    {editingProduct ? "Update" : "Create"}
                   </Button>
                 </div>
               </form>
@@ -453,7 +453,7 @@ const AdminProducts = () => {
                       </div>
                       <span className="text-xs text-muted-foreground">
                         {productReviews[product.id].averageRating.toFixed(1)} 
-                        ({productReviews[product.id].count} отзывов)
+                        ({productReviews[product.id].count} reviews)
                       </span>
                     </div>
                   )}
@@ -471,11 +471,11 @@ const AdminProducts = () => {
                 <div className="flex justify-between items-center">
                   <span className="font-bold">€{product.price}</span>
                   <span className={`text-sm ${product.in_stock ? 'text-green-600' : 'text-red-600'}`}>
-                    {product.in_stock ? 'В наличии' : 'Нет в наличии'}
+                    {product.in_stock ? 'In Stock' : 'Out of Stock'}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
-                  Слаг: {product.slug}
+                  Slug: {product.slug}
                 </p>
               </CardContent>
             </Card>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Waves, Mountain, Church, Building, Eye, Gem, MapPin, Leaf } from 'lucide-react';
 
@@ -77,7 +76,7 @@ const LocationFilter: React.FC<LocationFilterProps> = ({ selectedTypes, onTypeTo
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {locationTypes.map((type) => {
             const Icon = type.icon;
             const isSelected = selectedTypes.includes(type.value);
@@ -85,35 +84,67 @@ const LocationFilter: React.FC<LocationFilterProps> = ({ selectedTypes, onTypeTo
             return (
               <div 
                 key={type.value}
-                className={`flex items-center space-x-2 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
+                className={`group relative flex flex-col items-center p-4 rounded-2xl cursor-pointer transition-all duration-300 transform hover:scale-105 ${
                   isSelected 
-                    ? 'bg-primary/10 border border-primary/20' 
-                    : 'bg-muted/30 hover:bg-muted/50 border border-border/30'
+                    ? 'bg-gradient-to-br from-primary/20 to-primary/10 border-2 border-primary/40 shadow-lg shadow-primary/20 scale-105' 
+                    : 'bg-muted/20 hover:bg-muted/40 border-2 border-border/30 hover:border-primary/30 hover:shadow-md'
                 }`}
                 onClick={() => onTypeToggle(type.value)}
+                style={{
+                  boxShadow: isSelected 
+                    ? `0 8px 25px -8px ${type.color}40` 
+                    : undefined
+                }}
               >
-                <Checkbox
-                  id={type.value}
-                  checked={isSelected}
-                  onChange={() => onTypeToggle(type.value)}
-                  className="pointer-events-none"
-                />
-                <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <div 
-                    className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" 
-                    style={{ backgroundColor: type.color }}
-                  >
-                    <Icon className="w-2.5 h-2.5 text-white" />
-                  </div>
-                  <div className="min-w-0">
-                    <span className="text-sm font-medium text-foreground block truncate">
-                      {type.label}
-                    </span>
-                    <span className="text-xs text-muted-foreground block truncate">
-                      {type.description}
-                    </span>
-                  </div>
+                {/* Icon Container with enhanced effects */}
+                <div 
+                  className={`relative w-16 h-16 rounded-2xl flex items-center justify-center mb-3 transition-all duration-300 ${
+                    isSelected 
+                      ? 'animate-pulse shadow-lg' 
+                      : 'group-hover:scale-110 group-hover:shadow-md'
+                  }`}
+                  style={{ 
+                    backgroundColor: isSelected ? type.color : `${type.color}20`,
+                    boxShadow: isSelected ? `0 4px 15px ${type.color}40` : undefined
+                  }}
+                >
+                  <Icon 
+                    className={`transition-all duration-300 ${
+                      isSelected 
+                        ? 'w-8 h-8 text-white drop-shadow-sm' 
+                        : 'w-7 h-7 group-hover:w-8 group-hover:h-8'
+                    }`}
+                    style={{ 
+                      color: isSelected ? 'white' : type.color 
+                    }}
+                  />
+                  
+                  {/* Selection indicator */}
+                  {isSelected && (
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center shadow-md animate-bounce">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                  )}
                 </div>
+                
+                {/* Text Content */}
+                <div className="text-center space-y-1">
+                  <h3 className={`font-semibold text-sm transition-colors duration-300 ${
+                    isSelected ? 'text-primary' : 'text-foreground group-hover:text-primary'
+                  }`}>
+                    {type.label}
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-tight line-clamp-2">
+                    {type.description}
+                  </p>
+                </div>
+                
+                {/* Hover effect overlay */}
+                <div className={`absolute inset-0 rounded-2xl transition-opacity duration-300 ${
+                  isSelected 
+                    ? 'bg-gradient-to-t from-primary/5 to-transparent opacity-100' 
+                    : 'bg-gradient-to-t from-primary/5 to-transparent opacity-0 group-hover:opacity-100'
+                }`} />
               </div>
             );
           })}

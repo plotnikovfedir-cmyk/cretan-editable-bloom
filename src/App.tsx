@@ -39,6 +39,8 @@ import AdminEvents from "./pages/admin/AdminEvents";
 import AdminActivityManager from "./pages/admin/AdminActivityManager";
 import AdminIslandTours from "./pages/admin/AdminIslandTours";
 import AdminWineTastings from "./pages/admin/AdminWineTastings";
+import AdminSettings from "./pages/admin/AdminSettings";
+import BlogCategory from "./pages/BlogCategory";
 import IslandTours from "./pages/IslandTours";
 import WineTastings from "./pages/WineTastings";
 import IslandToursDynamic from "./pages/IslandToursDynamic";
@@ -75,6 +77,7 @@ const App = () => (
                   <Route path="/island-tours" element={<IslandToursDynamic />} />
                   <Route path="/wine-tastings" element={<WineTastingsDynamic />} />
                   <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/category/:slug" element={<BlogCategory />} />
                   <Route path="/blog/:slug" element={<BlogPost />} />
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/checkout" element={<Checkout />} />
@@ -96,6 +99,7 @@ const App = () => (
                   <Route path="/admin/activity-manager" element={<AdminActivityManager />} />
                   <Route path="/admin/island-tours" element={<AdminIslandTours />} />
                   <Route path="/admin/wine-tastings" element={<AdminWineTastings />} />
+                  <Route path="/admin/settings" element={<AdminSettings />} />
                   {/* Legal Pages */}
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms-of-service" element={<TermsOfService />} />

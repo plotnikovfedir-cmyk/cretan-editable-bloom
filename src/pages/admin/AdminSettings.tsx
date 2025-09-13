@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { Settings, Globe, Mail, CreditCard, Map, FileText, Users, ArrowLeft } from 'lucide-react';
-import { SettingsForm } from '@/components/admin/SettingsForm';
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, Settings, Globe, Mail, FileText, Users } from "lucide-react";
+import { SettingsForm } from "@/components/admin/SettingsForm";
 
 interface Setting {
   id: string;
@@ -19,11 +18,10 @@ interface Setting {
 }
 
 const AdminSettings = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState<Setting[]>([]);
-  const [activeTab, setActiveTab] = useState('general');
+  const [activeTab, setActiveTab] = useState("general");
+  const navigate = useNavigate();
 
   useEffect(() => {
     checkAdminAccess();
@@ -34,19 +32,19 @@ const AdminSettings = () => {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      navigate('/admin');
+      navigate("/admin");
       return;
     }
 
-    const { data: isAdminUser } = await supabase
-      .from('admin_users')
-      .select('*')
-      .eq('user_id', user.id)
-      .eq('is_active', true)
+    const { data: adminData, error } = await supabase
+      .from("admin_users")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("is_active", true)
       .single();
 
-    if (!isAdminUser) {
-      navigate('/admin');
+    if (error || !adminData) {
+      navigate("/admin");
       return;
     }
   };
@@ -54,66 +52,47 @@ const AdminSettings = () => {
   const loadSettings = async () => {
     try {
       const { data, error } = await supabase
-        .from('settings')
-        .select('*')
-        .order('category', { ascending: true });
+        .from("settings")
+        .select("*")
+        .order("category", { ascending: true });
 
       if (error) throw error;
       setSettings(data || []);
-    } catch (error) {
-      console.error('Error loading settings:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load settings",
-        variant: "destructive",
-      });
     } finally {
       setLoading(false);
     }
   };
 
   const settingCategories = [
-    { 
-      id: 'general', 
-      label: 'General', 
+    {
+      id: "general",
+      label: "General",
+      icon: Settings,
+      description: "Basic website settings and configuration"
+    },
+    {
+      id: "seo",
+      label: "SEO",
       icon: Globe,
-      description: 'Site name, description, contact info' 
+      description: "Search engine optimization settings"
     },
-    { 
-      id: 'seo', 
-      label: 'SEO', 
-      icon: FileText,
-      description: 'Meta tags, Analytics, Search settings' 
-    },
-    { 
-      id: 'email', 
-      label: 'Email', 
+    {
+      id: "email",
+      label: "Email",
       icon: Mail,
-      description: 'SMTP settings, email templates' 
+      description: "Email configuration and templates"
     },
-    { 
-      id: 'payments', 
-      label: 'Payments', 
-      icon: CreditCard,
-      description: 'Stripe, currency, tax settings' 
-    },
-    { 
-      id: 'maps', 
-      label: 'Maps', 
-      icon: Map,
-      description: 'Mapbox tokens, location settings' 
-    },
-    { 
-      id: 'blog', 
-      label: 'Blog', 
+    {
+      id: "blog",
+      label: "Blog",
       icon: FileText,
-      description: 'Pagination, comments, categories' 
+      description: "Blog and content management settings"
     },
-    { 
-      id: 'users', 
-      label: 'Users', 
+    {
+      id: "social",
+      label: "Social",
       icon: Users,
-      description: 'User management, roles, permissions' 
+      description: "Social media and sharing settings"
     }
   ];
 
@@ -122,64 +101,61 @@ const AdminSettings = () => {
   };
 
   if (loading) {
-    return <div className="p-6">Loading...</div>;
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/admin/dashboard')}
-            className="mb-4"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Dashboard
-          </Button>
-          <h1 className="text-3xl font-bold text-foreground">Settings</h1>
-          <p className="text-muted-foreground">
-            Manage your site configuration and preferences
-          </p>
+    <div className="min-h-screen bg-muted/50">
+      <header className="bg-background border-b">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center gap-4">
+            <Link to="/admin/dashboard">
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Dashboard
+              </Button>
+            </Link>
+            <h1 className="text-2xl font-bold">Website Settings</h1>
+          </div>
         </div>
-      </div>
+      </header>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-7 lg:w-auto lg:flex">
+      <main className="container mx-auto px-4 py-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-5">
+            {settingCategories.map((category) => {
+              const Icon = category.icon;
+              return (
+                <TabsTrigger key={category.id} value={category.id} className="flex items-center gap-2">
+                  <Icon className="w-4 h-4" />
+                  {category.label}
+                </TabsTrigger>
+              );
+            })}
+          </TabsList>
+
           {settingCategories.map((category) => (
-            <TabsTrigger
-              key={category.id}
-              value={category.id}
-              className="flex items-center gap-2"
-            >
-              <category.icon className="h-4 w-4" />
-              <span className="hidden sm:inline">{category.label}</span>
-            </TabsTrigger>
+            <TabsContent key={category.id} value={category.id}>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <category.icon className="w-5 h-5" />
+                    {category.label} Settings
+                  </CardTitle>
+                  <CardDescription>{category.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <SettingsForm
+                    category={category.id}
+                    settings={getSettingsByCategory(category.id)}
+                    onSettingsUpdate={loadSettings}
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
           ))}
-        </TabsList>
-
-        {settingCategories.map((category) => (
-          <TabsContent key={category.id} value={category.id} className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <category.icon className="h-5 w-5" />
-                  {category.label} Settings
-                </CardTitle>
-                <p className="text-muted-foreground">{category.description}</p>
-              </CardHeader>
-              <CardContent>
-                <SettingsForm
-                  category={category.id}
-                  settings={getSettingsByCategory(category.id)}
-                  onSettingsUpdate={loadSettings}
-                />
-              </CardContent>
-            </Card>
-          </TabsContent>
-        ))}
-      </Tabs>
+        </Tabs>
+      </main>
     </div>
   );
 };

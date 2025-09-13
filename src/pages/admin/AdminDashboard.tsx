@@ -200,6 +200,13 @@ const AdminDashboard = () => {
       icon: MapPin,
       link: "/admin/locations",
       count: 0
+    },
+    {
+      title: "Настройки сайта",
+      description: "Управление настройками и конфигурацией",
+      icon: Settings,
+      link: "/admin/settings",
+      count: 0
     }
   ];
 
@@ -209,10 +216,12 @@ const AdminDashboard = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold">Админ-панель</h1>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">
-              <Settings className="w-4 h-4 mr-2" />
-              Настройки
-            </Button>
+            <Link to="/admin/settings">
+              <Button variant="outline" size="sm">
+                <Settings className="w-4 h-4 mr-2" />
+                Настройки
+              </Button>
+            </Link>
             <Button variant="outline" size="sm" onClick={handleLogout}>
               <LogOut className="w-4 h-4 mr-2" />
               Выйти

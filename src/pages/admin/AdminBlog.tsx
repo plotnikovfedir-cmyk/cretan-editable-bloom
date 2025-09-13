@@ -7,10 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Plus, Edit, Trash2, Eye } from "lucide-react";
+import { ArrowLeft, Plus, Edit, Trash2, Eye, BarChart3, Settings } from "lucide-react";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { FormDialog } from "@/components/admin/FormDialog";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { BlogStats } from "@/components/admin/BlogStats";
+import { CategoryManager } from "@/components/admin/CategoryManager";
 
 interface BlogPost {
   id: string;
@@ -33,6 +37,7 @@ const AdminBlog = () => {
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
+  const [activeTab, setActiveTab] = useState("posts");
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -245,81 +250,110 @@ const AdminBlog = () => {
             </Link>
             <h1 className="text-2xl font-bold">Управление блогом</h1>
           </div>
-          <Button onClick={openCreateDialog}>
-            <Plus className="w-4 h-4 mr-2" />
-            Добавить статью
-          </Button>
+          {activeTab === "posts" && (
+            <Button onClick={openCreateDialog}>
+              <Plus className="w-4 h-4 mr-2" />
+              Добавить статью
+            </Button>
+          )}
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <Card key={post.id}>
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <CardTitle className="text-lg line-clamp-2">{post.title}</CardTitle>
-                  <div className="flex gap-2">
-                    {post.is_published && (
-                      <Button variant="outline" size="sm" asChild>
-                        <Link to={`/blog/${post.slug}`} target="_blank">
-                          <Eye className="w-4 h-4" />
-                        </Link>
-                      </Button>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="posts" className="flex items-center gap-2">
+              <Edit className="w-4 h-4" />
+              Статьи
+            </TabsTrigger>
+            <TabsTrigger value="stats" className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              Статистика
+            </TabsTrigger>
+            <TabsTrigger value="categories" className="flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              Категории и теги
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="posts" className="mt-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {posts.map((post) => (
+                <Card key={post.id}>
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <CardTitle className="text-lg line-clamp-2">{post.title}</CardTitle>
+                      <div className="flex gap-2">
+                        {post.is_published && (
+                          <Button variant="outline" size="sm" asChild>
+                            <Link to={`/blog/${post.slug}`} target="_blank">
+                              <Eye className="w-4 h-4" />
+                            </Link>
+                          </Button>
+                        )}
+                        <Button variant="outline" size="sm" onClick={() => handleEdit(post)}>
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => handleDelete(post.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    {post.featured_image_url && (
+                      <img 
+                        src={post.featured_image_url} 
+                        alt={post.title}
+                        className="w-full h-32 object-cover rounded-md mb-4"
+                      />
                     )}
-                    <Button variant="outline" size="sm" onClick={() => handleEdit(post)}>
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => handleDelete(post.id)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {post.featured_image_url && (
-                  <img 
-                    src={post.featured_image_url} 
-                    alt={post.title}
-                    className="w-full h-32 object-cover rounded-md mb-4"
-                  />
-                )}
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-                  {post.excerpt || post.content?.substring(0, 150) + "..."}
-                </p>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className={`text-xs px-2 py-1 rounded ${
-                      post.is_published 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {post.is_published ? 'Опубликовано' : 'Черновик'}
-                    </span>
-                    {post.read_time_minutes && (
-                      <span className="text-xs text-muted-foreground">
-                        {post.read_time_minutes} мин чтения
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Автор: {post.author_name}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Слаг: {post.slug}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {new Date(post.created_at).toLocaleDateString('ru-RU')}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+                      {post.excerpt || post.content?.substring(0, 150) + "..."}
+                    </p>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className={`text-xs px-2 py-1 rounded ${
+                          post.is_published 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {post.is_published ? 'Опубликовано' : 'Черновик'}
+                        </span>
+                        {post.read_time_minutes && (
+                          <span className="text-xs text-muted-foreground">
+                            {post.read_time_minutes} мин чтения
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Автор: {post.author_name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Слаг: {post.slug}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(post.created_at).toLocaleDateString('ru-RU')}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="stats" className="mt-6">
+            <BlogStats />
+          </TabsContent>
+
+          <TabsContent value="categories" className="mt-6">
+            <CategoryManager />
+          </TabsContent>
+        </Tabs>
       </main>
 
       <FormDialog
@@ -361,17 +395,13 @@ const AdminBlog = () => {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="content">Содержание</Label>
-            <Textarea
-              id="content"
-              value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-              rows={12}
-              required
-              placeholder="Полный текст статьи (поддерживается Markdown)"
-            />
-          </div>
+          <RichTextEditor
+            label="Содержание"
+            value={formData.content}
+            onChange={(value) => setFormData({ ...formData, content: value })}
+            placeholder="Полный текст статьи"
+            height="400px"
+          />
 
           <ImageUploader
             label="Главное изображение"

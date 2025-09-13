@@ -6,7 +6,7 @@ import { BlogSidebar } from "@/components/BlogSidebar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
-import { Helmet } from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 interface BlogPost {
   id: string;
@@ -47,7 +47,7 @@ const Blog = () => {
   const filteredPosts = posts.slice(0, filter === 'recent' ? 6 : posts.length);
 
   return (
-    <>
+    <HelmetProvider>
       <Helmet>
         <title>Blog - Cretan Guru</title>
         <meta name="description" content="Discover authentic Crete through our blog. Learn about traditional olive oil production, wild herbs, local culture, and sustainable practices." />
@@ -128,7 +128,7 @@ const Blog = () => {
         </div>
       </main>
       <Footer />
-    </>
+    </HelmetProvider>
   );
 };
 

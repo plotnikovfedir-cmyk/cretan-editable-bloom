@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { Calendar, Clock, ArrowLeft, Share2 } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 interface BlogPost {
   id: string;
@@ -111,7 +111,7 @@ const BlogPost = () => {
 
   if (loading) {
     return (
-      <>
+      <HelmetProvider>
         <Navigation />
         <main className="min-h-screen bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -128,13 +128,13 @@ const BlogPost = () => {
           </div>
         </main>
         <Footer />
-      </>
+      </HelmetProvider>
     );
   }
 
   if (notFound || !post) {
     return (
-      <>
+      <HelmetProvider>
         <Navigation />
         <main className="min-h-screen bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
@@ -151,12 +151,12 @@ const BlogPost = () => {
           </div>
         </main>
         <Footer />
-      </>
+      </HelmetProvider>
     );
   }
 
   return (
-    <>
+    <HelmetProvider>
       <Helmet>
         <title>{post.meta_title || post.title}</title>
         <meta name="description" content={post.meta_description || post.excerpt} />
@@ -293,7 +293,7 @@ const BlogPost = () => {
       </main>
 
       <Footer />
-    </>
+    </HelmetProvider>
   );
 };
 

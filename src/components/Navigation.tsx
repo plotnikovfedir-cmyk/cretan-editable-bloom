@@ -113,7 +113,7 @@ const Navigation = () => {
 
                 {/* Dropdown menus */}
                 {menuStructure.dropdownMenus.map((menu) => (
-                  <NavigationMenuItem key={menu.trigger}>
+                  <NavigationMenuItem key={menu.trigger} className="relative">
                     <NavigationMenuTrigger
                       className={cn(
                         "text-foreground hover:text-primary font-medium",
@@ -123,8 +123,8 @@ const Navigation = () => {
                       <menu.icon className="h-4 w-4 mr-2" />
                       {menu.trigger}
                     </NavigationMenuTrigger>
-                     <NavigationMenuContent>
-                      <div className="p-4 w-96">
+                     <NavigationMenuContent className="p-4">
+                      <div className="w-96">
                         <div className="mb-4 pb-3 border-b">
                           <h3 className="font-semibold text-sm uppercase tracking-wide text-primary flex items-center gap-2">
                             <menu.icon className="h-4 w-4" />

@@ -862,7 +862,7 @@ export type Database = {
           id: string
           is_active: boolean
           latitude: number
-          location_type: string
+          location_type: Database["public"]["Enums"]["location_type"]
           longitude: number
           name: string
           updated_at: string
@@ -873,7 +873,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           latitude: number
-          location_type?: string
+          location_type: Database["public"]["Enums"]["location_type"]
           longitude: number
           name: string
           updated_at?: string
@@ -884,7 +884,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           latitude?: number
-          location_type?: string
+          location_type?: Database["public"]["Enums"]["location_type"]
           longitude?: number
           name?: string
           updated_at?: string
@@ -1314,7 +1314,15 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      location_type:
+        | "production"
+        | "farm"
+        | "beaches"
+        | "canyons"
+        | "monasteries"
+        | "villages"
+        | "viewpoints"
+        | "caves"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1441,6 +1449,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      location_type: [
+        "production",
+        "farm",
+        "beaches",
+        "canyons",
+        "monasteries",
+        "villages",
+        "viewpoints",
+        "caves",
+      ],
+    },
   },
 } as const

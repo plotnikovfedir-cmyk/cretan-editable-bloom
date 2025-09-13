@@ -13,13 +13,15 @@ import { FormDialog } from '@/components/admin/FormDialog';
 import MapboxMap from '@/components/MapboxMap';
 import { useToast } from '@/hooks/use-toast';
 
+type LocationType = 'production' | 'farm' | 'beaches' | 'canyons' | 'monasteries' | 'villages' | 'viewpoints' | 'caves';
+
 interface Location {
   id: string;
   name: string;
   description: string;
   latitude: number;
   longitude: number;
-  location_type: string;
+  location_type: LocationType;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -37,7 +39,7 @@ const AdminLocations = () => {
     description: '',
     latitude: '',
     longitude: '',
-    location_type: 'production',
+    location_type: 'production' as LocationType,
     is_active: true
   });
 
@@ -90,7 +92,7 @@ const AdminLocations = () => {
         description: formData.description,
         latitude: parseFloat(formData.latitude),
         longitude: parseFloat(formData.longitude),
-        location_type: formData.location_type,
+        location_type: formData.location_type as LocationType,
         is_active: formData.is_active
       };
 
@@ -178,7 +180,7 @@ const AdminLocations = () => {
       description: '',
       latitude: '',
       longitude: '',
-      location_type: 'production',
+      location_type: 'production' as LocationType,
       is_active: true
     });
     setEditingLocation(null);
@@ -197,6 +199,20 @@ const AdminLocations = () => {
     );
   }
 
+  const getMarkerColor = (type: string) => {
+    switch(type) {
+      case 'beaches': return '#0ea5e9';
+      case 'canyons': return '#f59e0b';
+      case 'monasteries': return '#8b5cf6';
+      case 'villages': return '#f97316';
+      case 'viewpoints': return '#06b6d4';
+      case 'caves': return '#64748b';
+      case 'production': return '#059669';
+      case 'farm': return '#7c3aed';
+      default: return '#dc2626';
+    }
+  };
+
   const markers = locations
     .filter(loc => loc.is_active)
     .map(location => ({
@@ -204,7 +220,7 @@ const AdminLocations = () => {
       longitude: location.longitude,
       title: location.name,
       description: location.description,
-      color: location.location_type === 'production' ? '#059669' : '#7c3aed'
+      color: getMarkerColor(location.location_type)
     }));
 
   return (
@@ -270,7 +286,7 @@ const AdminLocations = () => {
               <Label htmlFor="location_type">Type</Label>
               <Select 
                 value={formData.location_type} 
-                onValueChange={(value) => setFormData(prev => ({ ...prev, location_type: value }))}
+                onValueChange={(value: LocationType) => setFormData(prev => ({ ...prev, location_type: value }))}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -278,8 +294,12 @@ const AdminLocations = () => {
                 <SelectContent>
                   <SelectItem value="production">Production</SelectItem>
                   <SelectItem value="farm">Farm</SelectItem>
-                  <SelectItem value="office">Office</SelectItem>
-                  <SelectItem value="warehouse">Warehouse</SelectItem>
+                  <SelectItem value="beaches">Beaches</SelectItem>
+                  <SelectItem value="canyons">Canyons</SelectItem>
+                  <SelectItem value="monasteries">Monasteries</SelectItem>
+                  <SelectItem value="villages">Villages</SelectItem>
+                  <SelectItem value="viewpoints">Viewpoints</SelectItem>
+                  <SelectItem value="caves">Caves</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -354,9 +374,19 @@ const AdminLocations = () => {
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="text-lg font-semibold text-foreground">{location.name}</h3>
                     <span className={`px-2 py-1 text-xs rounded-full ${
-                      location.location_type === 'production' 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                        : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                      (() => {
+                        switch(location.location_type) {
+                          case 'beaches': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+                          case 'canyons': return 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200';
+                          case 'monasteries': return 'bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-200';
+                          case 'villages': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
+                          case 'viewpoints': return 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200';
+                          case 'caves': return 'bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200';
+                          case 'production': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+                          case 'farm': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+                          default: return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+                        }
+                      })()
                     }`}>
                       {location.location_type}
                     </span>

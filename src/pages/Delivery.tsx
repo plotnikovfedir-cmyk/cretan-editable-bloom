@@ -83,11 +83,11 @@ const Delivery = () => {
       <HeroSlider pageType="delivery" />
 
       {/* About Us */}
-      <section className="py-20 bg-stone-50">
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-serif font-bold text-stone-800 mb-6">About Our Service</h2>
-            <p className="text-lg text-stone-600 mb-8 leading-relaxed">
+            <h2 className="text-4xl font-display font-bold text-foreground mb-6">About Our Service</h2>
+            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
               We specialize in delivering curated gourmet experiences to the most spectacular and 
               hard-to-reach locations along Crete's southern coast. From hidden beaches accessible 
               only by foot to remote sunset viewpoints, we bring the finest local delicacies directly 
@@ -102,37 +102,37 @@ const Delivery = () => {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-serif font-bold text-stone-800 mb-4">How It Works</h2>
-            <p className="text-lg text-stone-600">Three simple steps to your perfect adventure</p>
+            <h2 className="text-4xl font-display font-bold text-foreground mb-4">How It Works</h2>
+            <p className="text-lg text-muted-foreground">Three simple steps to your perfect adventure</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
+              <div className="w-20 h-20 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
                 1
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-stone-800">Choose Your Location</h3>
-              <p className="text-stone-600">
+              <h3 className="text-xl font-semibold mb-3 text-foreground">Choose Your Location</h3>
+              <p className="text-muted-foreground">
                 Select from our curated list of remote beaches and scenic spots, or suggest your own hidden gem.
               </p>
             </div>
             
             <div className="text-center">
-              <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
+              <div className="w-20 h-20 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
                 2
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-stone-800">Select Your Box</h3>
-              <p className="text-stone-600">
+              <h3 className="text-xl font-semibold mb-3 text-foreground">Select Your Box</h3>
+              <p className="text-muted-foreground">
                 Choose from our carefully crafted picnic boxes featuring local specialties and wine pairings.
               </p>
             </div>
             
             <div className="text-center">
-              <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
+              <div className="w-20 h-20 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
                 3
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-stone-800">Enjoy & Explore</h3>
-              <p className="text-stone-600">
+              <h3 className="text-xl font-semibold mb-3 text-foreground">Enjoy & Explore</h3>
+              <p className="text-muted-foreground">
                 Relax and savor exceptional food in extraordinary places while we handle all the logistics.
               </p>
             </div>
@@ -141,11 +141,11 @@ const Delivery = () => {
       </section>
 
       {/* Menu Preview */}
-      <section className="py-20 bg-stone-50">
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-serif font-bold text-stone-800 mb-4">Our Signature Boxes</h2>
-            <p className="text-lg text-stone-600">Curated experiences for every taste</p>
+            <h2 className="text-4xl font-display font-bold text-foreground mb-4">Our Signature Boxes</h2>
+            <p className="text-lg text-muted-foreground">Curated experiences for every taste</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -155,13 +155,13 @@ const Delivery = () => {
                   <img src={item.image} alt={item.title} className="w-full h-48 object-cover" />
                 </CardHeader>
                 <CardContent className="p-6">
-                  <CardTitle className="text-xl mb-2 text-stone-800">{item.title}</CardTitle>
-                  <p className="text-stone-600 mb-4">{item.description}</p>
+                  <CardTitle className="text-xl mb-2 text-foreground">{item.title}</CardTitle>
+                  <p className="text-muted-foreground mb-4">{item.description}</p>
                   <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold text-primary">{item.price}</span>
                     <Button 
                       variant="outline" 
-                      className="border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white"
+                      className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                       onClick={() => handleAddToOrder(item)}
                     >
                       Add to Order
@@ -178,8 +178,8 @@ const Delivery = () => {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-serif font-bold text-stone-800 mb-4">Delivery Areas</h2>
-            <p className="text-lg text-stone-600">We deliver to these stunning locations near Plakias</p>
+            <h2 className="text-4xl font-display font-bold text-foreground mb-4">Delivery Areas</h2>
+            <p className="text-lg text-muted-foreground">We deliver to these stunning locations near Plakias</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -203,18 +203,18 @@ const Delivery = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-stone-50">
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-serif font-bold text-stone-800 mb-4">What Our Customers Say</h2>
+            <h2 className="text-4xl font-display font-bold text-foreground mb-4">What Our Customers Say</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="border-none shadow-md">
                 <CardContent className="p-8">
-                  <p className="text-stone-600 italic mb-4 text-lg leading-relaxed">"{testimonial.text}"</p>
-                  <p className="font-semibold text-stone-800">— {testimonial.author}</p>
+                  <p className="text-muted-foreground italic mb-4 text-lg leading-relaxed">"{testimonial.text}"</p>
+                  <p className="font-semibold text-foreground">— {testimonial.author}</p>
                 </CardContent>
               </Card>
             ))}
@@ -223,9 +223,9 @@ const Delivery = () => {
       </section>
 
       {/* Contact & Order */}
-      <section id="order" className="py-20 bg-emerald-600 text-white">
+      <section id="order" className="py-20 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-serif font-bold mb-6">Ready for Your Adventure?</h2>
+          <h2 className="text-4xl font-display font-bold mb-6">Ready for Your Adventure?</h2>
           <p className="text-lg mb-8 max-w-2xl mx-auto opacity-90">
             Contact us via WhatsApp or Telegram to place your order. We recommend booking 
             at least 2 hours in advance for the best experience.
